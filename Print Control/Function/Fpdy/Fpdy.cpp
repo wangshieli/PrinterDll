@@ -11,7 +11,6 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 	m_sPrinterName(""),
 	m_sTempFplxdm(""),
 	m_sFpzt("0"),
-	m_sHx(""),
 	m_sPrintTaskName(""),
 	m_sPrintTaskNameFlag(""),
 	m_bStatus(FALSE)
@@ -50,6 +49,13 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 		}
 		m_pDlg->m_pd.hDevNames = hDevNames;
 		m_pDlg->m_pd.hDevMode = hDevMode;  // 为dlg设置参数，达到不弹框打印
+	}
+	else
+	{
+		if (!m_pDlg->GetDefaults())
+		{
+			return -11;// 找不到打印机
+		}
 	}
 
 	DEVMODE *lpDevMode = m_pDlg->GetDevMode();
@@ -197,6 +203,9 @@ CString CFpdyBase::GenerateXMLFpdy(FPDY fpdy, int rtn)
 			break;
 		case -10:
 			fpdy.sErrorInfo = "创建打印对象失败";
+			break;
+		case -11:
+			fpdy.sErrorInfo = "找不到默认打印机";
 			break;
 		default:
 			break;

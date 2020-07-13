@@ -12,7 +12,8 @@
 #define LINEFEED_L (16) //换行数，标识 横向
 
 CZzsfpdy::CZzsfpdy():m_nOrientation(DMORIENT_PORTRAIT),
-	m_nPageSize(LINEFEED_P)
+	m_nPageSize(LINEFEED_P),
+	m_sHx("")
 {
 }
 

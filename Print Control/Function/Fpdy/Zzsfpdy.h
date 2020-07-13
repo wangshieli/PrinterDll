@@ -269,5 +269,7 @@ private:
 
 	int m_nOrientation;
 	int m_nPageSize;
+
+	CString m_sHx;
 };
 

@@ -123,14 +123,13 @@ private:
 	void GetQRcodePath();
 
 protected:
-	char m_cQRcodePath[MAX_PATH];
-	int m_iPldy;
+	char m_cQRcodePath[MAX_PATH]; // 二维码
+	int m_iPldy;	// 打印方式0:普通打印 (弹框打印)  1:连续打印 (不弹框打印) 2:使用默认打印机不弹框打印
 	HDC m_hPrinterDC;
 	CPrintDialog *m_pDlg;
  	CString m_sPrinterName;
 	CString m_sTempFplxdm;
 	CString m_sFpzt;
-	CString m_sHx;
 	CString m_sPrintTaskName;
 	CString m_sPrintTaskNameFlag;
 	BOOL m_bStatus;

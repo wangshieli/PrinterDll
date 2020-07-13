@@ -1,0 +1,1191 @@
+<?xml version="1.0" encoding="gbk"?>
+<business id="20007" comment="发票查询">
+	<body yylxdm="1">
+		<returncode>0</returncode>
+		<returnmsg>成功</returnmsg>
+		<returndata>
+			<kpxx count="1">
+				<group xh="1">
+					<fpdm>1100191150</fpdm>
+					<fphm>30000114</fphm>
+					<fpzt>0</fpzt>
+					<scbz/>
+					<kprq>2020-07-05 09:05:21.000</kprq>
+					<jqbh>539905984496</jqbh>
+					<skm>03372-2&lt;-9&lt;959359>5*782&lt;//72&lt;8-330>&lt;-080&lt;9030/76+364/5->/>&lt;2+43-4*9-95*597931-8/-90/+0+8>3+*+90144>*03642>-635*1</skm>
+					<jym/>
+					<tspz/>
+					<xhdwsbh>1sbh</xhdwsbh>
+					<xhdwmc>1mc</xhdwmc>
+					<xhdwdzdh/>
+					<xhdwyhzh/>
+					<ghdwsbh>2sbh</ghdwsbh>
+					<ghdwmc>2mc</ghdwmc>
+					<ghdwdzdh/>
+					<ghdwyhzh/>
+					<bmbbbh/>
+					<zsfs>0</zsfs>
+					<fppy>06</fppy>
+					<fyxm count="0"/>
+					<qdxm count="45">
+						<group xh="1">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm></spsm>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="2">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="3">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="4">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="5">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="6">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="7">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="8">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="9">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="10">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="11">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="12">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="13">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="14">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="15">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="16">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="17">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="18">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="19">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="20">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="21">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="22">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="23">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="24">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="25">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="26">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="27">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="28">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="29">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="30">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="31">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="32">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="33">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="34">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="35">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="36">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="37">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="38">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="39">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="40">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="41">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="42">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="43">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm/>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="44">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm>000002</spsm>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+						<group xh="45">
+							<fphxz>0</fphxz>
+							<spmc>*棉花*美达24X CD-ROM</spmc>
+							<spsm>000002</spsm>
+							<ggxh>24倍速</ggxh>
+							<dw>台</dw>
+							<spsl>1</spsl>
+							<dj>1</dj>
+							<je>1</je>
+							<sl>0.01</sl>
+							<xm>*棉花*美达24X CD-ROM</xm>
+							<sl>1</sl>
+							<hsdj/>
+							<hsje/>
+							<bhsdj>1</bhsdj>
+							<bhsje>1</bhsje>
+							<zsl>0.01</zsl>
+							<se>0.01</se>
+							<hsbz>0</hsbz>
+							<spbm>1010105000000000000</spbm>
+							<zxbm/>
+							<yhzcbs>0</yhzcbs>
+							<lslbs/>
+							<zzstsgl/>
+						</group>
+					</qdxm>
+					<qtxm count="0"/>
+					<zhsl>0.01</zhsl>
+					<hjje>45.00</hjje>
+					<hjse/>
+					<jshj>45.45</jshj>
+					<bz>test</bz>
+					<skr>管理员</skr>
+					<fhr>管理员</fhr>
+					<kpr>管理员</kpr>
+					<jmbbh/>
+					<zyspmc>*棉花*美达24X CD-ROM</zyspmc>
+					<spsm/>
+					<qdbz>1</qdbz>
+					<ssyf/>
+					<kpjh/>
+					<tzdbh/>
+					<yfpdm/>
+					<yfphm/>
+					<zfrq/>
+					<zfr/>
+					<qmcs/>
+					<qmz/>
+					<ykfsje/>
+					<ewm/>
+					<yqjg/>
+				</group>
+			</kpxx>
+		</returndata>
+		<fplxdm>004</fplxdm>
+		<dylx>1</dylx>
+		<dyfs>0</dyfs>
+		<printername>预设</printername>
+		<orientation>2</orientation>
+	</body>
+</business>
