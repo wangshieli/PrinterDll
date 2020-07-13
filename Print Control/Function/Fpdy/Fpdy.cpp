@@ -21,6 +21,8 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 
 CFpdyBase::~CFpdyBase()
 {
+	if (NULL != m_pDlg)
+		delete m_pDlg;
 }
 
 int CFpdyBase::InitPrinter(short pwidth, short plength)
