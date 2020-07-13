@@ -143,7 +143,6 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 		nrt = ::StartDoc(m_hPrinterDC, &di);
 		if (nrt <= 0)
 		{
-			::DeleteDC(m_hPrinterDC);
 			nrt = -3;// 启动打印任务失败
 			break;
 		}
@@ -152,7 +151,6 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 		if (nrt <= 0)
 		{
 			::EndDoc(m_hPrinterDC);
-			::DeleteDC(m_hPrinterDC);
 			nrt = -4;// 发送打印内容失败
 			break;
 		}
@@ -301,7 +299,6 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 		}
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
-		::DeleteDC(m_hPrinterDC);
 	} while (false);
 
 	return nrt;
@@ -346,7 +343,6 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 		nrt = ::StartDoc(m_hPrinterDC, &di);
 		if (nrt <= 0)
 		{
-			::DeleteDC(m_hPrinterDC);
 			nrt = -3;// 启动打印任务失败
 			break;
 		}
@@ -357,7 +353,6 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 			if (nrt <= 0)
 			{
 				::EndDoc(m_hPrinterDC);
-				::DeleteDC(m_hPrinterDC);
 				nrt = -4;// 发送打印内容失败
 				break;
 			}
@@ -521,7 +516,6 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 		}
 		xml.OutOfElem();
 		::EndDoc(m_hPrinterDC);
-		::DeleteDC(m_hPrinterDC);
 	} while (false);
 
 	return nrt;

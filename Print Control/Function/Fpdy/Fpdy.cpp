@@ -22,6 +22,9 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 
 CFpdyBase::~CFpdyBase()
 {
+	if (NULL != m_hPrinterDC)
+		::DeleteDC(m_hPrinterDC);
+
 	if (NULL != m_pDlg)
 		delete m_pDlg;
 }

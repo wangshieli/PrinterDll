@@ -1384,7 +1384,6 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 		nrt = ::StartDoc(m_hPrinterDC, &di);
 		if (nrt <= 0)
 		{
-			::DeleteDC(m_hPrinterDC);
 			nrt = -3;// 启动打印任务失败
 			break;
 		}
@@ -1393,7 +1392,6 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 		if (nrt <= 0)
 		{
 			::EndDoc(m_hPrinterDC);
-			::DeleteDC(m_hPrinterDC);
 			nrt = -4;// 发送打印内容失败
 			break;
 		}
@@ -1460,7 +1458,6 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 		}
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
-		::DeleteDC(m_hPrinterDC);
 	} while (false);
 
 	return nrt;
