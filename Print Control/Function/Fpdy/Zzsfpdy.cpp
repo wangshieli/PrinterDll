@@ -334,7 +334,10 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 		}
 		xml.IntoElem();
 
-		nrt = InitPrinter(FPWidth, FPLength * 2);
+		if (m_nOrientation == DMORIENT_LANDSCAPE)
+			nrt = InitPrinter(FPLength * 2, FPWidth);
+		else
+			nrt = InitPrinter(FPWidth, FPLength * 2);
 		if (0 != nrt)
 			break;
 
