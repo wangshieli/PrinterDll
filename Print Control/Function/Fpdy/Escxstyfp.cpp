@@ -90,44 +90,7 @@ CString CEscxstyfp::Dlfpdy(LPSTR sInputInfo)
 		rtn = Print(printXml, fpdy.sFplxdm);
 	}
 
-	if (0 != rtn)
-	{
-		switch (rtn)
-		{
-		case -1:
-			fpdy.sErrorInfo = "用户取消了打印操作";
-			break;
-		case -2:
-			fpdy.sErrorInfo = "打印设备未就绪";
-			break;
-		case -3:
-			fpdy.sErrorInfo = "启动打印任务失败";
-			break;
-		case -4:
-			fpdy.sErrorInfo = "发送打印内容失败";
-			break;
-		case -5:
-			fpdy.sErrorInfo = "打印内容解析失败";
-			break;
-		case -6:
-			fpdy.sErrorInfo = "打印未知错误";
-			break;
-		case -7:
-			fpdy.sErrorInfo = "找不到打印机";
-			break;
-		case -8:
-			fpdy.sErrorInfo = "配置文件错误";
-			break;
-		case -9:
-			fpdy.sErrorInfo = "找不到配置的打印机名称";
-			break;
-		default:
-			break;
-		}
-	}
-	fpdy.sErrorCode.Format("%d", rtn);
-
-	return GenerateXMLFpdy(fpdy);
+	return GenerateXMLFpdy(fpdy, rtn);
 }
 
 LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
@@ -296,30 +259,6 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 	} while (false);
 
 	return nrt;
-}
-
-CString CEscxstyfp::GenerateXMLFpdy(FPDY fpdy)
-{
-	CMarkup xml;
-
-	xml.SetDoc(XMLHEAD);
-	xml.AddElem("business");
-	if (m_bStatus)
-		xml.AddAttrib("id", "30004");
-	else
-		xml.AddAttrib("id", "20004");
-
-	xml.AddAttrib("comment", "发票打印");
-	xml.IntoElem();
-	xml.AddElem("body");
-	xml.AddAttrib("yylxdm", fpdy.iYylxdm);
-	xml.IntoElem();
-	xml.AddElem("returncode", fpdy.sErrorCode);
-	xml.AddElem("returnmsg", fpdy.sErrorInfo);
-	xml.OutOfElem();
-	xml.OutOfElem();
-
-	return xml.GetDoc();
 }
 
 ESCFP_FPXX CEscxstyfp::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)

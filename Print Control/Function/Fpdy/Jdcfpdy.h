@@ -121,7 +121,6 @@ public:
 	LONG Print(LPCTSTR billXml, CString strFplxdm, CString zzzse);
 
 private:
-	CString GenerateXMLFpdy(FPDY fpdy);
 	JDCFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);
 	CString GenerateFpdyXml(JDCFP_FPXX fpmx, CString dylx, FPDY fpdy);
 	CString GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy);

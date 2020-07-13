@@ -114,6 +114,7 @@ public:
 
 public:
 	int InitPrinter(short pwidth, short plength);
+	CString GenerateXMLFpdy(FPDY fpdy, int rtn = 0);
 
 protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
