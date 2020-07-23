@@ -90,6 +90,40 @@ void CFpdyBase::GetQRcodePath()
 	strcat_s(m_cQRcodePath, MAX_PATH, "_SKSClog");
 }
 
+void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data)
+{
+	CFont *pOldFont;
+	CFont fontHeader;
+	int fontSize = FontSize;
+	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+
+	RECT trect = rect;
+
+	int recv_h = rect.bottom - rect.top;
+	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
+	while (h <= recv_h + 5)
+	{
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+
+		fontSize -= 5;
+		fontHeader.CreatePointFont(fontSize, "FixedSys", CDC::FromHandle(m_hPrinterDC));
+		trect = rect;
+		pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+		h = ::DrawText(m_hPrinterDC, data, -1, &trect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
+	}
+	rect.top = rect.top - (h - recv_h) / 2;
+
+	if (rect.right >= trect.right)
+		::DrawText(m_hPrinterDC, data, -1, &rect, DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX);
+	else
+		::DrawText(m_hPrinterDC, data, -1, &rect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+
+	::SelectObject(m_hPrinterDC, pOldFont);
+	fontHeader.DeleteObject();
+}
+
 BOOL CFpdyBase::GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL * phDevNames, HGLOBAL * phDevMode)
 {
 	// if NULL is passed, then assume we are setting app object's  

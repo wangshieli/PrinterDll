@@ -2,7 +2,6 @@
 #include "Jsfpdy.h"
 
 #include "../../Helper/XML/Markup.h"
-#include "../../Helper/XML/AnalyzeInXml.h"
 #include "../../Helper/Log/TraceLog.h"
 #include "../../Helper/ZLib/ZLib.h"
 #include "../../Helper/QRGenerator/QRGenerator.h"

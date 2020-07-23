@@ -63,7 +63,7 @@ struct XM //打印属性（坐标、宽高、字体、字号）
 	int z;//左对齐或者右对齐
 };
 
-struct FPDY
+typedef struct _dy
 {
 	int iYylxdm;
 	CString sKpzdbs;
@@ -81,13 +81,13 @@ struct FPDY
 	CString	sErrorCode;
 	CString	sErrorInfo;
 
-	FPDY() {
+	_dy() {
 		iYylxdm = 0;
 		sErrorCode = _T("0");
 		sErrorInfo = _T("成功");
 	}
-	~FPDY() {}
-};
+	~_dy() {}
+}FPDY, BBDY;
 
 class t_Exception
 {
@@ -118,6 +118,8 @@ public:
 
 protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
+
+	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data);
 
 private:
 	void GetQRcodePath();

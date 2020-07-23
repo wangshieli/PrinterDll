@@ -1,8 +1,7 @@
 #include "../../pch.h"
-#include "Escxstyfp.h"
+#include "Escxstyfpdy.h"
 
 #include "../../Helper/XML/Markup.h"
-#include "../../Helper/XML/AnalyzeInXml.h"
 #include "../../Helper/Log/TraceLog.h"
 #include "../../Helper/ZLib/ZLib.h"
 #include "../../Helper/QRGenerator/QRGenerator.h"

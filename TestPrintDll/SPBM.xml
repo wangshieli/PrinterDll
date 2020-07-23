@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="gbk"?>
+<business id="20007" comment="发票查询">
+	<body yylxdm="1">
+		<returncode>0</returncode>
+		<returnmsg>成功</returnmsg>
+		<returndata>
+			<bbxx count="1">
+				<group xh="1">
+					<bbxm count="2">
+						<group xh="1">
+							<dj>0</dj>
+							<ggxh/>
+							<hsbz>0</hsbz>
+							<jldw/>
+							<jm>YSLW</jm>
+							<mc>应税劳务</mc>
+							<sl>0.13</sl>
+							<spflbm/>
+						</group>
+						<group xh="2">
+							<dj>0</dj>
+							<ggxh/>
+							<hsbz>0</hsbz>
+							<jldw/>
+							<jm>STXS</jm>
+							<mc>视同销售</mc>
+							<sl>0.13</sl>
+							<spflbm/>
+						</group>
+					</bbxm>
+				</group>
+			</bbxx>
+		</returndata>
+		<dylx>0</dylx>
+		<dyfs>0</dyfs>
+		<printername>预设</printername>
+	</body>
+</business>

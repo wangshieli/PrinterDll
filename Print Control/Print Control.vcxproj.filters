@@ -34,6 +34,9 @@
     <Filter Include="Helper\QRGenerator">
       <UniqueIdentifier>{3d41e7fe-031e-4e4d-b9bf-418bb33254bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Function\Bbdy">
+      <UniqueIdentifier>{c2e5e6ce-2f0f-4946-8807-78e2de730b84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -81,8 +84,14 @@
     <ClInclude Include="Function\Fpdy\Jsfpdy.h">
       <Filter>Function\Fpdy</Filter>
     </ClInclude>
-    <ClInclude Include="Function\Fpdy\Escxstyfp.h">
+    <ClInclude Include="Function\Fpdy\Escxstyfpdy.h">
       <Filter>Function\Fpdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Khbmdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Spbmdy.h">
+      <Filter>Function\Bbdy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,8 +128,14 @@
     <ClCompile Include="Function\Fpdy\Jsfpdy.cpp">
       <Filter>Function\Fpdy</Filter>
     </ClCompile>
-    <ClCompile Include="Function\Fpdy\Escxstyfp.cpp">
+    <ClCompile Include="Function\Fpdy\Escxstyfpdy.cpp">
       <Filter>Function\Fpdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Khbmdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Spbmdy.cpp">
+      <Filter>Function\Bbdy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

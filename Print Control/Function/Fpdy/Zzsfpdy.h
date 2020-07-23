@@ -257,7 +257,7 @@ private:
 	LONG Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString hjse);
 	LONG PrintQD(LPCSTR billxml, CString strFplxdm);
 
-public:
+private:
 	ZZSFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);
 	CString GenerateFpdyXml(ZZSFP_FPXX fpmx, CString dylx, FPDY fpdy);
 	CString GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy);

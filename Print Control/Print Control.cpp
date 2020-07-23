@@ -8,7 +8,10 @@
 #include "Function/Fpdy/Zzsfpdy.h"
 #include "Function/Fpdy/Jdcfpdy.h"
 #include "Function/Fpdy/Jsfpdy.h"
-#include "Function/Fpdy/Escxstyfp.h"
+#include "Function/Fpdy/Escxstyfpdy.h"
+
+#include "Function/Bbdy/Khbmdy.h"
+#include "Function/Bbdy/Spbmdy.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -89,6 +92,13 @@ void PostAndRecvEx(IN LPTSTR pszPost, OUT LPTSTR pszRecv)
 		CEscxstyfp escfpdy;
 		escfpdy.Dlfpdy(pszPost);
 		//strcpy(pszRecv, strResult);
+		return;
+	}
+	else
+	{
+		//CKhbmdy c;
+		CSpbmdy c;
+		c.Dlfpdy(pszPost);
 		return;
 	}
 }
