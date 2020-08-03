@@ -8,6 +8,15 @@
 #define LINEFEED_P (22+4) //换行数，标识 竖向
 #define LINEFEED_L (16) //换行数，标识 横向
 
+#define MC_W	408
+#define SM_W	306
+#define JM_W	204
+#define SL_W	204
+#define GG_W	204
+#define DW_W	204
+#define DJ_W	204
+#define HS_W	200
+
 CSpbmdy::CSpbmdy() :m_nPageSize(LINEFEED_P)
 {
 }
@@ -16,7 +25,7 @@ CSpbmdy::~CSpbmdy()
 {
 }
 
-CString CSpbmdy::Dlfpdy(LPTSTR sInputInfo)
+CString CSpbmdy::Dlfpdy(LPCTSTR sInputInfo)
 {
 	FPDY fpdy;
 	CMarkup xml;
@@ -93,7 +102,7 @@ LONG CSpbmdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 		}
 		xml.IntoElem();
 
-		nrt = InitPrinter(FPWidth, FPLength * 2);
+		nrt = InitPrinter(A4_W, A4_H);
 		if (0 != nrt)
 			break;
 
@@ -161,74 +170,83 @@ LONG CSpbmdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 			fontHeader.CreatePointFont(95, "FixedSys", CDC::FromHandle(m_hPrinterDC));// 话竖线
 			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+			int nShiting = 38;
+
 			int fontSize = 95;
 			LPCSTR fontType = FH;
-			rect.left = PaintRect.left + 38;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 38 + 102; // 1
+			rect.right = PaintRect.left + nShiting + MC_W; // 1
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "名称");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 38 + 102, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 38 + 102, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + MC_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + MC_W, PaintRect.bottom);
+			nShiting += MC_W;
 
-			rect.left = PaintRect.left + 140;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 140 + 408; // 4
+			rect.right = PaintRect.left + nShiting + SM_W; // 4
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "税收编码");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 140 + 408, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 140 + 408, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + SM_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + SM_W, PaintRect.bottom);
+			nShiting += SM_W;
 
-			rect.left = PaintRect.left + 548;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 548 + 153; // 1.5
+			rect.right = PaintRect.left + nShiting + JM_W; // 1.5
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "简码");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 548 + 153, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 548 + 153, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + JM_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + JM_W, PaintRect.bottom);
+			nShiting += JM_W;
 
-			rect.left = PaintRect.left + 701;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 701 + 255;
+			rect.right = PaintRect.left + nShiting + SL_W;
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "税率");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 701 + 255, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 701 + 255, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + SL_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + SL_W, PaintRect.bottom);
+			nShiting += SL_W;
 
-			rect.left = PaintRect.left + 956;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 956 + 255;
+			rect.right = PaintRect.left + nShiting + GG_W;
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "规格型号");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 956 + 255, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 956 + 255, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + GG_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + GG_W, PaintRect.bottom);
+			nShiting += GG_W;
 
-			rect.left = PaintRect.left + 1211;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 1211 + 255;
+			rect.right = PaintRect.left + nShiting + DW_W;
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "单位");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 1211 + 255, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 1211 + 255, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + DW_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + DW_W, PaintRect.bottom);
+			nShiting += DW_W;
 
-			rect.left = PaintRect.left + 1466;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 1466 + 255;
+			rect.right = PaintRect.left + nShiting + DJ_W;
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "单价");
-			MoveToEx(m_hPrinterDC, PaintRect.left + 1466 + 255, PaintRect.top - 165, NULL);
-			LineTo(m_hPrinterDC, PaintRect.left + 1466 + 255, PaintRect.bottom);
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + DJ_W, PaintRect.top - 165, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + DJ_W, PaintRect.bottom);
+			nShiting += DJ_W;
 
-			rect.left = PaintRect.left + 1721;
+			rect.left = PaintRect.left + nShiting;
 			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + 1721 + 251;
+			rect.right = PaintRect.left + nShiting + HS_W;
 			rect.bottom = PaintRect.top - 165 - 70;
 			PaintTile(fontSize, fontType, rect, "含税标志");
 
 			::SelectObject(m_hPrinterDC, pOldFont);
 			fontHeader.DeleteObject();
 
-			/*while (xml.FindElem("Item"))
+			while (xml.FindElem("Item"))
 			{
 				RECT itemRect;
 
@@ -249,7 +267,7 @@ LONG CSpbmdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				PaintTile(nFontSize, strFontName, itemRect, strText);
 				MoveToEx(m_hPrinterDC, itemRect.left, itemRect.bottom, NULL);
 				LineTo(m_hPrinterDC, itemRect.right, itemRect.bottom);
-			}*/
+			}
 
 			::EndPage(m_hPrinterDC);
 			xml.OutOfElem();
@@ -342,76 +360,31 @@ CString CSpbmdy::GenerateItemMXXml(SPBM_BBXX bbxx)
 	LTSPBM_BBXM::iterator pos;
 	for (pos = bbxx.st_lSpbmBbxm.begin(); pos != bbxx.st_lSpbmBbxm.end(); pos++)
 	{
-		//计算商品名称长度
-		int LengOfMc = pos->st_sMc.GetLength();
-		if (LengOfMc >= 40)
-		{
-			xywhsf(pos->xmMc, 102, nLY + i * nLY, 408, 70, LS_6, FS, ZC);
-		}
-		else if (LengOfMc >= 34 && LengOfMc < 40)
-		{
-			xywhsf(pos->xmMc, 102, nLY + i * nLY, 408, 70, LS_7, FS, ZC);
-		}
-		else if (LengOfMc >= 30 && LengOfMc < 34)
-		{
-			xywhsf(pos->xmMc, 102, nLY + i * nLY, 408, 70, LS_8, FS, ZC);
-		}
-		else
-		{
-			xywhsf(pos->xmMc, 102, nLY + i * nLY, 408, 70, LS_9, FS, ZC);
-		}
+		int nShiting = 0;
 
-		int LenOfJm = pos->st_sJm.GetLength();
-		if (LenOfJm >= 18)
-		{
-			xywhsf(pos->xmJm, 510, nLY + i * nLY, 153, 70, LS_7, FS, ZC);
-		}
-		else if (LenOfJm >= 14 && LenOfJm < 18)
-		{
-			xywhsf(pos->xmJm, 510, nLY + i * nLY, 153, 70, LS_8, FS, ZC);
-		}
-		else
-		{
-			xywhsf(pos->xmJm, 510, nLY + i * nLY, 153, 70, LS_9, FS, ZC);
-		}
+		xywhsf(pos->xmMc, nShiting, nLY + i * nLY, MC_W, 70, LS_9, FS, ZC);
+		nShiting += MC_W;
 
-		//xywhsf(pos->xmNsrsbh, 663, nLY + i * nLY, 255, 70, LS_9, FS, ZC);
+		xywhsf(pos->xmSpflbm, nShiting, nLY + i * nLY, SM_W, 70, LS_9, FS, ZC);
+		nShiting += SM_W;
 
-	/*	int LenOfKzl = pos->st_sKzl.GetLength();
-		if (LenOfKzl >= 11 && LenOfKzl <= 13)
-		{
-			xywhsf(pos->xmKzl, 918, nLY + i * nLY, 255, 70, LS_6, FS, ZC);
-		}
-		else
-		{
-			xywhsf(pos->xmKzl, 918, nLY + i * nLY, 255, 70, LS_9, FS, ZC);
-		}*/
+		xywhsf(pos->xmJm, nShiting, nLY + i * nLY, JM_W, 70, LS_9, FS, ZC);
+		nShiting += JM_W;
 
-		//int LengOfDz = pos->st_sDz.GetLength();
-		//if (LengOfDz >= 11 || LengOfDz <= 13)
-		//{
-		//	xywhsf(pos->xmDz, 1173, nLY + i * nLY, 255, 70, LS_8, FS, ZC);
-		//}
-		//else
-		//{
-		//	xywhsf(pos->xmDz, 1173, nLY + i * nLY, 255, 70, LS_9, FS, ZC);
-		//}
+		xywhsf(pos->xmSl, nShiting, nLY + i * nLY, SL_W, 70, LS_9, FS, ZC);
+		nShiting += SL_W;
 
-		//int lenOfYhzh = pos->st_sYhzh.GetLength();
-		//xywhsf(pos->xmYhzh, 1428, nLY + i * nLY, 255, 70, LS_9, FS, ZC);
+		xywhsf(pos->xmGgxh, nShiting, nLY + i * nLY, GG_W, 70, LS_9, FS, ZC);
+		nShiting += GG_W;
 
-		//int lenOfYjdz = pos->st_sYjdz.GetLength();
-		//if (lenOfYjdz > 4)
-		//{
-		//	xywhsf(pos->xmYjdz, 1683, nLY + i * nLY, 251, 70, LS_8, FS, ZC);
-		//}
-		//else
-		//{
-		//	xywhsf(pos->xmYjdz, 1683, nLY + i * nLY, 251, 70, LS_9, FS, ZC);
-		//}
-		//xywhsf(pos->ssSe, LX + 1710 - 170, LY + nLY + i * nLY, LW + 300, LH + 50, LS_9, FS, ZR);
+		xywhsf(pos->xmJldw, nShiting, nLY + i * nLY, DW_W, 70, LS_9, FS, ZC);
+		nShiting += DW_W;
 
-		xywhsf(pos->xmXh, 0, nLY + i * nLY, 102, 70, LS_9, FS, ZL);
+		xywhsf(pos->xmDj, nShiting, nLY + i * nLY, DJ_W, 70, LS_9, FS, ZC);
+		nShiting += DJ_W;
+
+		xywhsf(pos->xmHsbz, nShiting, nLY + i * nLY, HS_W, 70, LS_9, FS, ZC);
+		nShiting += HS_W;
 
 		i++;
 		if (i%m_nPageSize == 0)

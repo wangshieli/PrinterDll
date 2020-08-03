@@ -15,7 +15,7 @@ CJdcfpdy::~CJdcfpdy()
 {
 }
 
-CString CJdcfpdy::Dlfpdy(LPSTR sInputInfo)
+CString CJdcfpdy::Dlfpdy(LPCTSTR sInputInfo)
 {
 	FPDY fpdy;
 	CMarkup xml;
@@ -244,17 +244,49 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 				printRect.right = x + nXoff + w + 100;
 				printRect.bottom = -((y + 5 + nYoff) + h);
 
+				RECT testRect = printRect;
 				if (z == 0)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX);
 				}
 				else if (z == 2)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
 				}
 				else
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
+				}
+
+				if (printRect.right >= testRect.right)
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
+					}
+				}
+				else
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					}
 				}
 			}
 			ftPrint.DeleteObject();

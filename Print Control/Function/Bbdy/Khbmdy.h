@@ -32,6 +32,11 @@ typedef list<KHBM_BBXM> LTKHBM_BBXM;
 
 typedef struct _khbm_bbxx
 {
+	_khbm_bbxx()
+	{
+		clear();
+	}
+
 	int st_nBbxmCount;
 	LTKHBM_BBXM st_lKhbmBbxm;
 
@@ -49,7 +54,7 @@ public:
 	~CKhbmdy();
 
 public:
-	CString Dlfpdy(LPTSTR sInputInfo);
+	CString Dlfpdy(LPCTSTR sInputInfo);
 
 public:
 	LONG PrintQD(LPCSTR billxml, CString strFplxdm);

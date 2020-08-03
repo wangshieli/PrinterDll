@@ -32,6 +32,11 @@ typedef list<SPBM_BBXM> LTSPBM_BBXM;
 
 typedef struct _spbm_bbxx
 {
+	_spbm_bbxx()
+	{
+		clear();
+	}
+
 	int st_nBbxmCount;
 	LTSPBM_BBXM st_lSpbmBbxm;
 
@@ -49,7 +54,7 @@ public:
 	~CSpbmdy();
 
 public:
-	CString Dlfpdy(LPTSTR sInputInfo);
+	CString Dlfpdy(LPCTSTR sInputInfo);
 
 public:
 	LONG PrintQD(LPCSTR billxml, CString strFplxdm);

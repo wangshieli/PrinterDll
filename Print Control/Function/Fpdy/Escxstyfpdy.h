@@ -109,7 +109,7 @@ public:
 	virtual ~CEscxstyfp();
 
 public:
-	CString Dlfpdy(LPSTR sInputInfo);
+	CString Dlfpdy(LPCTSTR sInputInfo);
 	LONG Print(LPCTSTR billXml, CString strFplxdm);
 
 private:

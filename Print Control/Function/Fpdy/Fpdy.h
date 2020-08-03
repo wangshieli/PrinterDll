@@ -38,6 +38,9 @@
 #define ZR 1				//右对齐
 #define ZC 2				//水平居中
 
+#define A4_W	2100
+#define A4_H	2970
+
 
 //设置打印各项/字段属性
 #define xywhsf(A,X,Y,W,H,S,F,Z)\
@@ -119,7 +122,7 @@ public:
 protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
 
-	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data);
+	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC, int s = 5);
 
 private:
 	void GetQRcodePath();

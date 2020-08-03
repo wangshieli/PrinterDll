@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="gbk"?><business id="20007" comment="发票查询">
+	<body yylxdm="1">
+		<returncode>0</returncode>
+		<returnmsg>成功</returnmsg>
+		<returndata>
+			<bbxx count="1">
+				<group xh="1">
+					<gfmc>1101101101108888</gfmc>
+					<gfsh>1101101101108888</gfsh>
+					<xfmc>444444444</xfmc>
+					<xfsh>44444444444444444444</xfsh>
+					<fpdm>1234567890</fpdm>
+					<fphm>1234567890</fphm>
+					<hjje>-560</hjje>
+					<hjse>-50.4</hjse>
+					<sqf>0</sqf>
+					<sqyy>0</sqyy>
+					<sqdbh>1234567890123456</sqdbh>
+					<bbxm count="1">
+						<group xh="1">
+							<mc>*棉花*美达24X CD-ROM</mc>
+							<sl>-1</sl>
+							<dj>560</dj>
+							<je>"-560</je>
+							<slv>0.09</slv>
+							<se>-50.4</se>
+						</group>
+					</bbxm>
+				</group>
+			</bbxx>
+		</returndata>
+		<dylx>0</dylx>
+		<dyfs>0</dyfs>
+		<printername>预设</printername>
+	</body>
+</business>

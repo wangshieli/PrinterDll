@@ -20,7 +20,7 @@ CZzsfpdy::~CZzsfpdy()
 {
 }
 
-CString CZzsfpdy::Dlfpdy(LPTSTR sInputInfo)
+CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 {
 	FPDY fpdy;
 	CMarkup xml;
@@ -264,17 +264,50 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 				printRect.right = x + nXoff + w + 100;
 				printRect.bottom = -((y + 5 + nYoff) + h);
 
+				RECT testRect = printRect;
+
 				if (z == 0)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX);
 				}
 				else if (z == 2)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
 				}
 				else
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
+				}
+
+				if (printRect.right >= testRect.right)
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
+					}
+				}
+				else
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					}
 				}
 			}
 			ftPrint.DeleteObject();
@@ -332,9 +365,9 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 		xml.IntoElem();
 
 		if (m_nOrientation == DMORIENT_LANDSCAPE)
-			nrt = InitPrinter(FPLength * 2, FPWidth);
+			nrt = InitPrinter(A4_H, A4_W);
 		else
-			nrt = InitPrinter(FPWidth, FPLength * 2);
+			nrt = InitPrinter(A4_W, A4_H);
 		if (0 != nrt)
 			break;
 
@@ -499,16 +532,9 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				printRect.right = x + nXoff + 160 + w;
 				printRect.bottom = (-y - 365 - h - nYoff);
 
-				if (z == 0)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX);
-				}
-				else
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_RIGHT | DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX);
-				}
-
-				ftPrint.DeleteObject();
+				PaintTile(nFontSize, strFontName, printRect, strText);
+				MoveToEx(m_hPrinterDC, printRect.left, printRect.bottom, NULL);
+				LineTo(m_hPrinterDC, printRect.right, printRect.bottom);
 			}
 			::EndPage(m_hPrinterDC);
 			xml.OutOfElem();

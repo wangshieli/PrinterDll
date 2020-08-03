@@ -93,6 +93,12 @@
     <ClInclude Include="Function\Bbdy\Spbmdy.h">
       <Filter>Function\Bbdy</Filter>
     </ClInclude>
+    <ClInclude Include="Function\Bbdy\Hzxxbdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Fpcxdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Print Control.cpp">
@@ -135,6 +141,12 @@
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Spbmdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Hzxxbdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Fpcxdy.cpp">
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
   </ItemGroup>

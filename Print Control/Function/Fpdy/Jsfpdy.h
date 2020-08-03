@@ -217,7 +217,7 @@ public:
 	virtual ~CJsfpdy();
 
 public:
-	CString Dlfpdy(LPSTR sInputInfo);
+	CString Dlfpdy(LPCTSTR sInputInfo);
 	LONG Print(LPCTSTR billXml, CString strFplxdm);
 
 private:

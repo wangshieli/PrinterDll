@@ -17,7 +17,7 @@ CJsfpdy::~CJsfpdy()
 
 }
 
-CString CJsfpdy::Dlfpdy(LPSTR sInputInfo)
+CString CJsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 {
 	FPDY fpdy;
 	CMarkup xml;
@@ -197,7 +197,7 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 		{
 			xml.FindElem("group");
 			xml.IntoElem();
-			if (xml.FindElem("xm")) fpxx.fyxmxx[i].sSpmc = xml.GetData();
+			if (xml.FindElem("spmc")) fpxx.fyxmxx[i].sSpmc = xml.GetData();
 			if (m_strFppy.CompareNoCase("01") == 0 || m_strFppy.CompareNoCase("06") == 0)
 			{
 				if (fpxx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
@@ -242,47 +242,15 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 			{
 
 			}
-			if (xml.FindElem("sl")) fpxx.fyxmxx[i].sSpsl = xml.GetData();
-			if (xml.FindElem("dj"))   fpxx.fyxmxx[i].sDj = xml.GetData();
-			if (xml.FindElem("je"))   fpxx.fyxmxx[i].sJe = xml.GetData();
+			if (xml.FindElem("spsl")) fpxx.fyxmxx[i].sSpsl = xml.GetData();
 			if (xml.FindElem("hsdj")) fpxx.fyxmxx[i].sHsdj = xml.GetData();
 			if (xml.FindElem("hsje")) fpxx.fyxmxx[i].sHsje = xml.GetData();
-			if (xml.FindElem("zsl"))   fpxx.fyxmxx[i].sSl = xml.GetData();
+			if (xml.FindElem("dj"))   fpxx.fyxmxx[i].sDj = xml.GetData();
+			if (xml.FindElem("je"))   fpxx.fyxmxx[i].sJe = xml.GetData();		
+			if (xml.FindElem("sl"))   fpxx.fyxmxx[i].sSl = xml.GetData();
 			if (xml.FindElem("se"))   fpxx.fyxmxx[i].sSe = xml.GetData();
 			xml.OutOfElem();
 
-			//			if (fpxx.fyxmxx[i].sSl.CompareNoCase("0") != 0 &&
-			//				fpxx.fyxmxx[i].sSl.CompareNoCase("0.0") != 0 &&
-			//				fpxx.fyxmxx[i].sSl.CompareNoCase("0.00") != 0 )
-			//			{
-			//				if (fpxx.fyxmxx[i].sSl.GetLength()>0)
-			//				{
-			//					fpxx.fyxmxx[i].sSl.TrimLeft(_T("0."));
-			//					fpxx.fyxmxx[i].sSl = fpxx.fyxmxx[i].sSl.Left(2);
-			//					fpxx.fyxmxx[i].sSl = fpxx.fyxmxx[i].sSl+"%";
-			//				}
-			//
-			//				if(fpxx.fyxmxx[i].sSe.Find('.') != -1)  //有小数点
-			//				{
-			//					int leng_Hjje = fpxx.fyxmxx[i].sSe.GetLength();
-			//					if (fpxx.fyxmxx[i].sSe.Mid(leng_Hjje-3,1).CompareNoCase(".") != 0) //小数点后只有一位
-			//					{
-			//						fpxx.fyxmxx[i].sSe += "0";
-			//					}
-			//				}
-			//				else
-			//				{
-			//					if(fpxx.fyxmxx[i].sSe.GetLength()>0)
-			//						fpxx.fyxmxx[i].sSe += ".00";
-			//					else
-			//						fpxx.fyxmxx[i].sSe += "0.00";
-			//				}
-			//			}
-			//			else
-			//			{
-			//				fpxx.fyxmxx[i].sSl.Format("***");
-			//				fpxx.fyxmxx[i].sSe.Format("***");
-			// 			}
 			if (fpxx.fyxmxx[i].sSpsl.Find(".") != -1)
 			{
 				int leng_spsl = fpxx.fyxmxx[i].sSpsl.GetLength();
@@ -1423,17 +1391,50 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 				printRect.right = x + nXoff + w + 100;
 				printRect.bottom = -((y + 5 + nYoff) + h);
 
+				RECT testRect = printRect;
+
 				if (z == 0)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_NOPREFIX);
 				}
 				else if (z == 2)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
 				}
 				else
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
+				}
+
+				if (printRect.right >= testRect.right)
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					}
+				}
+				else
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					}
 				}
 			}
 			ftPrint.DeleteObject();

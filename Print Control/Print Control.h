@@ -19,4 +19,4 @@ public:
 
 extern PRINTCONTROL_API int nPrintControl;
 
-PRINTCONTROL_API void PostAndRecvEx(IN LPSTR pszPost, OUT LPSTR pszRecv);
+PRINTCONTROL_API void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv);

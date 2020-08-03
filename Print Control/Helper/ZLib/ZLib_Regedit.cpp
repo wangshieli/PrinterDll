@@ -242,43 +242,14 @@ int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CS
 	CString strTempTop, strTempLeft;
 	int rtn[5];
 
-	char sTempPath[MAX_PATH], sTempIniPath[MAX_PATH];
-#if PATH
-	strcpy(sTempPath, sYbjszFile);
-#else
-//	strcpy(sTempPath, CONFIG_PATH);
-#endif
-	strcpy(sTempIniPath, sTempPath);
-	strcat(sTempIniPath, "\\ybjsz.ini");
+	CString ini = "painter.ini";
 
-	char cstr1[100], cstr2[100], cstr3[100];
-	rtn[0] = GetPrivateProfileString(strFplxdm.GetBuffer(0), "top",	"", cstr1, sizeof(cstr1), sTempIniPath);
-	rtn[1] = GetPrivateProfileString(strFplxdm.GetBuffer(0), "left",	"", cstr2, sizeof(cstr2), sTempIniPath);
-	rtn[2] = GetPrivateProfileString("QRCode", "QRCodeSize",	"", cstr3, sizeof(cstr3), sTempIniPath);
+	char cstr1[100], cstr2[100];
+	rtn[0] = GetPrivateProfileString(strFplxdm, "top",	"", cstr1, sizeof(cstr1), ini);
+	rtn[1] = GetPrivateProfileString(strFplxdm, "left",	"", cstr2, sizeof(cstr2), ini);
 
-	if(rtn[0] == 0 && rtn[1] == 0)
-	{
-		strcat_s(sTempPath, "\\ybjsz.xml");
-		xml.Load(sTempPath);
-		xml.FindElem("business");
-		xml.IntoElem();
-		xml.FindElem("body");
-		xml.IntoElem();
-		if(xml.FindElem("top")) strTempTop = xml.GetData();
-		if(xml.FindElem("left")) strTempLeft = xml.GetData();
-		xml.OutOfElem();
-
-		WritePrivateProfileString(strFplxdm.GetBuffer(0), "top", strTempTop.GetBuffer(0), sTempIniPath);
-		WritePrivateProfileString(strFplxdm.GetBuffer(0), "left", strTempLeft.GetBuffer(0), sTempIniPath);
-
-		strTop = strTempTop;
-		strLeft = strTempLeft;
-
-		return 0;
-	}
 	strTop.Format("%s", cstr1);
 	strLeft.Format("%s", cstr2);
-	strQRCodeSize.Format("%s", cstr3);
 
 	return 0;
 }

@@ -90,7 +90,7 @@ void CFpdyBase::GetQRcodePath()
 	strcat_s(m_cQRcodePath, MAX_PATH, "_SKSClog");
 }
 
-void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data)
+void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int s)
 {
 	CFont *pOldFont;
 	CFont fontHeader;
@@ -98,11 +98,27 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data)
 	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+	UINT flags1 = 0;
+	UINT flags2 = 0;
+	UINT flags3 = 0;
+	if (z == ZL)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+	}
+	else if (z == ZC)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
+	}
+
 	RECT trect = rect;
 
 	int recv_h = rect.bottom - rect.top;
-	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
-	while (h <= recv_h + 5)
+	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	while (h <= recv_h + s)
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
@@ -111,14 +127,14 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data)
 		fontHeader.CreatePointFont(fontSize, "FixedSys", CDC::FromHandle(m_hPrinterDC));
 		trect = rect;
 		pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-		h = ::DrawText(m_hPrinterDC, data, -1, &trect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
+		h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
 	}
 	rect.top = rect.top - (h - recv_h) / 2;
 
 	if (rect.right >= trect.right)
-		::DrawText(m_hPrinterDC, data, -1, &rect, DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX);
+		::DrawText(m_hPrinterDC, data, -1, &rect, flags2);
 	else
-		::DrawText(m_hPrinterDC, data, -1, &rect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+		::DrawText(m_hPrinterDC, data, -1, &rect, flags3);
 
 	::SelectObject(m_hPrinterDC, pOldFont);
 	fontHeader.DeleteObject();

@@ -251,7 +251,7 @@ public:
 	virtual ~CZzsfpdy();
 
 public:
-	CString Dlfpdy(LPTSTR sInputInfo);
+	CString Dlfpdy(LPCTSTR sInputInfo);
 
 private:
 	LONG Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString hjse);

@@ -17,7 +17,7 @@ CEscxstyfp::~CEscxstyfp()
 
 }
 
-CString CEscxstyfp::Dlfpdy(LPSTR sInputInfo)
+CString CEscxstyfp::Dlfpdy(LPCTSTR sInputInfo)
 {
 	FPDY fpdy;
 	CMarkup xml;
@@ -220,15 +220,15 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 
 				if (z == 0)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_LEFT | DT_EDITCONTROL | DT_NOPREFIX);
 				}
 				else if (z == 2)
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/* DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX | */DT_SINGLELINE | DT_VCENTER);
 				}
 				else
 				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
 				}
 			}
 			ftPrint.DeleteObject();

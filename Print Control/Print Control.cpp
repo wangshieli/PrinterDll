@@ -12,6 +12,7 @@
 
 #include "Function/Bbdy/Khbmdy.h"
 #include "Function/Bbdy/Spbmdy.h"
+#include "Function/Bbdy/Hzxxbdy.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -54,51 +55,72 @@ int main()
     return nRetCode;
 }
 
-void PostAndRecvEx(IN LPTSTR pszPost, OUT LPTSTR pszRecv)
+void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 {
 	CMarkup xml;
 	CString sFplxdm;
+	CString sDylx;
 	xml.SetDoc(pszPost);
 	xml.FindElem("business");
 	xml.IntoElem();
 	xml.FindElem("body");
 	xml.IntoElem();
-	if (xml.FindElem("fplxdm")) sFplxdm = xml.GetData();
-	if (sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
+	if (xml.FindChildElem("dylx")) sDylx = xml.GetData();
+
+	if (sDylx.Compare("0") == 0) // 发票打印
 	{
-		CZzsfpdy zzsfpdy;
-		zzsfpdy.Dlfpdy(pszPost);
-		//DEBUG_TRACELOG_STR("输出XML", strResult);
-		return;
+		CString sFplxdm;
+		if (xml.FindChildElem("fplxdm")) sFplxdm = xml.GetData();
+		if (sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
+		{
+			CZzsfpdy zzsfpdy;
+			zzsfpdy.Dlfpdy(pszPost);
+			return;
+		}
+		else if (sFplxdm.Compare("005") == 0)
+		{
+			CJdcfpdy jdcfpdy;
+			jdcfpdy.Dlfpdy(pszPost);
+			return;
+		}
+		else if (sFplxdm.Compare("025") == 0)
+		{
+			CJsfpdy jsfpdy;
+			jsfpdy.Dlfpdy(pszPost);
+			return;
+		}
+		else if (sFplxdm.Compare("006") == 0)
+		{
+			CEscxstyfp escfpdy;
+			escfpdy.Dlfpdy(pszPost);
+			return;
+		}
+		else
+		{
+
+		}
 	}
-	else if (sFplxdm.Compare("005") == 0)
+	else if (sDylx.Compare("1") == 0) // 增值发票清单打印
 	{
-		CJdcfpdy jdcfpdy;
-		jdcfpdy.Dlfpdy(pszPost);
-		//DEBUG_TRACELOG_STR("输出XML", strResult);
-		//strcpy(pszRecv, strResult);
-		return;
+		CString sFplxdm;
+		if (xml.FindChildElem("fplxdm")) sFplxdm = xml.GetData();
+		if(sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
+		{
+			CZzsfpdy zzsfpdy;
+			zzsfpdy.Dlfpdy(pszPost);
+			return;
+		}
 	}
-	else if (sFplxdm.Compare("025") == 0)
+	else if (sDylx.Compare("2") == 0) //报表打印
 	{
-		CJsfpdy jsfpdy;
-		jsfpdy.Dlfpdy(pszPost);
-		//DEBUG_TRACELOG_STR("输出XML", strResult);
-		//strcpy(pszRecv, strResult);
-		return;
-	}
-	else if (sFplxdm.Compare("006") == 0)
-	{
-		CEscxstyfp escfpdy;
-		escfpdy.Dlfpdy(pszPost);
-		//strcpy(pszRecv, strResult);
+		//CKhbmdy c;
+		//CSpbmdy c;
+		CHzxxbdy c;
+		c.Dlfpdy(pszPost);
 		return;
 	}
 	else
 	{
-		//CKhbmdy c;
-		CSpbmdy c;
-		c.Dlfpdy(pszPost);
-		return;
+
 	}
 }
