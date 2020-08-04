@@ -101,7 +101,6 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	UINT flags1 = 0;
 	UINT flags2 = 0;
 	UINT flags3 = 0;
-	int nShiting = 3;
 	if (z == ZL)
 	{
 		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
@@ -129,7 +128,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 
 	int recv_h = rect.bottom - rect.top;
 	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
-	while (h <= recv_h + s)
+	while (s != 0 && h <= recv_h + s)
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
@@ -140,7 +139,8 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 		h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
 	}
-	rect.top = rect.top - (h - recv_h) / 2;
+	if (s != 0)
+		rect.top = rect.top - (h - recv_h) / 2;
 
 	if (rect.right >= trect.right)
 		::DrawText(m_hPrinterDC, data, -1, &rect, flags2);

@@ -265,9 +265,9 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			CString strText = xml.GetData();
 
 			itemRect.left = x + nXoff + 100;
-			itemRect.top = (-y - nYoff);
+			itemRect.top = (-y - 5 - nYoff);
 			itemRect.right = x + nXoff + 100 + w;
-			itemRect.bottom = (-y - h - nYoff);
+			itemRect.bottom = (-y + 5 - h - nYoff);
 
 			if (w == 0 && h == 0)
 			{
@@ -281,7 +281,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			}
 			else
 			{
-				PaintTile(nFontSize, strFontName, itemRect, strText, z, 10);
+				PaintTile(nFontSize, strFontName, itemRect, strText, z, 0);
 			}
 		}
 

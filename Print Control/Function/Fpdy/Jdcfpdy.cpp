@@ -220,9 +220,8 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 
 		while (xml.FindElem("Item"))
 		{
-			RECT printRect;
-			CFont ftPrint;
-			CString strText = xml.GetData();
+			RECT itemRect;
+
 			int x = atoi(xml.GetAttrib("x"));
 			int y = atoi(xml.GetAttrib("y"));
 			int w = atoi(xml.GetAttrib("w"));
@@ -230,66 +229,28 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
-			ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			::SelectObject(m_hPrinterDC, ftPrint);
-			printRect.left = x + nXoff + 100;
-			printRect.top = -(y - 5 + nYoff);
+			CString strText = xml.GetData();
+
+			itemRect.left = x + nXoff + 100;
+			itemRect.top = (-y - 5 - nYoff);
+			itemRect.right = x + nXoff + 100 + w;
+			itemRect.bottom = (-y + 5 - h - nYoff);
+
 
 			if (w == 0 && h == 0)
 			{
-				::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
+				CFont *pOldFont;
+				CFont fontHeader;
+				fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
+				pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+				::TextOut(m_hPrinterDC, itemRect.left, itemRect.top, strText, strText.GetLength());
+				::SelectObject(m_hPrinterDC, pOldFont);
+				fontHeader.DeleteObject();
 			}
 			else
 			{
-				printRect.right = x + nXoff + w + 100;
-				printRect.bottom = -((y + 5 + nYoff) + h);
-
-				RECT testRect = printRect;
-				if (z == 0)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX);
-				}
-				else if (z == 2)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
-				}
-				else
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
-				}
-
-				if (printRect.right >= testRect.right)
-				{
-					if (z == 0)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX);
-					}
-					else if (z == 2)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX);
-					}
-					else
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
-					}
-				}
-				else
-				{
-					if (z == 0)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
-					}
-					else if (z == 2)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
-					}
-					else
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
-					}
-				}
+				PaintTile(nFontSize, strFontName, itemRect, strText, z, 0);
 			}
-			ftPrint.DeleteObject();
 		}
 
 		// 输出大写金额开头圈叉符号
