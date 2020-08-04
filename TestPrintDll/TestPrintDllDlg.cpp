@@ -173,7 +173,7 @@ void CTestPrintDllDlg::OnBnClickedButton004qd()
 	// TODO: 在此添加控件通知处理程序代码
 	TRACE(_T("开始打印004QD!\r\n"));
 	CMarkup xml004qd;
-	if (!xml004qd.Load("004QD_1P.xml"))
+	if (!xml004qd.Load("004QD_2P.xml"))
 	{
 		TRACE(_T("打开004QD.xml失败!\r\n"));
 		return;

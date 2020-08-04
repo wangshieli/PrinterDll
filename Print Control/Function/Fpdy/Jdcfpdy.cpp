@@ -54,8 +54,8 @@ CString CJdcfpdy::Dlfpdy(LPCTSTR sInputInfo)
 		fpdy.sErrorInfo = sMsg;
 		return GenerateXMLFpdy(fpdy);
 	}
-	if (xml.FindElem("fplxdm")) fpdy.sFplxdm = xml.GetData();
 	if (xml.FindElem("dylx"))   fpdy.sDylx = xml.GetData();
+	if (xml.FindElem("fplxdm")) fpdy.sFplxdm = xml.GetData();
 	if (xml.FindElem("dyfs"))   fpdy.sDyfs = xml.GetData();
 	if (xml.FindElem("printername"))	m_sPrinterName = xml.GetData();
 	if (xml.FindElem("printtasknameflag")) m_sPrintTaskNameFlag = xml.GetData();

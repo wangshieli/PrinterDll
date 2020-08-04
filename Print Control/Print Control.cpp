@@ -14,6 +14,8 @@
 #include "Function/Bbdy/Spbmdy.h"
 #include "Function/Bbdy/Hzxxbdy.h"
 
+#include "Helper/Log/TraceLog.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -57,6 +59,9 @@ int main()
 
 void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 {
+	DEBUG_TRACELOG_STR("", "enter PostAndRecvEx");
+	DEBUG_TRACELOG_STR("pszPost", pszPost);
+	DEBUG_TRACELOG_STR("pszRecv", pszRecv);
 	CMarkup xml;
 	CString sFplxdm;
 	CString sDylx;
@@ -65,16 +70,21 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 	xml.IntoElem();
 	xml.FindElem("body");
 	xml.IntoElem();
-	if (xml.FindChildElem("dylx")) sDylx = xml.GetData();
+	if (xml.FindElem("dylx")) sDylx = xml.GetData();
 
+	DEBUG_TRACELOG_STR("dylx", sDylx);
 	if (sDylx.Compare("0") == 0) // 发票打印
 	{
+		DEBUG_TRACELOG_STR("", "enter fpdy");
 		CString sFplxdm;
-		if (xml.FindChildElem("fplxdm")) sFplxdm = xml.GetData();
+		if (xml.FindElem("fplxdm")) sFplxdm = xml.GetData();
 		if (sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
 		{
+			DEBUG_TRACELOG_STR("", "enter zzsfpdy");
 			CZzsfpdy zzsfpdy;
-			zzsfpdy.Dlfpdy(pszPost);
+			CString strResult = zzsfpdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			DEBUG_TRACELOG_STR("", "out zzsfpdy");
 			return;
 		}
 		else if (sFplxdm.Compare("005") == 0)
@@ -99,23 +109,24 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		{
 
 		}
+		DEBUG_TRACELOG_STR("", "out fpdy");
 	}
 	else if (sDylx.Compare("1") == 0) // 增值发票清单打印
 	{
 		CString sFplxdm;
 		if (xml.FindChildElem("fplxdm")) sFplxdm = xml.GetData();
-		if(sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
-		{
+		//if(sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
+		//{
 			CZzsfpdy zzsfpdy;
 			zzsfpdy.Dlfpdy(pszPost);
 			return;
-		}
+		//}
 	}
 	else if (sDylx.Compare("2") == 0) //报表打印
 	{
-		//CKhbmdy c;
+		CKhbmdy c;
 		//CSpbmdy c;
-		CHzxxbdy c;
+		//CHzxxbdy c;
 		c.Dlfpdy(pszPost);
 		return;
 	}

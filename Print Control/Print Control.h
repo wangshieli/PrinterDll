@@ -10,13 +10,12 @@
 #define PRINTCONTROL_API __declspec(dllimport)
 #endif
 
-// 此类是从 dll 导出的
-class PRINTCONTROL_API CPrintControl {
-public:
-	CPrintControl(void);
-	// TODO: 在此处添加方法。
-};
-
-extern PRINTCONTROL_API int nPrintControl;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 PRINTCONTROL_API void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv);
+
+#ifdef __cplusplus
+}
+#endif

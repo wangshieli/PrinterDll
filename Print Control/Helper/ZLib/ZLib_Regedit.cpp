@@ -242,7 +242,7 @@ int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CS
 	CString strTempTop, strTempLeft;
 	int rtn[5];
 
-	CString ini = "painter.ini";
+	CString ini = "D:\\Mr.Wang\\My.Work\\Tax System Control\\Debug\\printer.ini";
 
 	char cstr1[100], cstr2[100];
 	rtn[0] = GetPrivateProfileString(strFplxdm, "top",	"", cstr1, sizeof(cstr1), ini);

@@ -10,9 +10,19 @@
 #define LINEFEED_P (22+4) //换行数，标识 竖向
 #define LINEFEED_L (16) //换行数，标识 横向
 
-CZzsfpdy::CZzsfpdy():m_nOrientation(DMORIENT_PORTRAIT),
-	m_nPageSize(LINEFEED_P),
-	m_sHx("")
+#define XU_W	100
+#define MC_W	400
+#define XH_W	250
+#define DW_W	192
+#define SL_W	192
+#define DJ_W	200
+#define JE_W	250
+#define SLV_W	100
+#define SE_W	250
+
+CZzsfpdy::CZzsfpdy() :m_nOrientation(DMORIENT_PORTRAIT),
+m_nPageSize(LINEFEED_P),
+m_sHx("")
 {
 }
 
@@ -27,6 +37,8 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 	ZZSFP_FPXX fpmx;
 	CString printXml("");
 	m_sPrinterName.Empty();
+	TRACE("wsl:");
+	OutputDebugString(sInputInfo);
 
 	int rtn = 0;
 	CString sCode = "", sMsg = "";
@@ -59,8 +71,9 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 		fpdy.sErrorInfo = sMsg;
 		return GenerateXMLFpdy(fpdy);
 	}
-	if (xml.FindElem("fplxdm")) fpdy.sFplxdm = xml.GetData();
+
 	if (xml.FindElem("dylx"))   fpdy.sDylx = xml.GetData();
+	if (xml.FindElem("fplxdm")) fpdy.sFplxdm = xml.GetData();
 	if (xml.FindElem("dyfs"))   fpdy.sDyfs = xml.GetData();
 	if (xml.FindElem("printername"))	m_sPrinterName = xml.GetData();
 	if (xml.FindElem("hx")) m_sHx = xml.GetData();
@@ -117,8 +130,8 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 	CString _sLeft = "";
 	CString _sQRSize = "";
 	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft) * 10;
-	nYoff = atoi(_sTop) * 10;
+	nXoff = atoi(_sLeft);
+	nYoff = atoi(_sTop);
 	nQRCodeSize = atoi(_sQRSize) * 10;
 
 	int _nHjjeLen = strlen(hjje);
@@ -240,9 +253,8 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 
 		while (xml.FindElem("Item"))
 		{
-			RECT printRect;
-			CFont ftPrint;
-			CString strText = xml.GetData();
+			RECT itemRect;
+
 			int x = atoi(xml.GetAttrib("x"));
 			int y = atoi(xml.GetAttrib("y"));
 			int w = atoi(xml.GetAttrib("w"));
@@ -250,67 +262,27 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
-			ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			::SelectObject(m_hPrinterDC, ftPrint);
-			printRect.left = x + nXoff + 100;
-			printRect.top = -(y - 5 + nYoff);
+			CString strText = xml.GetData();
+
+			itemRect.left = x + nXoff + 100;
+			itemRect.top = (-y - nYoff);
+			itemRect.right = x + nXoff + 100 + w;
+			itemRect.bottom = (-y - h - nYoff);
 
 			if (w == 0 && h == 0)
 			{
-				::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
+				CFont *pOldFont;
+				CFont fontHeader;
+				fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
+				pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+				::TextOut(m_hPrinterDC, itemRect.left, itemRect.top - 5, strText, strText.GetLength());
+				::SelectObject(m_hPrinterDC, pOldFont);
+				fontHeader.DeleteObject();
 			}
 			else
 			{
-				printRect.right = x + nXoff + w + 100;
-				printRect.bottom = -((y + 5 + nYoff) + h);
-
-				RECT testRect = printRect;
-
-				if (z == 0)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX);
-				}
-				else if (z == 2)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
-				}
-				else
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
-				}
-
-				if (printRect.right >= testRect.right)
-				{
-					if (z == 0)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX);
-					}
-					else if (z == 2)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX);
-					}
-					else
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
-					}
-				}
-				else
-				{
-					if (z == 0)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
-					}
-					else if (z == 2)
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
-					}
-					else
-					{
-						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
-					}
-				}
+				PaintTile(nFontSize, strFontName, itemRect, strText, z, 10);
 			}
-			ftPrint.DeleteObject();
 		}
 
 		// 输出大写金额开头圈叉符号
@@ -349,10 +321,11 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 	CString _sTop = "";
 	CString _sLeft = "";
 	CString _sQRSize = "";
-	CString _sItem = strFplxdm + "_QD";
+	//CString _sItem = strFplxdm + "_QD";
+	CString _sItem = "XHQD";
 	ZLib_GetIniYbjValue(_sItem, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft) * 10;
-	nYoff = atoi(_sTop) * 10;
+	nXoff = atoi(_sLeft);
+	nYoff = atoi(_sTop);
 
 	do
 	{
@@ -395,118 +368,172 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 			CString strTemp;
 			CFont *pOldFont;
 			CFont fontHeader;
-			fontHeader.CreatePointFont(150, "FixedSys", CDC::FromHandle(m_hPrinterDC));
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
-			CRect rect1;
-			rect1.left = 0 + nXoff;
-			rect1.top = 0 - nYoff;
-			rect1.right = 2010 + nXoff;
-			rect1.bottom = -1830 - 900 - nYoff;
-			if (m_nOrientation == DMORIENT_LANDSCAPE)
-			{
-				rect1.left = 0 + nXoff;
-				rect1.top = 0 - nYoff;
-				rect1.right = 2010 + nXoff;
-				rect1.bottom = -2010 - nYoff;
-			}
-			
-			TextOut(m_hPrinterDC, rect1.left + 670, rect1.top - 20, CString("销售货物或者提供应税劳务、服务清单"), 34);
-			::SelectObject(m_hPrinterDC, pOldFont);
-			fontHeader.DeleteObject();
+			CRect PaintRect;
+			PaintRect.left = 0 + nXoff;
+			PaintRect.top = 0 - nYoff;
+			PaintRect.right = 2010 + nXoff;
+			PaintRect.bottom = -1830 - 900 - nYoff;
+
+			RECT rect;
+			rect.left = PaintRect.left;
+			rect.top = PaintRect.top;
+			rect.right = PaintRect.right;
+			rect.bottom = PaintRect.top - 100;
+
+			PaintTile(150, "FixedSys", rect, "销售货物或者提供应税劳务、服务清单");
 
 			fontHeader.CreatePointFont(120, "FixedSys", CDC::FromHandle(m_hPrinterDC));
 			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
-			TextOut(m_hPrinterDC, rect1.left + 40, rect1.top - 100, CString("购物单位名称："), 14);
-			TextOut(m_hPrinterDC, rect1.left + 40, rect1.top - 165, CString("销货单位名称："), 14);
+			TextOut(m_hPrinterDC, PaintRect.left + 40, PaintRect.top - 100, CString("购物单位名称："), strlen("购物单位名称：") + 1);
+			TextOut(m_hPrinterDC, PaintRect.left + 40, PaintRect.top - 165, CString("销货单位名称："), strlen("销货单位名称：") + 1);
 			if (!m_sTempFplxdm.CompareNoCase("007"))
 			{
-				TextOut(m_hPrinterDC, rect1.left + 40, rect1.top - 230, CString("所属增值税普通发票代码："), 24);
+				TextOut(m_hPrinterDC, PaintRect.left + 40, PaintRect.top - 230, CString("所属增值税普通发票代码："), strlen("所属增值税普通发票代码：") + 1);
 			}
 			else if (!m_sTempFplxdm.CompareNoCase("004"))
 			{
-				TextOut(m_hPrinterDC, rect1.left + 40, rect1.top - 230, CString("所属增值税专用发票代码："), 24);
+				TextOut(m_hPrinterDC, PaintRect.left + 40, PaintRect.top - 230, CString("所属增值税专用发票代码："), strlen("所属增值税专用发票代码：") + 1);
 			}
 			else
 			{
 				//
 			}
-			TextOut(m_hPrinterDC, rect1.left + 1005, rect1.top - 230, CString("号码："), 6);
-			TextOut(m_hPrinterDC, rect1.left + 1005 + 600, rect1.top - 230, CString("共"), 2);
-			TextOut(m_hPrinterDC, rect1.left + 1005 + 680, rect1.top - 230, CString("页"), 2);
-			TextOut(m_hPrinterDC, rect1.left + 1005 + 740, rect1.top - 230, CString("第"), 2);
-			TextOut(m_hPrinterDC, rect1.left + 1005 + 830, rect1.top - 230, CString("页"), 2);
+			TextOut(m_hPrinterDC, PaintRect.left + 1005, PaintRect.top - 230, CString("号码："), strlen("号码：") + 1);
+			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 600, PaintRect.top - 230, CString("共"), strlen("共") + 1);
+			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 680, PaintRect.top - 230, CString("页"), strlen("页") + 1);
+			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 740, PaintRect.top - 230, CString("第"), strlen("第") + 1);
+			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 830, PaintRect.top - 230, CString("页"), strlen("页") + 1);
 			char buffer[5] = { 0 };
 			itoa(npn, buffer, 10);
-			TextOut(m_hPrinterDC, rect1.left + 1005 + 780, rect1.top - 230, buffer, strlen(buffer));
+			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 780, PaintRect.top - 230, buffer, strlen(buffer));
 			itoa(m_nAllPageNum, buffer, 10);
-			TextOut(m_hPrinterDC, rect1.left + 1005 + 640, rect1.top - 230, buffer, strlen(buffer));
+			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 640, PaintRect.top - 230, buffer, strlen(buffer));
 
-			TextOut(m_hPrinterDC, rect1.left + 80, rect1.bottom + 108, CString("销货单位(章)："), 14);
-			TextOut(m_hPrinterDC, rect1.left + 1206, rect1.bottom + 108, CString("开票日期："), 10);
+			TextOut(m_hPrinterDC, PaintRect.left + 80, PaintRect.bottom + 108, CString("销货单位(章)："), strlen("销货单位(章)：") + 1);
+			TextOut(m_hPrinterDC, PaintRect.left + 1206, PaintRect.bottom + 108, CString("开票日期："), strlen("开票日期：") + 1);
 
-			Rectangle(m_hPrinterDC, rect1.left + 38, rect1.top - 300, rect1.right - 38, rect1.bottom + 150);
-			MoveToEx(m_hPrinterDC, rect1.left + 38, rect1.top - 370, NULL);
-			LineTo(m_hPrinterDC, rect1.right - 38, rect1.top - 370);
+			Rectangle(m_hPrinterDC, PaintRect.left + 38, PaintRect.top - 300, PaintRect.right - 38, PaintRect.bottom + 150);
+			MoveToEx(m_hPrinterDC, PaintRect.left + 38, PaintRect.top - 370, NULL);
+			LineTo(m_hPrinterDC, PaintRect.right - 38, PaintRect.top - 370);
 
 			::SelectObject(m_hPrinterDC, pOldFont);
 			fontHeader.DeleteObject(); // 框体打印完成
 
-			fontHeader.CreatePointFont(95, "FixedSys", CDC::FromHandle(m_hPrinterDC));
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-			TextOut(m_hPrinterDC, rect1.left + 55, rect1.top - 315, CString("序号"), 4);
+			int nShiting = 38;
 
-			MoveToEx(m_hPrinterDC, rect1.left + 38, rect1.bottom + 230, NULL);
-			LineTo(m_hPrinterDC, rect1.right - 38, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 50, rect1.bottom + 208, CString("备注"), 4);
-			::SelectObject(m_hPrinterDC, pOldFont);
-			fontHeader.DeleteObject();
+			int fontSize = 95;
+			LPCSTR fontType = "FixedSys";
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + XU_W; // 1
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "序号");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + XU_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + XU_W, PaintRect.bottom + 150);
+			nShiting += XU_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + MC_W; // 4
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "货物（劳务）名称");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + MC_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + MC_W, PaintRect.bottom + 230);
+			nShiting += MC_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + XH_W; // 1.5
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "规格型号");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + XH_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + XH_W, PaintRect.bottom + 230);
+			nShiting += XH_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + DW_W;
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "单位");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + DW_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + DW_W, PaintRect.bottom + 230);
+			nShiting += DW_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + SL_W;
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "数量");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + SL_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + SL_W, PaintRect.bottom + 230);
+			nShiting += SL_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + DJ_W;
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "单价");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + DJ_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + DJ_W, PaintRect.bottom + 230);
+			nShiting += DJ_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + JE_W;
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "金额");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + JE_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + JE_W, PaintRect.bottom + 230);
+			nShiting += JE_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + SLV_W;
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "税率");
+			MoveToEx(m_hPrinterDC, PaintRect.left + nShiting + SLV_W, PaintRect.top - 300, NULL);
+			LineTo(m_hPrinterDC, PaintRect.left + nShiting + SLV_W, PaintRect.bottom + 230);
+			nShiting += SLV_W;
+
+			rect.left = PaintRect.left + nShiting;
+			rect.top = PaintRect.top - 300;
+			rect.right = PaintRect.left + nShiting + SE_W;
+			rect.bottom = PaintRect.top - 300 - 70;
+			PaintTile(fontSize, fontType, rect, "税额");
+
+			MoveToEx(m_hPrinterDC, PaintRect.left + 38, PaintRect.bottom + 230, NULL);
+			LineTo(m_hPrinterDC, PaintRect.right - 38, PaintRect.bottom + 230);
+			rect.left = PaintRect.left + 38;
+			rect.top = PaintRect.bottom + 230;
+			rect.right = PaintRect.left + 38 + XU_W;
+			rect.bottom = PaintRect.bottom + 150;
+			PaintTile(fontSize, fontType, rect, "备注");
 
 			fontHeader.CreatePointFont(80, "FixedSys", CDC::FromHandle(m_hPrinterDC));
 			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-			TextOut(m_hPrinterDC, rect1.left + 80, rect1.bottom + 50, CString("注：本清单一式两联：\
+
+			rect.left = PaintRect.left + 38;
+			rect.top = PaintRect.bottom + 290;
+			rect.right = PaintRect.left + 38 + XU_W;
+			rect.bottom = PaintRect.bottom + 230;
+			PaintTile(fontSize, fontType, rect, "合计");
+
+			rect.left = PaintRect.left + 38;
+			rect.top = PaintRect.bottom + 350;
+			rect.right = PaintRect.left + 38 + XU_W;
+			rect.bottom = PaintRect.bottom + 290;
+			PaintTile(fontSize, fontType, rect, "折扣");
+
+			rect.left = PaintRect.left + 38;
+			rect.top = PaintRect.bottom + 410;
+			rect.right = PaintRect.left + 38 + XU_W;
+			rect.bottom = PaintRect.bottom + 350;
+			PaintTile(fontSize, fontType, rect, "小计");
+
+			TextOut(m_hPrinterDC, PaintRect.left + 80, PaintRect.bottom + 50, CString("注：本清单一式两联：\
 							第一联，销售方留存；第二联，销售方送交购买方"), 72);
-			::SelectObject(m_hPrinterDC, pOldFont);
-			fontHeader.DeleteObject();
-
-			TextOut(m_hPrinterDC, rect1.left + 50, rect1.bottom + 290, CString("合计"), 4);
-			TextOut(m_hPrinterDC, rect1.left + 50, rect1.bottom + 350, CString("折扣"), 4);
-			TextOut(m_hPrinterDC, rect1.left + 50, rect1.bottom + 410, CString("小计"), 4);
-
-			fontHeader.CreatePointFont(95, "FixedSys", CDC::FromHandle(m_hPrinterDC));
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-			MoveToEx(m_hPrinterDC, rect1.left + 140, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 140, rect1.bottom + 150);
-			TextOut(m_hPrinterDC, rect1.left + 210, rect1.top - 315, CString("货物（劳务）名称"), 16);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 620, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 620, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 670, rect1.top - 315, CString("规格型号"), 8);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 770 + 105, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 770 + 105, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 790 + 125, rect1.top - 315, CString("单位"), 4);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 830 + 200, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 830 + 200, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 870 + 210, rect1.top - 315, CString("数量"), 4);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 910 + 280, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 910 + 280, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 940 + 310, rect1.top - 315, CString("单价"), 4);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 1030 + 360, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 1030 + 360, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 1050 + 430, rect1.top - 315, CString("金额"), 4);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 1140 + 500, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 1140 + 500, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 1160 + 500, rect1.top - 315, CString("税率"), 4);
-
-			MoveToEx(m_hPrinterDC, rect1.left + 1180 + 560, rect1.top - 300, NULL);
-			LineTo(m_hPrinterDC, rect1.left + 1180 + 560, rect1.bottom + 230);
-			TextOut(m_hPrinterDC, rect1.left + 1800 + (rect1.right - 38 - rect1.left - 1800) / 2 - 60, rect1.top - 315, CString("税额"), 4);
 			::SelectObject(m_hPrinterDC, pOldFont);
 			fontHeader.DeleteObject();
 
@@ -527,14 +554,14 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
 				::SelectObject(m_hPrinterDC, ftPrint);
 
-				printRect.left = x + nXoff + 130;
-				printRect.top = (-y - 365 - nYoff);
-				printRect.right = x + nXoff + 160 + w;
-				printRect.bottom = (-y - 365 - h - nYoff);
+				printRect.left = x + nXoff + 38;
+				printRect.top = (-y - 300 - nYoff);
+				printRect.right = x + nXoff + 38 + w;
+				printRect.bottom = (-y - 300 - h - nYoff);
 
-				PaintTile(nFontSize, strFontName, printRect, strText);
-				MoveToEx(m_hPrinterDC, printRect.left, printRect.bottom, NULL);
-				LineTo(m_hPrinterDC, printRect.right, printRect.bottom);
+				PaintTile(nFontSize, strFontName, printRect, strText, z);
+				//MoveToEx(m_hPrinterDC, printRect.left, printRect.bottom, NULL);
+				//LineTo(m_hPrinterDC, printRect.right, printRect.bottom);
 			}
 			::EndPage(m_hPrinterDC);
 			xml.OutOfElem();
@@ -1481,14 +1508,10 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 	double dZKSE = 0.00;
 	fpmx.sKprq = fpmx.sKprq.Mid(0, 8);
 
-	int nTmp = 900;
-	int nTmpKprq = 35;
 
 	if (m_nOrientation == DMORIENT_LANDSCAPE)
 	{
 		m_nPageSize = LINEFEED_L;
-		nTmp = 195;
-		nTmpKprq = 20;
 	}
 
 	int nLY = 70;
@@ -1496,89 +1519,25 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 	LTFPQDXX_ZZSFP::iterator pos;
 	for (pos = fpmx.fpqdxx.begin(); pos != fpmx.fpqdxx.end(); pos++)
 	{
-		//计算商品名称长度
-		char* strSP = pos->sSpmc.GetBuffer(0);
-		int LengOfSpmc = strlen(strSP);
-		char* tempGgxh = pos->sGgxh.GetBuffer(0);
-		int LenOfGgxh = lstrlen(tempGgxh);
-
-		if (LengOfSpmc >= 40)
-		{
-			xywhsf(pos->ssSpmc, LX + 60, LY + nLY + i * nLY, LW + 440, LH + 50, LS_6, FS, ZL);
-		}
-		else if (LengOfSpmc >= 34 && LengOfSpmc < 40)
-		{
-			xywhsf(pos->ssSpmc, LX + 60, LY + nLY + i * nLY, LW + 440, LH + 50, LS_7, FS, ZL);
-		}
-		else if (LengOfSpmc >= 30 && LengOfSpmc < 34)
-		{
-			xywhsf(pos->ssSpmc, LX + 60, LY + nLY + i * nLY, LW + 440, LH + 50, LS_8, FS, ZL);
-		}
-		else
-		{
-			xywhsf(pos->ssSpmc, LX + 60, LY + nLY + i * nLY, LW + 440, LH + 50, LS_9, FS, ZL);
-		}
-
-		if (LenOfGgxh >= 18)
-		{
-			xywhsf(pos->ssGgxh, LX + 595 - 60, LY + nLY + i * nLY, LW + 210, LH + 50, LS_7, FS, ZL);
-		}
-		else if (LenOfGgxh >= 14 && LenOfGgxh < 18)
-		{
-			xywhsf(pos->ssGgxh, LX + 595 - 60, LY + nLY + i * nLY, LW + 210, LH + 50, LS_8, FS, ZL);
-		}
-		else
-		{
-			xywhsf(pos->ssGgxh, LX + 595 - 60, LY + nLY + i * nLY, LW + 210, LH + 50, LS_9, FS, ZL);
-		}
-
-		xywhsf(pos->ssDw, LX + 845, LY + nLY + i * nLY, LW + 120, LH + 50, LS_9, FS, ZL);
-
-		int LenOfSpsl = 0;
-		if (pos->sSpsl.GetLength() > 13)
-		{
-			pos->sSpsl = pos->sSpsl.Mid(0, 13);
-		}
-		char * strSpsl = pos->sSpsl.GetBuffer(0);
-		LenOfSpsl = strlen(strSpsl);
-
-		if (LenOfSpsl >= 11 && LenOfSpsl <= 13)
-		{
-			xywhsf(pos->ssSpsl, LX + 810 + 40, LY + nLY + i * nLY, LW + 200, LH + 50, LS_6, FS, ZR);
-		}
-		else
-		{
-			xywhsf(pos->ssSpsl, LX + 810 + 40, LY + nLY + i * nLY, LW + 200, LH + 50, LS_9, FS, ZR);
-		}
-
-		int LengOfDj = 0;
-		if (pos->sDj.GetLength() > 13)
-		{
-			pos->sDj = pos->sDj.Mid(0, 13);
-		}
-		char* str5 = pos->sDj.GetBuffer(0);
-		LengOfDj = strlen(str5);
-
-		if (LengOfDj >= 11 || LengOfDj <= 13)
-		{
-			xywhsf(pos->ssDj, LX + 1080 - 15, LY + nLY + i * nLY, LW + 200, LH + 50, LS_8, FS, ZR);
-		}
-		else
-		{
-			xywhsf(pos->ssDj, LX + 1080 - 15, LY + nLY + i * nLY, LW + 200, LH + 50, LS_9, FS, ZR);
-		}
-		xywhsf(pos->ssJe, LX + 1230 - 30, LY + nLY + i * nLY, LW + 300, LH + 50, LS_9, FS, ZR);
-		if (pos->sSl.GetLength() > 4)
-		{
-			xywhsf(pos->ssSl, LX + 1510, LY + nLY + i * nLY, LW + 100, LH + 50, LS_8, FS, ZR);
-		}
-		else
-		{
-			xywhsf(pos->ssSl, LX + 1510, LY + nLY + i * nLY, LW + 100, LH + 50, LS_9, FS, ZR);
-		}
-		xywhsf(pos->ssSe, LX + 1710 - 170, LY + nLY + i * nLY, LW + 300, LH + 50, LS_9, FS, ZR);
-
-		xywhsf(pos->sequenceNum, LX - 10, LY + nLY + i * nLY, LW + 500, LH + 50, LS_9, FS, ZL);
+		int nShiting = 0;
+		xywhsf(pos->sequenceNum, nShiting, nLY + i * nLY, XU_W, 70, LS_9, FS, ZL);
+		nShiting += XU_W;
+		xywhsf(pos->ssSpmc, nShiting, nLY + i * nLY, MC_W, 70, LS_9, FS, ZL);
+		nShiting += MC_W;
+		xywhsf(pos->ssGgxh, nShiting, nLY + i * nLY, XH_W, 70, LS_9, FS, ZL);
+		nShiting += XH_W;
+		xywhsf(pos->ssDw, nShiting, nLY + i * nLY, DW_W, 70, LS_9, FS, ZL);
+		nShiting += DW_W;
+		xywhsf(pos->ssSpsl, nShiting, nLY + i * nLY, SL_W, 70, LS_9, FS, ZR);
+		nShiting += SL_W;
+		xywhsf(pos->ssDj, nShiting, nLY + i * nLY, DJ_W, 70, LS_9, FS, ZR);
+		nShiting += DJ_W;
+		xywhsf(pos->ssJe, nShiting, nLY + i * nLY, JE_W, 70, LS_9, FS, ZR);
+		nShiting += JE_W;
+		xywhsf(pos->ssSl, nShiting, nLY + i * nLY, SLV_W, 70, LS_9, FS, ZR);
+		nShiting += SLV_W;
+		xywhsf(pos->ssSe, nShiting, nLY + i * nLY, SE_W, 70, LS_9, FS, ZR);
+		nShiting += SE_W;
 
 		i++;
 		if (i%m_nPageSize == 0)
@@ -1631,25 +1590,23 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 		num++;
 		if (num % m_nPageSize == 0)
 		{
-			xywhsf(fpmx.xjje, LX + 1520 - 500 - 10, LY + 1098 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-			xywhsf(fpmx.xjse, LX + 1910 - 555 - 10, LY + 1098 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-			xywhsf(fpmx.zkje, LX + 1520 - 500 - 10, LY + 1153 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-			xywhsf(fpmx.zkse, LX + 1910 - 555 - 10, LY + 1153 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-			xywhsf(fpmx.hjje, LX + 1520 - 500 - 10, LY + 1208 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-			xywhsf(fpmx.hjse, LX + 1910 - 555 - 10, LY + 1208 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-			xywhsf(fpmx.Ghdwmc, LX + 230, LY - 228, LW + 1000, LH + 50, LS_11, FS, ZL);
-			xywhsf(fpmx.Xhdwmc, LX + 230, LY - 163, LW + 1000, LH + 50, LS_11, FS, ZL);
-			xywhsf(fpmx.Fpdm, LX + 440 - 10, LY - 98, LW + 500, LH + 50, LS_11, FS, ZL);
-			xywhsf(fpmx.Fphm, LX + 1130 - 80, LY - 98, LW + 500, LH + 50, LS_11, FS, ZL);
-			xywhsf(fpmx.Kprq, LX + 1430 - 120, LY + 1362 + nTmp + nTmpKprq, LW + 500, LH + 50, LS_11, FS, ZL);
-			if (fpmx.sBz.GetLength() < 80)
-			{
-				xywhsf(fpmx.bz, LX + 60, LY + 1285 + nTmp, LW + 1700, LH + 60, LS_9, FS, ZL);
-			}
-			else
-			{
-				xywhsf(fpmx.bz, LX + 60, LY + 1285 + nTmp, LW + 1700, LH + 60, LS_8, FS, ZL);
-			}
+			int je_x = XU_W + MC_W + XH_W + DW_W + SL_W + DJ_W;
+			int se_x = je_x + JE_W + SLV_W;
+			int je_hj_y = 2730 - 300 - 230 - 60; //2730打印区高度  300标头  230备注top 60合计高度
+			int je_zk_y = je_hj_y - 60;
+			int je_xj_y = je_zk_y - 60;
+			xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, ZR);
+			xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, ZR);
+			xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, ZR);
+			xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, ZR);
+			xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, ZR);
+			xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, ZR);
+			xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, ZL);
+			xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, ZL);
+			xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, ZL);
+			xywhsf(fpmx.Fphm, 1080, 216 - 300, 500, 65, LS_11, FS, ZL);
+			xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, ZL);
+			xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, ZL);
 
 			if (k == 0)
 			{
@@ -1691,26 +1648,23 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 		}
 		j++;
 	}
-
-	xywhsf(fpmx.xjje, LX + 1520 - 500 - 10, LY + 1098 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-	xywhsf(fpmx.xjse, LX + 1910 - 555 - 10, LY + 1098 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-	xywhsf(fpmx.zkje, LX + 1520 - 500 - 10, LY + 1153 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-	xywhsf(fpmx.zkse, LX + 1910 - 555 - 10, LY + 1153 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-	xywhsf(fpmx.hjje, LX + 1520 - 500 - 10, LY + 1208 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-	xywhsf(fpmx.hjse, LX + 1910 - 555 - 10, LY + 1208 + nTmp, LW + 500, LH + 50, LS_9, FS, ZR);
-	xywhsf(fpmx.Ghdwmc, LX + 230, LY - 228, LW + 1000, LH + 50, LS_11, FS, ZL);
-	xywhsf(fpmx.Xhdwmc, LX + 230, LY - 163, LW + 1000, LH + 50, LS_11, FS, ZL);
-	xywhsf(fpmx.Fpdm, LX + 440 - 10, LY - 98, LW + 500, LH + 50, LS_11, FS, ZL);
-	xywhsf(fpmx.Fphm, LX + 1130 - 80, LY - 98, LW + 500, LH + 50, LS_11, FS, ZL);
-	xywhsf(fpmx.Kprq, LX + 1430 - 120, LY + 1362 + nTmp + nTmpKprq, LW + 500, LH + 50, LS_11, FS, ZL);// -10
-	if (fpmx.sBz.GetLength() < 80)
-	{
-		xywhsf(fpmx.bz, LX + 60, LY + 1285 + nTmp, LW + 1700, LH + 60, LS_9, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.bz, LX + 60, LY + 1285 + nTmp, LW + 1700, LH + 60, LS_8, FS, ZL);
-	}
+	int je_x = XU_W + MC_W + XH_W + DW_W + SL_W + DJ_W;
+	int se_x = je_x + JE_W + SLV_W;
+	int je_hj_y = 2730 - 300 - 230 - 60;
+	int je_zk_y = je_hj_y - 60;
+	int je_xj_y = je_zk_y - 60;
+	xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, ZR);
+	xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, ZR);
+	xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, ZR);
+	xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, ZR);
+	xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, ZR);
+	xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, ZR);
+	xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, ZL);
+	xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, ZL);
+	xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, ZL);
+	xywhsf(fpmx.Fphm, 1080 , 216 - 300, 500, 65, LS_11, FS, ZL);
+	xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, ZL);
+	xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, ZL);
 
 	addxml(fpmx.sGhdwmc, fpmx.Ghdwmc);
 	addxml(fpmx.sXhdwmc, fpmx.Xhdwmc);

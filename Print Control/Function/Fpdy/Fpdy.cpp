@@ -101,17 +101,28 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	UINT flags1 = 0;
 	UINT flags2 = 0;
 	UINT flags3 = 0;
+	int nShiting = 3;
 	if (z == ZL)
 	{
 		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
 		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+		rect.left += 3;
 	}
 	else if (z == ZC)
 	{
 		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
 		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
+		rect.left += 1;
+		rect.right -= 1;
+	}
+	else
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX;
+		rect.right -= 3;
 	}
 
 	RECT trect = rect;
@@ -123,8 +134,8 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
 
-		fontSize -= 5;
-		fontHeader.CreatePointFont(fontSize, "FixedSys", CDC::FromHandle(m_hPrinterDC));
+		fontSize -= 2;
+		fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 		trect = rect;
 		pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 		h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
