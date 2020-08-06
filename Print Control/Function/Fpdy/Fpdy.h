@@ -127,6 +127,9 @@ protected:
 private:
 	void GetQRcodePath();
 
+	void getSysDefPrinter(CString& printer);
+	void setSysDefprinter(CString& printer);
+
 protected:
 	char m_cQRcodePath[MAX_PATH]; // 二维码
 	int m_iPldy;	// 打印方式0:普通打印 (弹框打印)  1:连续打印 (不弹框打印) 2:使用默认打印机不弹框打印

@@ -37,10 +37,14 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 
 	if (0 == m_iPldy)
 	{
+		CString defPrinter = ""; 
+		getSysDefPrinter(defPrinter);
+		setSysDefprinter(m_sPrinterName);
 		if (m_pDlg->DoModal() == IDCANCEL)
 		{
 			return -1;// 用户取消了打印操作
 		}
+		setSysDefprinter(defPrinter);
 	}
 	else if (1 == m_iPldy)
 	{
@@ -88,6 +92,25 @@ void CFpdyBase::GetQRcodePath()
 		*(p + 1) = 0;
 	}
 	strcat_s(m_cQRcodePath, MAX_PATH, "_SKSClog");
+}
+
+void CFpdyBase::getSysDefPrinter(CString& printer)
+{
+	DWORD dwSize = 0;
+	if (!::GetDefaultPrinter(NULL, &dwSize) && ERROR_INSUFFICIENT_BUFFER == GetLastError())
+	{
+		TCHAR* name = new TCHAR[dwSize + 1];
+		if (::GetDefaultPrinter(name, &dwSize))
+		{
+			printer = name;
+		}
+		delete name;
+	}
+}
+
+void CFpdyBase::setSysDefprinter(CString& printer)
+{
+	::SetDefaultPrinter(printer);
 }
 
 void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int s)

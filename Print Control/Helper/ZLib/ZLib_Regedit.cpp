@@ -8,6 +8,7 @@
 #include "../../pch.h"
 #include "ZLib.h"
 #include "../../Helper/XML/Markup.h"
+#include "../../Helper/Log/TraceLog.h"
 #if PATH
 extern char sYbjszFile[MAX_PATH];
 extern char sPrintConfigFile[MAX_PATH];
@@ -236,13 +237,35 @@ int ZLib_SetIniYbjValue(CString strFplxdm, CString strTop, CString strLeft, CStr
 	return 0;
 }
 
+HMODULE GetSelfModuleMode()
+{
+	MEMORY_BASIC_INFORMATION mbi;
+	return ((::VirtualQuery(GetSelfModuleMode, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
+}
+
+void GetDllPath(CString& dllpath)
+{
+	TCHAR path[MAX_PATH];
+	GetModuleFileName(GetSelfModuleMode(), path, MAX_PATH);
+
+	char drive[_MAX_DRIVE];
+	char dir[_MAX_DIR];
+	_splitpath_s(path, drive, _MAX_DRIVE, dir, _MAX_DIR, NULL, 0, NULL, 0);
+	_makepath_s(path, MAX_PATH, drive, dir, "printer", "ini");
+	dllpath = path;
+
+	DEBUG_TRACELOG_STR("dllpath", dllpath);
+}
+
 int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CString& strQRCodeSize)
 {
 	CMarkup xml;
 	CString strTempTop, strTempLeft;
 	int rtn[5];
 
-	CString ini = "D:\\Mr.Wang\\My.Work\\Tax System Control\\Debug\\printer.ini";
+	CString ini;
+	GetDllPath(ini);
+	DEBUG_TRACELOG_STR("dllpath", strFplxdm);
 
 	char cstr1[100], cstr2[100];
 	rtn[0] = GetPrivateProfileString(strFplxdm, "top",	"", cstr1, sizeof(cstr1), ini);

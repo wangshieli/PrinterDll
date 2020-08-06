@@ -106,8 +106,8 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 	CString _sLeft = "";
 	CString _sQRSize = "";
 	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft) * 10;
-	nYoff = atoi(_sTop) * 10;
+	nXoff = atoi(_sLeft);
+	nYoff = atoi(_sTop);
 	nQRCodeSize = atoi(_sQRSize) * 10;
 
 	do
