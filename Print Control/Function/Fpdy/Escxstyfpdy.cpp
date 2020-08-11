@@ -169,32 +169,18 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 			{
 				int nScaledWidth = 160;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
 				int nScaledHeight = 160;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
-				::StretchBlt(m_hPrinterDC, nXoff + 20 + 180 - 160 + 20, -(nYoff + 40 + (180 - 160) - 50), nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+				::StretchBlt(m_hPrinterDC, 240 + nXoff, -55 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 			}
 
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
-
-			int n_x_RMB1 = 1660, n_y_RMB1 = -950;
-
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 31 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - 13 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - 22 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - 22 - nYoff);
 		}
 
 		while (xml.FindElem("Item"))
 		{
-			RECT printRect;
-			CFont ftPrint;
-			CString strText = xml.GetData();
+			RECT itemRect;
+
 			int x = atoi(xml.GetAttrib("x"));
 			int y = atoi(xml.GetAttrib("y"));
 			int w = atoi(xml.GetAttrib("w"));
@@ -202,36 +188,70 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
-			ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			::SelectObject(m_hPrinterDC, ftPrint);
-			printRect.left = x + nXoff + 100;
-			printRect.top = -(y - 5 + nYoff);
-			printRect.right = x + nXoff + 100 + w;
-			printRect.bottom = -(y - 5 + nYoff + h);
+			int tb = atoi(xml.GetAttrib("tb"));
+			CString strText = xml.GetData();
 
-			if (w == 0 && h == 0)
-			{
-				::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
-			}
-			else
-			{
-				printRect.right = x + nXoff + w + 100;
-				printRect.bottom = -((y + 5 + nYoff) + h);
+			itemRect.left = x + nXoff + 200;
+			itemRect.top = (-y - nYoff - 285);
+			itemRect.right = x + nXoff + 200 + w;
+			itemRect.bottom = (-y - h - nYoff - 285);
 
-				if (z == 0)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_LEFT | DT_EDITCONTROL | DT_NOPREFIX);
-				}
-				else if (z == 2)
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/* DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX | */DT_SINGLELINE | DT_VCENTER);
-				}
-				else
-				{
-					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
-				}
-			}
-			ftPrint.DeleteObject();
+
+			//if (w == 0 && h == 0)
+			//{
+			//	CFont *pOldFont;
+			//	CFont fontHeader;
+			//	fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
+			//	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+			//	::TextOut(m_hPrinterDC, itemRect.left, itemRect.top, strText, strText.GetLength());
+			//	::SelectObject(m_hPrinterDC, pOldFont);
+			//	fontHeader.DeleteObject();
+			//}
+			//else
+			//{
+				PaintTile(nFontSize, strFontName, itemRect, strText, z, tb);
+			//}
+
+			//RECT printRect;
+			//CFont ftPrint;
+			//CString strText = xml.GetData();
+			//int x = atoi(xml.GetAttrib("x"));
+			//int y = atoi(xml.GetAttrib("y"));
+			//int w = atoi(xml.GetAttrib("w"));
+			//int h = atoi(xml.GetAttrib("h"));
+			//int nFontSize = atoi(xml.GetAttrib("s"));
+			//CString strFontName = xml.GetAttrib("f");
+			//int z = atoi(xml.GetAttrib("z"));
+			//ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
+			//::SelectObject(m_hPrinterDC, ftPrint);
+			//printRect.left = x + nXoff + 100;
+			//printRect.top = -(y - 5 + nYoff);
+			//printRect.right = x + nXoff + 100 + w;
+			//printRect.bottom = -(y - 5 + nYoff + h);
+
+			//if (w == 0 && h == 0)
+			//{
+			//	::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
+			//}
+			//else
+			//{
+			//	printRect.right = x + nXoff + w + 100;
+			//	printRect.bottom = -((y + 5 + nYoff) + h);
+
+			//	if (z == 0)
+			//	{
+			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_LEFT | DT_CENTER | DT_EDITCONTROL | DT_NOPREFIX);
+			//	}
+			//	else if (z == 2)
+			//	{
+			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/* DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX | */DT_SINGLELINE | DT_VCENTER);
+			//	}
+			//	else
+			//	{
+			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
+			//	}
+			//}
+			//ftPrint.DeleteObject();
 		}
 
 		// 输出大写金额开头圈叉符号
@@ -393,345 +413,72 @@ CString CEscxstyfp::GenerateFpdyXml(ESCFP_FPXX fpmx, CString dylx, FPDY fpdy)
 CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 {
 	CMarkup xml;
-	/*
-		fpmx.sKprq = "2017-11-08";
-		fpmx.sFpdm = "199311080703";
-		fpmx.sFphm = "12345678";
-		fpmx.sJqbh = "1234567890";
-		fpmx.sGfmc = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六";
-		fpmx.sGfsfzhm = "4104261993110810161022";
-		fpmx.sGfdz = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sGfdh = "15515799921234567890";
 
-		fpmx.sMfmc = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六";
-		fpmx.sMfsfzhm = "4110252017072101041022";
-		fpmx.sMfdz = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sMfdh = "18410107577234567890";
+	xywhsf(fpmx.Kprq, 188, -60, 400, 60, LS_12, FT, ZVC);
+	xywhsf(fpmx.Fpdm, 200, 10, 725, 60, LS_12, FT, ZVC);
+	xywhsf(fpmx.Fphm, 200, 80, 725, 60, LS_12, FT, ZVC);
+	xywhsf(fpmx.Jqbh, 200, 150, 725, 60, LS_12, FT, ZVC);
 
-		fpmx.sCpzh = "一二三四五六七八九十";
-		fpmx.sDjzh = "一二三四五六七八九十";
-		fpmx.sCllx = "一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sCjhm = "12345678901234567890123";
-		fpmx.sCpxh = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sZrdclglsmc = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sCjhjDx = "拾忆玖仟玖百玖拾玖万玖仟玖百玖拾玖圆整";
-		fpmx.sCjhj = "1999999999.00";
-		fpmx.sJypmdw = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sJypmdwdz = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sJypmdwnsrsbh = "1234567890123454567890";
-		fpmx.sJypmdwyhzh = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sJypmdwdh = "12345678901234567890";
+	int nH = 0;
+	xywhsf(fpmx.Skm, 1005, nH, 1005, 220, LS_12, FT, ZVC);
+	nH += 220;
 
-		fpmx.sEscsc = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
+	xywhsf_f(fpmx.Gfmc, 405, nH, 660, 78, LS_10, FS, ZL);
+	xywhsf(fpmx.Gfsfzhm, 1445, nH, 565, 78, LS_11, FT, ZVC);
+	nH += 78;
 
-		fpmx.sEscscnsrsbh = "12345678901234567890";
-		fpmx.sEscscdz = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sEscscyhzh = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十";
-		fpmx.sEscscdh = "12345678901234567890";
-		fpmx.sBz = "一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五";
-		fpmx.sKpr = "一二三四五六七八九十";
-	*/
-	xywhsf(fpmx.Skm, LX + 1020, LY + 370, LW + 900, LH + 40, LS_12, FT, ZL);
+	xywhsf_f(fpmx.Gfdz, 405, nH, 1040, 78, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Gfdh, 1565, nH, 445, 78, LS_12, FT, ZL);
+	nH += 78;
 
-	xywhsf(fpmx.Kprq, LX + 145, LY + 230, LW + 300, LH + 40, LS_12, FT, ZL);
-	xywhsf(fpmx.Fpdm, LX + 200, LY + 300, LW + 600, LH + 40, LS_12, FT, ZL);
-	xywhsf(fpmx.Fphm, LX + 200, LY + 370, LW + 600, LH + 40, LS_12, FT, ZL);
-	xywhsf(fpmx.Jqbh, LX + 200, LY + 440, LW + 600, LH + 40, LS_12, FT, ZL);
+	xywhsf_f(fpmx.Mfmc, 405, nH, 660, 78, LS_10, FS, ZL);
+	xywhsf(fpmx.Mfsfzhm, 1445, nH, 565, 78, LS_11, FT, ZVC);
+	nH += 78;
 
-	if (fpmx.sGfmc.GetLength() < 37)
-	{
-		xywhsf(fpmx.Gfmc, LX + 400, LY + 509, LW + 635, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sGfmc.GetLength() > 36 && fpmx.sGfmc.GetLength() < 39)
-	{
-		xywhsf(fpmx.Gfmc, LX + 400, LY + 509, LW + 635, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Gfmc, LX + 400, LY + 509, LW + 635, LH + 65, LS_9, FS, ZL);
-	}
+	xywhsf_f(fpmx.Mfdz, 405, nH, 1040, 78, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Mfdh, 1565, nH, 445, 78, LS_12, FT, ZL);
+	nH += 78;
 
+	xywhsf_f(fpmx.Cpzh, 405, nH, 350, 78, LS_12, FT, ZL);
+	xywhsf_f(fpmx.Djzh, 935, nH, 410, 78, LS_11, FT, ZL);
+	xywhsf_f(fpmx.Cllx, 1565, nH, 445, 78, LS_10, FS, ZL);
+	nH += 78;
 
-	xywhsf(fpmx.Gfsfzhm, LX + 1435, LY + 509, LW + 540, LH + 65, LS_11, FT, ZC);
+	xywhsf_f(fpmx.Cjhm, 405, nH, 350, 78, LS_11, FT, ZL);
+	xywhsf_f(fpmx.Cpxh, 935, nH, 410, 78, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Zrdclglsmc, 1565, nH, 445, 78, LS_10, FS, ZL);
+	nH += 78;
 
-	if (fpmx.sGfdz.GetLength() < 57)
-	{
-		xywhsf(fpmx.Gfdz, LX + 400, LY + 587, LW + 1010, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sGfdz.GetLength() > 56 && fpmx.sGfdz.GetLength() < 63)
-	{
-		xywhsf(fpmx.Gfdz, LX + 400, LY + 587, LW + 1010, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Gfdz, LX + 400, LY + 587, LW + 1010, LH + 65, LS_9, FS, ZL);
-	}
+	xywhsf(fpmx.OX, 450, nH, 78, 78, LS_9, FT, ZVC);
+	xywhsf(fpmx.CjhjDx, 405, nH, 1040, 78, LS_10, FS, ZVC);
+	xywhsf(fpmx.Cjhj, 1565, nH, 445, 78, LS_12, FT, ZVC);
+	nH += 78;
 
-	if (fpmx.sGfdh.GetLength() < 17)
-	{
-		xywhsf(fpmx.Gfdh, LX + 1552, LY + 587, LW + 420, LH + 65, LS_12, FT, ZC);
-	}
-	else if (fpmx.sGfdh.GetLength() > 16 && fpmx.sGfdh.GetLength() < 19)
-	{
-		xywhsf(fpmx.Gfdh, LX + 1552, LY + 587, LW + 420, LH + 65, LS_11, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Gfdh, LX + 1552, LY + 587, LW + 420, LH + 65, LS_10, FT, ZC);
-	}
+	xywhsf_f(fpmx.Jypmdw, 405, nH, 1605, 78, LS_10, FS, ZL);
+	nH += 78;
 
+	xywhsf_f(fpmx.Jypmdwdz, 405, nH, 860, 78, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Jypmdwnsrsbh, 1445, nH, 565, 78, LS_11, FT, ZL);
+	nH += 78;
 
+	xywhsf_f(fpmx.Jypmdwyhzh, 405, nH, 1165, 78, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Jypmdwdh, 1690, nH, 320, 78, LS_11, FT, ZL);
+	nH += 78;
+	
+	xywhsf_f(fpmx.Escsc, 405, nH, 620, 156, LS_10, FS, ZL);
+	xywhsf(fpmx.Escscnsrsbh, 1205, nH, 805, 78, LS_11, FT, ZVC);
+	nH += 78;
+	xywhsf_f(fpmx.Escscdz, 1205, nH, 805, 78, LS_10, FS, ZL);
+	nH += 78;
 
-	if (fpmx.sMfmc.GetLength() < 37)
-	{
-		xywhsf(fpmx.Mfmc, LX + 400, LY + 665, LW + 635, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sMfmc.GetLength() > 36 && fpmx.sMfmc.GetLength() < 39)
-	{
-		xywhsf(fpmx.Mfmc, LX + 400, LY + 665, LW + 635, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Mfmc, LX + 400, LY + 665, LW + 635, LH + 65, LS_9, FS, ZL);
-	}
+	xywhsf_f(fpmx.Escscyhzh, 405, nH, 1165, 78, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Escscdh, 1690, nH, 320, 78, LS_11, FT, ZL);
+	nH += 78;
 
-	xywhsf(fpmx.Mfsfzhm, LX + 1435, LY + 665, LW + 540, LH + 65, LS_11, FT, ZC);
-
-	if (fpmx.sMfdz.GetLength() < 57)
-	{
-		xywhsf(fpmx.Mfdz, LX + 400, LY + 743, LW + 1010, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sMfdz.GetLength() > 56 && fpmx.sMfdz.GetLength() < 63)
-	{
-		xywhsf(fpmx.Mfdz, LX + 400, LY + 743, LW + 1010, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Mfdz, LX + 400, LY + 743, LW + 1010, LH + 65, LS_9, FS, ZL);
-	}
-
-	if (fpmx.sMfdh.GetLength() < 17)
-	{
-		xywhsf(fpmx.Mfdh, LX + 1552, LY + 743, LW + 420, LH + 65, LS_12, FT, ZC);
-	}
-	else if (fpmx.sMfdh.GetLength() > 16 && fpmx.sMfdh.GetLength() < 19)
-	{
-		xywhsf(fpmx.Mfdh, LX + 1552, LY + 743, LW + 420, LH + 65, LS_11, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Mfdh, LX + 1552, LY + 743, LW + 420, LH + 65, LS_10, FT, ZC);
-	}
-
-	if (fpmx.sCpzh.GetLength() < 13)
-	{
-		xywhsf(fpmx.Cpzh, LX + 400, LY + 821, LW + 320, LH + 65, LS_12, FT, ZC);
-	}
-	else if (fpmx.sCpzh.GetLength() > 12 && fpmx.sCpzh.GetLength() < 15)
-	{
-		xywhsf(fpmx.Cpzh, LX + 400, LY + 821, LW + 320, LH + 65, LS_11, FT, ZC);
-	}
-	else if (fpmx.sCpzh.GetLength() > 14 && fpmx.sCpzh.GetLength() < 17)
-	{
-		xywhsf(fpmx.Cpzh, LX + 400, LY + 821, LW + 320, LH + 65, LS_9, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Cpzh, LX + 400, LY + 821, LW + 320, LH + 65, LS_8, FT, ZL);
-	}
-
-	if (fpmx.sDjzh.GetLength() < 17)
-	{
-		xywhsf(fpmx.Djzh, LX + 930, LY + 821, LW + 385, LH + 65, LS_11, FT, ZC);
-	}
-	else if (fpmx.sDjzh.GetLength() > 16 && fpmx.sDjzh.GetLength() < 19)
-	{
-		xywhsf(fpmx.Djzh, LX + 930, LY + 821, LW + 385, LH + 65, LS_10, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Djzh, LX + 930, LY + 821, LW + 385, LH + 65, LS_9, FT, ZC);
-	}
-
-	if (fpmx.sCllx.GetLength() < 23)
-	{
-		xywhsf(fpmx.Cllx, LX + 1552, LY + 821, LW + 420, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sCllx.GetLength() > 22 && fpmx.sCllx.GetLength() < 27)
-	{
-		xywhsf(fpmx.Cllx, LX + 1552, LY + 821, LW + 420, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Cllx, LX + 1552, LY + 821, LW + 420, LH + 65, LS_9, FS, ZL);
-	}
-
-	if (fpmx.sCjhm.GetLength() < 15)
-	{
-		xywhsf(fpmx.Cjhm, LX + 400, LY + 899, LW + 320, LH + 65, LS_11, FT, ZC);
-	}
-	else if (fpmx.sCjhm.GetLength() > 14 && fpmx.sCjhm.GetLength() < 17)
-	{
-		xywhsf(fpmx.Cjhm, LX + 400, LY + 899, LW + 320, LH + 65, LS_9, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Cjhm, LX + 400, LY + 899, LW + 320, LH + 65, LS_8, FT, ZL);
-	}
-
-	int nLengthOfCPXH = fpmx.sCpxh.GetLength();
-	if (nLengthOfCPXH < 21)
-	{
-		xywhsf(fpmx.Cpxh, LX + 930, LY + 899, LW + 385, LH + 65, LS_10, FS, ZC);
-	}
-	else if (nLengthOfCPXH > 20 && nLengthOfCPXH < 23)
-	{
-		xywhsf(fpmx.Cpxh, LX + 930, LY + 899, LW + 385, LH + 65, LS_9, FS, ZC);
-	}
-	else if (nLengthOfCPXH > 22 && nLengthOfCPXH < 45)
-	{
-		xywhsf(fpmx.Cpxh, LX + 930, LY + 899, LW + 385, LH + 65, LS_8, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Cpxh, LX + 930, LY + 899, LW + 385, LH + 65, LS_7, FS, ZL);
-	}
-
-	int nLengthOfZRDCLGLSMC = fpmx.sZrdclglsmc.GetLength();
-	if (nLengthOfZRDCLGLSMC < 23)
-	{
-		xywhsf(fpmx.Zrdclglsmc, LX + 1552, LY + 899, LW + 420, LH + 65, LS_10, FS, ZC);
-	}
-	else if (nLengthOfZRDCLGLSMC > 22 && nLengthOfZRDCLGLSMC < 27)
-	{
-		xywhsf(fpmx.Zrdclglsmc, LX + 1552, LY + 899, LW + 420, LH + 65, LS_9, FS, ZC);
-	}
-	else if (nLengthOfZRDCLGLSMC > 26 && nLengthOfZRDCLGLSMC < 53)
-	{
-		xywhsf(fpmx.Zrdclglsmc, LX + 1552, LY + 899, LW + 420, LH + 65, LS_8, FS, ZL);
-	}
-	else if (nLengthOfZRDCLGLSMC > 52 && nLengthOfZRDCLGLSMC < 61)
-	{
-		xywhsf(fpmx.Zrdclglsmc, LX + 1552, LY + 899, LW + 420, LH + 65, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Zrdclglsmc, LX + 1552, LY + 899, LW + 420, LH + 65, LS_6, FS, ZL);
-	}
-
-	xywhsf(fpmx.OX, LX + 550, LY + 997, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.CjhjDx, LX + 500, LY + 977, LW + 910, LH + 65, LS_10, FS, ZC);
-	xywhsf(fpmx.Cjhj, LX + 1642, LY + 977, LW + 330, LH + 65, LS_12, FT, ZC);
-
-	xywhsf(fpmx.Jypmdw, LX + 400, LY + 1055, LW + 1570, LH + 65, LS_10, FS, ZC);
-	if (fpmx.sJypmdwdz.GetLength() < 47)
-	{
-		xywhsf(fpmx.Jypmdwdz, LX + 400, LY + 1133, LW + 830, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sJypmdwdz.GetLength() > 46 && fpmx.sJypmdwdz.GetLength() < 51)
-	{
-		xywhsf(fpmx.Jypmdwdz, LX + 400, LY + 1133, LW + 830, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Jypmdwdz, LX + 400, LY + 1133, LW + 830, LH + 65, LS_9, FS, ZL);
-	}
-	xywhsf(fpmx.Jypmdwnsrsbh, LX + 1435, LY + 1133, LW + 540, LH + 65, LS_11, FT, ZC);
-
-	if (fpmx.sJypmdwyhzh.GetLength() < 65)
-	{
-		xywhsf(fpmx.Jypmdwyhzh, LX + 400, LY + 1211, LW + 1130, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sJypmdwyhzh.GetLength() > 64 && fpmx.sJypmdwyhzh.GetLength() < 71)
-	{
-		xywhsf(fpmx.Jypmdwyhzh, LX + 400, LY + 1211, LW + 1130, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Jypmdwyhzh, LX + 400, LY + 1211, LW + 1130, LH + 65, LS_9, FS, ZL);
-	}
-
-	if (fpmx.sJypmdwdh.GetLength() < 13)
-	{
-		xywhsf(fpmx.Jypmdwdh, LX + 1670, LY + 1211, LW + 300, LH + 65, LS_11, FT, ZC);
-	}
-	else if (fpmx.sJypmdwdh.GetLength() > 12 && fpmx.sJypmdwdh.GetLength() < 15)
-	{
-		xywhsf(fpmx.Jypmdwdh, LX + 1670, LY + 1211, LW + 300, LH + 65, LS_10, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Jypmdwdh, LX + 1670, LY + 1211, LW + 300, LH + 65, LS_8, FT, ZL);
-	}
-
-	int nLengthOfESCSC = fpmx.sEscsc.GetLength();
-	if (nLengthOfESCSC < 33)
-	{
-		xywhsf(fpmx.Escsc, LX + 400, LY + 1289, LW + 590, LH + 130, LS_10, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Escsc, LX + 400, LY + 1289, LW + 590, LH + 130, LS_10, FS, ZL);
-	}
-	xywhsf(fpmx.Escscnsrsbh, LX + 1190, LY + 1289, LW + 780, LH + 65, LS_11, FT, ZC);
-
-	if (fpmx.sEscscdz.GetLength() < 45)
-	{
-		xywhsf(fpmx.Escscdz, LX + 1190, LY + 1367, LW + 780, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sEscscdz.GetLength() > 44 && fpmx.sEscscdz.GetLength() < 49)
-	{
-		xywhsf(fpmx.Escscdz, LX + 1190, LY + 1367, LW + 780, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Escscdz, LX + 1190, LY + 1367, LW + 780, LH + 65, LS_9, FS, ZL);
-	}
-
-	if (fpmx.sEscscyhzh.GetLength() < 65)
-	{
-		xywhsf(fpmx.Escscyhzh, LX + 400, LY + 1445, LW + 1130, LH + 65, LS_10, FS, ZC);
-	}
-	else if (fpmx.sEscscyhzh.GetLength() > 64 && fpmx.sEscscyhzh.GetLength() < 71)
-	{
-		xywhsf(fpmx.Escscyhzh, LX + 400, LY + 1445, LW + 1130, LH + 65, LS_9, FS, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Escscyhzh, LX + 400, LY + 1445, LW + 1130, LH + 65, LS_9, FS, ZL);
-	}
-
-	if (fpmx.sEscscdh.GetLength() < 13)
-	{
-		xywhsf(fpmx.Escscdh, LX + 1670, LY + 1445, LW + 300, LH + 65, LS_11, FT, ZC);
-	}
-	else if (fpmx.sEscscdh.GetLength() > 12 && fpmx.sEscscdh.GetLength() < 15)
-	{
-		xywhsf(fpmx.Escscdh, LX + 1670, LY + 1445, LW + 300, LH + 65, LS_10, FT, ZC);
-	}
-	else
-	{
-		xywhsf(fpmx.Escscdh, LX + 1670, LY + 1445, LW + 300, LH + 65, LS_8, FT, ZL);
-	}
-
-	int nLengthOfBZ = fpmx.sBz.GetLength();
-	if (nLengthOfBZ < 101)
-	{
-		xywhsf(fpmx.Bz, LX + 170, LY + 1523, LW + 1790, LH + 65, LS_10, FS, ZC);
-	}
-	else if (nLengthOfBZ > 100 && nLengthOfBZ < 111)
-	{
-		xywhsf(fpmx.Bz, LX + 170, LY + 1523, LW + 1790, LH + 65, LS_9, FS, ZC);
-	}
-	else if (nLengthOfBZ > 110 && nLengthOfBZ < 221)
-	{
-		xywhsf(fpmx.Bz, LX + 170, LY + 1523, LW + 1790, LH + 65, LS_9, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Bz, LX + 170, LY + 1523, LW + 1790, LH + 65, LS_8, FS, ZL);
-	}
-	xywhsf(fpmx.Kpr, LX + 1435, LY + 1601, LW + 470, LH + 65, LS_10, FS, ZL);
+	xywhsf_f(fpmx.Bz, 200, nH, 1810, 78, LS_10, FS, ZL);
+	nH += 78;
+	
+	xywhsf(fpmx.Kpr, 1450, nH + 20, 300, 60, LS_10, FS, ZVC);
 
 	addxml(fpmx.sKprq, fpmx.Kprq);
 	addxml(fpmx.sFpdm, fpmx.Fpdm);

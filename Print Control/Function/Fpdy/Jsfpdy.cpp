@@ -844,17 +844,17 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 		if (fpmx.bMxFontSize)
 		{
 			xywhsf(fpmx.fyxmxx[i].ssSpmc, LX + -60, number, LW + 190, LH + 1000, LS_8, FS, ZL);
-			xywhsf(fpmx.fyxmxx[i].ssSpsl, LX + 290, number, LW + 130, LH + 30, LS_8, FS, ZL);
-			xywhsf(fpmx.fyxmxx[i].ssHsdj, LX + 135, number, LW + 150, LH + 30, LS_8, FS, ZL);
-			xywhsf(fpmx.fyxmxx[i].ssHsje, LX + 425, number, LW + 160, LH + 30, LS_8, FS, ZL);
+			xywhsf(fpmx.fyxmxx[i].ssSpsl, LX + 290, number, LW + 130, LH + 50, LS_8, FS, ZL);
+			xywhsf(fpmx.fyxmxx[i].ssHsdj, LX + 135, number, LW + 150, LH + 50, LS_8, FS, ZL);
+			xywhsf(fpmx.fyxmxx[i].ssHsje, LX + 425, number, LW + 160, LH + 50, LS_8, FS, ZL);
 
 		}
 		else
 		{
 			xywhsf(fpmx.fyxmxx[i].ssSpmc, LX + -60, number, LW + 192, LH + 1000, LS_7, FS, ZL);
-			xywhsf(fpmx.fyxmxx[i].ssSpsl, LX + 290, number, LW + 130, LH + 30, LS_7, FS, ZL);
-			xywhsf(fpmx.fyxmxx[i].ssHsdj, LX + 135, number, LW + 150, LH + 30, LS_7, FS, ZL);
-			xywhsf(fpmx.fyxmxx[i].ssHsje, LX + 425, number, LW + 160, LH + 30, LS_7, FS, ZL);
+			xywhsf(fpmx.fyxmxx[i].ssSpsl, LX + 290, number, LW + 130, LH + 50, LS_7, FS, ZL);
+			xywhsf(fpmx.fyxmxx[i].ssHsdj, LX + 135, number, LW + 150, LH + 50, LS_7, FS, ZL);
+			xywhsf(fpmx.fyxmxx[i].ssHsje, LX + 425, number, LW + 160, LH + 50, LS_7, FS, ZL);
 
 		}
 
@@ -1329,8 +1329,8 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 	CString _sLeft = "";
 	CString _sQRSize = "";
 	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft) * 10;
-	nYoff = atoi(_sTop) * 10;
+	nXoff = atoi(_sLeft);
+	nYoff = atoi(_sTop);
 	nQRCodeSize = atoi(_sQRSize) * 10;
 
 	do

@@ -1,2 +1,81 @@
 <?xml version="1.0" encoding="gbk"?>
-<business comment="发票查询" id="20007"><body yylxdm="1"><returncode>0</returncode><returnmsg>成功</returnmsg><dylx>0</dylx><fplxdm>004</fplxdm><dyfs>0</dyfs><printername></printername><returndata><kpxx count="1"><group xh="1"><fpdm>1100191150</fpdm><fphm>30000114</fphm><fpzt>00</fpzt><scbz></scbz><kprq>20200705090521</kprq><jqbh>539905984496</jqbh><skm>03372-2&lt;-9&lt;959359>5*782&lt;//72&lt;8-330>&lt;-080&lt;9030/76+364/5->/>&lt;2+43-4*9-95*597931-8/-90/+0+8>3+*+90144>*03642>-635*1</skm><jym></jym><tspz></tspz><xhdwsbh>1101101101108888</xhdwsbh><xhdwmc>1101101101108888</xhdwmc><xhdwdzdh>11</xhdwdzdh><xhdwyhzh>1</xhdwyhzh><ghdwsbh>11111111111111111111</ghdwsbh><ghdwmc>1</ghdwmc><ghdwdzdh>1111111111111</ghdwdzdh><ghdwyhzh>1111111111111111</ghdwyhzh><bmbbbh></bmbbbh><zsfs>0</zsfs><fyxm count="1"><group xh="1"><fphxz>3</fphxz><spmc>（详见销货清单）</spmc><spsm>（详见销货清单）</spsm><ggxh></ggxh><dw></dw><spsl></spsl><dj></dj><je>45.00</je><sl>0.01</sl><se>0.45</se><hsbz>0.45</hsbz><spbm>0.45</spbm><yhzcbs>0.45</yhzcbs><lslbs>0.45</lslbs><zzstsgl>0.45</zzstsgl></group></fyxm><qdxm count="0"/><qtxm count="0"/><zhsl>0.01</zhsl><hjje>45.00</hjje><hjse>0.45</hjse><jshj>45.45</jshj><bz></bz><skr>管理员</skr><fhr>管理员</fhr><kpr>管理员</kpr><jmbbh></jmbbh><zyspmc>*棉花*美达24X CD-ROM</zyspmc><spsm></spsm><qdbz>1</qdbz><ssyf></ssyf><kpjh></kpjh><tzdbh></tzdbh><yfpdm></yfpdm><yfphm></yfphm><zfrq></zfrq><zfr></zfr><qmcs></qmcs><qmz></qmz><ykfsje></ykfsje><ewm></ewm><yqjg></yqjg></group></kpxx></returndata></body></business>
+<business comment="发票查询" id="20007">
+	<body yylxdm="1">
+		<returncode>0</returncode>
+		<returnmsg>成功</returnmsg>
+		<dylx>0</dylx>
+		<fplxdm>004</fplxdm>
+		<dyfs>0</dyfs>
+		<printername/>
+		<returndata>
+			<kpxx count="1">
+				<group xh="1">
+					<fpdm>1100191150</fpdm>
+					<fphm>30000114</fphm>
+					<fpzt>00</fpzt>
+					<scbz/>
+					<kprq>20200705090521</kprq>
+					<jqbh>539905984496</jqbh>
+					<skm>03372-2&lt;-9&lt;959359>5*782&lt;//72&lt;8-330>&lt;-080&lt;9030/76+364/5->/>&lt;2+43-4*9-95*597931-8/-90/+0+8>3+*+90144>*03642>-635*1</skm>
+					<jym/>
+					<tspz/>
+					<xhdwsbh>1101101101108888</xhdwsbh>
+					<xhdwmc>1101101101108888</xhdwmc>
+					<xhdwdzdh>11</xhdwdzdh>
+					<xhdwyhzh>1</xhdwyhzh>
+					<ghdwsbh>11111111111111111111</ghdwsbh>
+					<ghdwmc>1</ghdwmc>
+					<ghdwdzdh>1111111111111</ghdwdzdh>
+					<ghdwyhzh>1111111111111111</ghdwyhzh>
+					<bmbbbh/>
+					<zsfs>0</zsfs>
+					<fyxm count="1">
+						<group xh="1">
+							<fphxz>3</fphxz>
+							<spmc>（详见销货清单）</spmc>
+							<spsm>（详见销货清单）</spsm>
+							<ggxh/>
+							<dw/>
+							<spsl/>
+							<dj/>
+							<je>45.00</je>
+							<sl>0.01</sl>
+							<se>0.45</se>
+							<hsbz>0.45</hsbz>
+							<spbm>0.45</spbm>
+							<yhzcbs>0.45</yhzcbs>
+							<lslbs>0.45</lslbs>
+							<zzstsgl>0.45</zzstsgl>
+						</group>
+					</fyxm>
+					<qdxm count="0"/>
+					<qtxm count="0"/>
+					<zhsl>0.01</zhsl>
+					<hjje>45.00</hjje>
+					<hjse>0.45</hjse>
+					<jshj>45.45</jshj>
+					<bz/>
+					<skr>管理员</skr>
+					<fhr>管理员</fhr>
+					<kpr>管理员</kpr>
+					<jmbbh/>
+					<zyspmc>*棉花*美达24X CD-ROM</zyspmc>
+					<spsm/>
+					<qdbz>1</qdbz>
+					<ssyf/>
+					<kpjh/>
+					<tzdbh/>
+					<yfpdm/>
+					<yfphm/>
+					<zfrq/>
+					<zfr/>
+					<qmcs/>
+					<qmz/>
+					<ykfsje/>
+					<ewm/>
+					<yqjg/>
+				</group>
+			</kpxx>
+		</returndata>
+	</body>
+</business>
