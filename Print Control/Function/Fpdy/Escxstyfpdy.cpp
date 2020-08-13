@@ -175,6 +175,19 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
+
+			int n_x_RMB1 = 1810, n_y_RMB1 = -1000;
+
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 31 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - 13 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - 13 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - 22 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - 22 - nYoff);
 		}
 
 		while (xml.FindElem("Item"))
@@ -188,81 +201,24 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
-			int tb = atoi(xml.GetAttrib("tb"));
 			CString strText = xml.GetData();
 
-			itemRect.left = x + nXoff + 200;
-			itemRect.top = (-y - nYoff - 285);
-			itemRect.right = x + nXoff + 200 + w;
-			itemRect.bottom = (-y - h - nYoff - 285);
+			itemRect.left = x + nXoff + 210;
+			itemRect.top = (-y - nYoff - 290);
+			itemRect.right = x + nXoff + 210 + w;
+			itemRect.bottom = (-y - h - nYoff - 290);
 
-
-			//if (w == 0 && h == 0)
-			//{
-			//	CFont *pOldFont;
-			//	CFont fontHeader;
-			//	fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			//	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-			//	::TextOut(m_hPrinterDC, itemRect.left, itemRect.top, strText, strText.GetLength());
-			//	::SelectObject(m_hPrinterDC, pOldFont);
-			//	fontHeader.DeleteObject();
-			//}
-			//else
-			//{
-				PaintTile(nFontSize, strFontName, itemRect, strText, z, tb);
-			//}
-
-			//RECT printRect;
-			//CFont ftPrint;
-			//CString strText = xml.GetData();
-			//int x = atoi(xml.GetAttrib("x"));
-			//int y = atoi(xml.GetAttrib("y"));
-			//int w = atoi(xml.GetAttrib("w"));
-			//int h = atoi(xml.GetAttrib("h"));
-			//int nFontSize = atoi(xml.GetAttrib("s"));
-			//CString strFontName = xml.GetAttrib("f");
-			//int z = atoi(xml.GetAttrib("z"));
-			//ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			//::SelectObject(m_hPrinterDC, ftPrint);
-			//printRect.left = x + nXoff + 100;
-			//printRect.top = -(y - 5 + nYoff);
-			//printRect.right = x + nXoff + 100 + w;
-			//printRect.bottom = -(y - 5 + nYoff + h);
-
-			//if (w == 0 && h == 0)
-			//{
-			//	::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
-			//}
-			//else
-			//{
-			//	printRect.right = x + nXoff + w + 100;
-			//	printRect.bottom = -((y + 5 + nYoff) + h);
-
-			//	if (z == 0)
-			//	{
-			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_LEFT | DT_CENTER | DT_EDITCONTROL | DT_NOPREFIX);
-			//	}
-			//	else if (z == 2)
-			//	{
-			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/* DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX | */DT_SINGLELINE | DT_VCENTER);
-			//	}
-			//	else
-			//	{
-			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_WORDBREAK | DT_EDITCONTROL | DT_RIGHT | DT_NOPREFIX);
-			//	}
-			//}
-			//ftPrint.DeleteObject();
+			PaintTile1(nFontSize, strFontName, itemRect, strText, z);
 		}
 
 		// 输出大写金额开头圈叉符号
 		int x, y, tx, ty;
-		bool zsfp = xml.FindElem("OX");//正数发票
 		if (xml.FindElem("OX"))
 		{
 			x = atoi(xml.GetAttrib("x"));
 			y = atoi(xml.GetAttrib("y"));
-			tx = x + nXoff;
-			ty = -(y + nYoff);
+			tx = x + nXoff + 210;
+			ty = -(y + nYoff) - 290;
 
 			::Ellipse(m_hPrinterDC, tx - 20, ty + 10, tx + 10, ty - 20);
 			::MoveToEx(m_hPrinterDC, tx - 16, ty + 6, NULL);
@@ -414,71 +370,50 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 {
 	CMarkup xml;
 
-	xywhsf(fpmx.Kprq, 188, -60, 400, 60, LS_12, FT, ZVC);
-	xywhsf(fpmx.Fpdm, 200, 10, 725, 60, LS_12, FT, ZVC);
-	xywhsf(fpmx.Fphm, 200, 80, 725, 60, LS_12, FT, ZVC);
-	xywhsf(fpmx.Jqbh, 200, 150, 725, 60, LS_12, FT, ZVC);
+	xywhsf(fpmx.Kprq, 180, -55, 270, 50, LS_12, FT, AM_VCL);
 
-	int nH = 0;
-	xywhsf(fpmx.Skm, 1005, nH, 1005, 220, LS_12, FT, ZVC);
-	nH += 220;
+	xywhsf(fpmx.Fpdm, 220, 10, 680, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Fphm, 220, 80, 680, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Jqbh, 220, 150, 680, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm, 1020, 0, 960, 220, LS_12, FT, AM_VCL);
 
-	xywhsf_f(fpmx.Gfmc, 405, nH, 660, 78, LS_10, FS, ZL);
-	xywhsf(fpmx.Gfsfzhm, 1445, nH, 565, 78, LS_11, FT, ZVC);
-	nH += 78;
+	xywhsf(fpmx.Gfmc, 420, 225, 630, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Gfsfzhm, 1460, 225, 520, 70, LS_11, FT, AM_VCL);
+	xywhsf(fpmx.Gfdz, 420, 305, 1000, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Gfdh, 1580, 305, 400, 70, LS_12, FT, AM_VCL);
 
-	xywhsf_f(fpmx.Gfdz, 405, nH, 1040, 78, LS_10, FS, ZL);
-	xywhsf_f(fpmx.Gfdh, 1565, nH, 445, 78, LS_12, FT, ZL);
-	nH += 78;
+	xywhsf(fpmx.Mfmc, 420, 380, 630, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Mfsfzhm, 1460, 380, 520, 70, LS_11, FT, AM_VCL);
+	xywhsf(fpmx.Mfdz, 420, 460, 1000, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Mfdh, 1580, 460, 400, 70, LS_12, FT, AM_VCL);
 
-	xywhsf_f(fpmx.Mfmc, 405, nH, 660, 78, LS_10, FS, ZL);
-	xywhsf(fpmx.Mfsfzhm, 1445, nH, 565, 78, LS_11, FT, ZVC);
-	nH += 78;
+	xywhsf(fpmx.Cpzh, 420, 535, 320, 70, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Djzh, 950, 535, 380, 70, LS_11, FT, AM_VCL);
+	xywhsf(fpmx.Cllx, 2580, 535, 400, 70, LS_10, FS, AM_VCL);
 
-	xywhsf_f(fpmx.Mfdz, 405, nH, 1040, 78, LS_10, FS, ZL);
-	xywhsf_f(fpmx.Mfdh, 1565, nH, 445, 78, LS_12, FT, ZL);
-	nH += 78;
+	xywhsf(fpmx.Cjhm, 420, 615, 320, 70, LS_11, FT, AM_VCL);
+	xywhsf(fpmx.Cpxh, 950, 615, 380, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Zrdclglsmc, 1580, 615, 400, 70, LS_10, FS, AM_VCL);
 
-	xywhsf_f(fpmx.Cpzh, 405, nH, 350, 78, LS_12, FT, ZL);
-	xywhsf_f(fpmx.Djzh, 935, nH, 410, 78, LS_11, FT, ZL);
-	xywhsf_f(fpmx.Cllx, 1565, nH, 445, 78, LS_10, FS, ZL);
-	nH += 78;
+	xywhsf(fpmx.OX, 459, 720, 78, 70, LS_9, FT, ZVC);
+	xywhsf(fpmx.CjhjDx, 480, 690, 940, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Cjhj, 1630, 690, 350, 70, LS_12, FT, AM_VCL);
 
-	xywhsf_f(fpmx.Cjhm, 405, nH, 350, 78, LS_11, FT, ZL);
-	xywhsf_f(fpmx.Cpxh, 935, nH, 410, 78, LS_10, FS, ZL);
-	xywhsf_f(fpmx.Zrdclglsmc, 1565, nH, 445, 78, LS_10, FS, ZL);
-	nH += 78;
-
-	xywhsf(fpmx.OX, 450, nH, 78, 78, LS_9, FT, ZVC);
-	xywhsf(fpmx.CjhjDx, 405, nH, 1040, 78, LS_10, FS, ZVC);
-	xywhsf(fpmx.Cjhj, 1565, nH, 445, 78, LS_12, FT, ZVC);
-	nH += 78;
-
-	xywhsf_f(fpmx.Jypmdw, 405, nH, 1605, 78, LS_10, FS, ZL);
-	nH += 78;
-
-	xywhsf_f(fpmx.Jypmdwdz, 405, nH, 860, 78, LS_10, FS, ZL);
-	xywhsf_f(fpmx.Jypmdwnsrsbh, 1445, nH, 565, 78, LS_11, FT, ZL);
-	nH += 78;
-
-	xywhsf_f(fpmx.Jypmdwyhzh, 405, nH, 1165, 78, LS_10, FS, ZL);
-	xywhsf_f(fpmx.Jypmdwdh, 1690, nH, 320, 78, LS_11, FT, ZL);
-	nH += 78;
+	xywhsf(fpmx.Jypmdw, 420, 770, 1560, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Jypmdwdz, 420, 850, 830, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Jypmdwnsrsbh, 1460, 850, 520, 70, LS_11, FT, AM_VCL);
+	xywhsf(fpmx.Jypmdwyhzh, 420, 925, 1130, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Jypmdwdh, 1710, 925, 270, 70, LS_11, FT, AM_VCL);
 	
-	xywhsf_f(fpmx.Escsc, 405, nH, 620, 156, LS_10, FS, ZL);
-	xywhsf(fpmx.Escscnsrsbh, 1205, nH, 805, 78, LS_11, FT, ZVC);
-	nH += 78;
-	xywhsf_f(fpmx.Escscdz, 1205, nH, 805, 78, LS_10, FS, ZL);
-	nH += 78;
+	xywhsf(fpmx.Escsc, 420, 1005, 580, 145, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Escscnsrsbh, 1220, 1005, 760, 70, LS_11, FT, AM_VCL);
+	xywhsf(fpmx.Escscdz, 1220, 1180, 760, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Escscyhzh, 420, 1160, 1130, 70, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Escscdh, 1710, 1160, 270, 70, LS_11, FT, AM_VCL);
 
-	xywhsf_f(fpmx.Escscyhzh, 405, nH, 1165, 78, LS_10, FS, ZL);
-	xywhsf_f(fpmx.Escscdh, 1690, nH, 320, 78, LS_11, FT, ZL);
-	nH += 78;
-
-	xywhsf_f(fpmx.Bz, 200, nH, 1810, 78, LS_10, FS, ZL);
-	nH += 78;
+	xywhsf(fpmx.Bz, 200, 1235, 1780, 70, LS_10, FS, AM_VCL);
 	
-	xywhsf(fpmx.Kpr, 1450, nH + 20, 300, 60, LS_10, FS, ZVC);
+	xywhsf(fpmx.Kpr, 1440, 1320, 260, 60, LS_10, FS, AM_VCL);
 
 	addxml(fpmx.sKprq, fpmx.Kprq);
 	addxml(fpmx.sFpdm, fpmx.Fpdm);
@@ -505,7 +440,7 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 
 	addxml(fpmx.sCjhjDx, fpmx.CjhjDx);
 	addxml(fpmx.sCjhj, fpmx.Cjhj)
-		addxml(fpmx.sJypmdw, fpmx.Jypmdw);
+	addxml(fpmx.sJypmdw, fpmx.Jypmdw);
 	addxml(fpmx.sJypmdwdz, fpmx.Jypmdwdz);
 	addxml(fpmx.sJypmdwnsrsbh, fpmx.Jypmdwnsrsbh);
 	addxml(fpmx.sJypmdwyhzh, fpmx.Jypmdwyhzh);
@@ -519,7 +454,7 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sKpr, fpmx.Kpr);
 
 
-	if (fpmx.sFpzt.Compare("0") == 0)
+	if (fpmx.sFpzt.Compare("00") == 0)
 	{
 		xml.AddElem("OX", "1");
 		xml.AddAttrib("x", fpmx.OX.x);

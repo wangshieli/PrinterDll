@@ -40,10 +40,11 @@
 #define ZVC 3				//垂直居中
 #define ZVL 4				//垂直居中左对齐
 
-#define AM_ZC	1	// 水平居中
+#define AM_ZC	0	// 水平居中
 #define AM_VC	1	// 垂直居中
-#define AM_VCL	2	// 垂直居中左对齐
-#define AM_VCR	3	// 垂直居中右对齐
+#define AM_ZL	2	// 左对齐对齐
+#define AM_VCL	3	// 垂直居中左对齐
+#define AM_VCR	4	// 垂直居中右对齐
 
 #define A4_W	2100
 #define A4_H	2970
@@ -55,28 +56,15 @@
 		((A).h)=(H) ;((A).s)= (S) ;((A).f)= (F); \
 		((A).z)=(Z)  
 
-#define xywhsf_f(A,X,Y,W,H,S,F,Z)\
-		((A).x)=(X) ;((A).y)= (Y) ;((A).w)= (W); \
-		((A).h)=(H) ;((A).s)= (S) ;((A).f)= (F); \
-		((A).z)=(Z) ;((A).tb)=(1)\
-
 //生成XML内部段
 #define addxml(a,b)  \
 	xml.AddElem("Item",a);xml.AddAttrib("x",b.x);  \
 	xml.AddAttrib("y",b.y);xml.AddAttrib("w",b.w); \
 	xml.AddAttrib("h",b.h);xml.AddAttrib("s",b.s); \
 	xml.AddAttrib("f",b.f);xml.AddAttrib("z",b.z); \
-	xml.AddAttrib("tb",b.tb);xml.AddAttrib("l",b.l); \
-	xml.AddAttrib("r",b.r);
 
 struct XM //打印属性（坐标、宽高、字体、字号）
 {
-	XM()
-	{
-		tb = 0;
-		l = 0;
-		r = 0;
-	}
 	int x; //坐标
 	int y;
 	int w; //宽高
@@ -84,9 +72,6 @@ struct XM //打印属性（坐标、宽高、字体、字号）
 	int s;//字号
 	CString f;//字体
 	int z;//左对齐或者右对齐
-	int tb;
-	int l;
-	int r;
 };
 
 typedef struct _dy
@@ -145,6 +130,7 @@ public:
 protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
 
+	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC);
 	void PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC);
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC, int s = 5, int l = 0, int r = 0);
 

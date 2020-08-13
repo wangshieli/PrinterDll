@@ -90,19 +90,22 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		else if (sFplxdm.Compare("005") == 0)
 		{
 			CJdcfpdy jdcfpdy;
-			jdcfpdy.Dlfpdy(pszPost);
+			CString strResult = jdcfpdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
 			return;
 		}
 		else if (sFplxdm.Compare("025") == 0)
 		{
 			CJsfpdy jsfpdy;
-			jsfpdy.Dlfpdy(pszPost);
+			CString strResult = jsfpdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
 			return;
 		}
 		else if (sFplxdm.Compare("006") == 0)
 		{
 			CEscxstyfp escfpdy;
-			escfpdy.Dlfpdy(pszPost);
+			CString strResult = escfpdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
 			return;
 		}
 		else
@@ -118,7 +121,7 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		//if(sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
 		//{
 			CZzsfpdy zzsfpdy;
-			zzsfpdy.Dlfpdy(pszPost);
+			CString strResult = zzsfpdy.Dlfpdy(pszPost);
 			return;
 		//}
 	}

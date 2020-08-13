@@ -113,6 +113,85 @@ void CFpdyBase::setSysDefprinter(CString& printer)
 	::SetDefaultPrinter(printer);
 }
 
+LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z)
+{
+	LONG r = 0;
+	CFont *pOldFont;
+	CFont fontHeader;
+	int fontSize = FontSize;
+	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+
+	UINT flags1 = 0;
+	UINT flags2 = 0;
+	UINT flags3 = 0;
+	if (z == AM_ZC)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_VC)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER;
+		flags2 = DT_SINGLELINE | DT_VCENTER;
+		flags3 = DT_SINGLELINE | DT_VCENTER;
+	}
+	else if (z == AM_ZL)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+	}
+	else if (z == AM_VCL)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
+	}
+	else if (z == AM_VCR)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+	}
+
+	RECT trect = rect;
+
+	int recv_h = rect.bottom - rect.top;
+	int recv_r = rect.right;
+	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	r = trect.right;
+	if ((h <= recv_h && ((fontSize -= 2) || 1)) 
+		|| (r > recv_r
+			&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1) 
+			&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+			&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))) //如果多行，居中左对齐
+	{
+		do
+		{
+			::SelectObject(m_hPrinterDC, pOldFont);
+			fontHeader.DeleteObject();
+
+			fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
+			trect = rect;
+			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+			h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+			r = trect.right;
+		} while ((h <= recv_h && ((fontSize -= 2) || 1))
+			|| (r > recv_r
+				&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX )|| 1)
+					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))));
+		rect.top = rect.top - (h - recv_h) / 2;
+	}	
+
+	::SelectObject(m_hPrinterDC, pOldFont);
+	fontHeader.DeleteObject();
+
+	return r;
+}
+
 void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z)
 {
 	CFont *pOldFont;
@@ -136,6 +215,12 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		flags2 = DT_SINGLELINE | DT_VCENTER;
 		flags3 = DT_SINGLELINE | DT_VCENTER;
 	}
+	else if (z == AM_ZL)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+	}
 	else if (z == AM_VCL)
 	{
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT;
@@ -154,12 +239,12 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
-	int w = trect.right;
-	if ((h <= recv_h && ((fontSize -= 2) || 1)) 
-		|| (w > recv_r 
-			&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1) 
-			&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-			&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))) //如果多行，居中左对齐
+	LONG r = trect.right;
+	if ((h <= recv_h && ((fontSize -= 2) || 1))
+		|| (r > recv_r
+			&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+				&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+				&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))) //如果多行，居中左对齐
 	{
 		do
 		{
@@ -170,14 +255,14 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 			trect = rect;
 			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 			h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
-			w = trect.right;
+			r = trect.right;
 		} while ((h <= recv_h && ((fontSize -= 2) || 1))
-			|| (w > recv_r
-				&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX )|| 1)
+			|| (r > recv_r
+				&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))));
 		rect.top = rect.top - (h - recv_h) / 2;
-	}	
+	}
 
 	if (rect.right >= trect.right)
 		::DrawText(m_hPrinterDC, data, -1, &rect, flags2);
@@ -375,6 +460,7 @@ CString CFpdyBase::GenerateXMLFpdy(FPDY fpdy, int rtn)
 			fpdy.sErrorInfo = "找不到默认打印机";
 			break;
 		default:
+			rtn = 0; // StartPage成功返回的是页码
 			break;
 		}
 	}

@@ -171,16 +171,16 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 			{
 				int nScaledWidth = 160;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
 				int nScaledHeight = 160;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
-				::StretchBlt(m_hPrinterDC, nXoff + 20 + 180 - 160, -(nYoff + 40 + (180 - 160)), nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+				::StretchBlt(m_hPrinterDC, 220 + nXoff, -100 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 			}
 
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
 
-			int n_x_RMB1 = 1570, n_y_RMB1 = -1040;
-			int n_x_RMB2 = 720, n_y_RMB2 = -1425;
-			int n_x_RMB3 = 370, n_y_RMB3 = -1530;
+			int n_x_RMB1 = 1590 + 190, n_y_RMB1 = -745 - 330;
+			int n_x_RMB2 = 700 + 190, n_y_RMB2 = -1125 - 330;
+			int n_x_RMB3 = 390 + 190, n_y_RMB3 = -1230 - 330;
 
 			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - nYoff, NULL);
 			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
@@ -231,37 +231,22 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 			int z = atoi(xml.GetAttrib("z"));
 			CString strText = xml.GetData();
 
-			itemRect.left = x + nXoff + 100;
-			itemRect.top = (-y - 5 - nYoff);
-			itemRect.right = x + nXoff + 100 + w;
-			itemRect.bottom = (-y + 5 - h - nYoff);
+			itemRect.left = x + nXoff + 190;
+			itemRect.top = (-y - nYoff - 330);
+			itemRect.right = x + nXoff + 190 + w;
+			itemRect.bottom = (-y - h - nYoff- 330);
 
-
-			if (w == 0 && h == 0)
-			{
-				CFont *pOldFont;
-				CFont fontHeader;
-				fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-				pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-				::TextOut(m_hPrinterDC, itemRect.left, itemRect.top, strText, strText.GetLength());
-				::SelectObject(m_hPrinterDC, pOldFont);
-				fontHeader.DeleteObject();
-			}
-			else
-			{
-				PaintTile(nFontSize, strFontName, itemRect, strText, z, 0);
-			}
+			PaintTile1(nFontSize, strFontName, itemRect, strText, z);
 		}
 
 		// 输出大写金额开头圈叉符号
 		int x, y, tx, ty;
-		bool zsfp = xml.FindElem("OX");//正数发票
 		if (xml.FindElem("OX"))
 		{
 			x = atoi(xml.GetAttrib("x"));
 			y = atoi(xml.GetAttrib("y"));
-			tx = x + nXoff;
-			ty = -(y + nYoff);
+			tx = x + nXoff + 190;
+			ty = -(y + nYoff) - 330;
 
 			::Ellipse(m_hPrinterDC, tx - 20, ty + 10, tx + 10, ty - 20);
 			::MoveToEx(m_hPrinterDC, tx - 16, ty + 6, NULL);
@@ -490,254 +475,58 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	CMarkup xml;
 
 	//计算出销货方名称的长度
-	int LengOfXhfmc = fpmx.sXhdwmc.GetLength();
 	xywhsf(fpmx.OX, LX + 380, LY + 1085, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.Kprq, LX + 110, LY + 290, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Fpdm, LX + 220, LY + 400, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Fphm, LX + 220, LY + 470, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Jqbh, LX + 220, LY + 540, LW, LH, LS_12, FT, ZL);
-	//计算出购货方名称的长度	
-	int LengOfGhfmc = fpmx.sGhfmc.GetLength();
-	if (LengOfGhfmc < 37)
-	{
-		xywhsf(fpmx.Ghfmc, LX + 220, LY + 690, LW + 660, LH + 150, LS_10, FS, ZL);
-	}
-	else if (LengOfGhfmc > 36 && LengOfGhfmc < 43)
-	{
-		xywhsf(fpmx.Ghfmc, LX + 220, LY + 690, LW + 660, LH + 150, LS_9, FS, ZL);
-	}
-	else if (LengOfGhfmc > 42 && LengOfGhfmc < 47)
-	{
-		xywhsf(fpmx.Ghfmc, LX + 220, LY + 690, LW + 660, LH + 150, LS_8, FS, ZL);
-	}
-	else if (LengOfGhfmc > 46 && LengOfGhfmc < 53)
-	{
-		xywhsf(fpmx.Ghfmc, LX + 220, LY + 690, LW + 660, LH + 150, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Ghfmc, LX + 220, LY + 680, LW + 660, LH + 150, LS_7, FS, ZL);
-	}
-	xywhsf(fpmx.Sfzhm, LX + 220, LY + 730, LW, LH, LS_12, FT, ZL);
-	// 计算车辆类型的长度
-	int LengOfCllx = fpmx.sCllx.GetLength();
-	if (LengOfCllx < 23)
-	{
-		xywhsf(fpmx.Cllx, LX + 220, LY + 805, LW + 420, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Cllx, LX + 220, LY + 805, LW + 420, LH + 150, LS_9, FS, ZL);
-	}
-	// 计算合格证号的长度
-	int LengOfHgzh = fpmx.sHgzh.GetLength();
-	if (LengOfHgzh < 25)
-	{
-		xywhsf(fpmx.Hgzh, LX + 220, LY + 890, LW + 420, LH + 150, LS_10, FS, ZL);
-	}
-	else if (LengOfHgzh > 24 && LengOfHgzh < 49)
-	{
-		xywhsf(fpmx.Hgzh, LX + 220, LY + 880, LW + 420, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Hgzh, LX + 220, LY + 880, LW + 420, LH + 150, LS_9, FS, ZL);
-	}
-	// 计算发动机号码的长度
-	int LengOfFdjhm = fpmx.sFdjhm.GetLength();
-	if (LengOfFdjhm < 37)
-	{
-		xywhsf(fpmx.Fdjhm, LX + 220, LY + 985, LW + 660, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Fdjhm, LX + 220, LY + 975, LW + 660, LH + 150, LS_10, FS, ZL);
-	}
-	xywhsf(fpmx.JshjDx, LX + 300, LY + 1080, LW, LH, LS_10, FS, ZL);
-	// 计算销货单位名称的长度
-	int LengOfXhdwmc = fpmx.sXhdwmc.GetLength();
-	if (LengOfXhdwmc < 59)
-	{
-		xywhsf(fpmx.Xhdwmc, LX + 220, LY + 1170, LW + 1050, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Xhdwmc, LX + 220, LY + 1160, LW + 1050, LH + 150, LS_9, FS, ZL);
-	}
-	xywhsf(fpmx.Xhdwsbh, LX + 220, LY + 1260, LW, LH, LS_12, FT, ZL);
-	// 计算地址的长度
-	int LengOfDz = fpmx.sDz.GetLength();
-	if (LengOfDz < 43)
-	{
-		xywhsf(fpmx.Dz, LX + 220, LY + 1365, LW + 750, LH + 150, LS_10, FS, ZL);
-	}
-	else if (LengOfDz > 42 && LengOfDz < 49)
-	{
-		xywhsf(fpmx.Dz, LX + 220, LY + 1365, LW + 750, LH + 150, LS_9, FS, ZL);
-	}
-	else if (LengOfDz > 48 && LengOfDz < 53)
-	{
-		xywhsf(fpmx.Dz, LX + 220, LY + 1365, LW + 750, LH + 150, LS_8, FS, ZL);
-	}
-	else if (LengOfDz > 52 && LengOfDz < 61)
-	{
-		xywhsf(fpmx.Dz, LX + 220, LY + 1365, LW + 750, LH + 150, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Dz, LX + 220, LY + 1355, LW + 750, LH + 150, LS_7, FS, ZL);
-	}
-	xywhsf(fpmx.Zzssl, LX + 280, LY + 1455, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Bhsj, LX + 350, LY + 1570, LW, LH, LS_12, FT, ZL);
 
-	xywhsf(fpmx.Skm1, LX + 930, LY + 390 - 20, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Skm2, LX + 930, LY + 430 - 15, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Skm3, LX + 930, LY + 470 - 10, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Skm4, LX + 930, LY + 510 - 5, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Skm5, LX + 930, LY + 550, LW, LH, LS_12, FT, ZL);
+	xywhsf(fpmx.Kprq, 190, -60, 310, 50, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.Ghfsbh, LX + 1350, LY + 690, LW, LH, LS_12, FT, ZL);
-	// 计算厂牌型号的长度
-	int LengOfCpxh = fpmx.sCpxh.GetLength();
-	if (LengOfCpxh < 39)
-	{
-		xywhsf(fpmx.Cpxh, LX + 820, LY + 805, LW + 690, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Cpxh, LX + 820, LY + 805, LW + 690, LH + 150, LS_9, FS, ZL);
-	}
-	// 计算产地的长度
-	int LengOfCd = fpmx.sCd.GetLength();
-	if (LengOfCd < 19)
-	{
-		xywhsf(fpmx.Cd, LX + 1610, LY + 805, LW + 340, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Cd, LX + 1610, LY + 805, LW + 340, LH + 150, LS_9, FS, ZL);
-	}
-	// 计算证明书号的长度
-	int LengOfJkzmsh = fpmx.sJkzmsh.GetLength();
-	if (LengOfJkzmsh < 31)
-	{
-		xywhsf(fpmx.Jkzmsh, LX + 900, LY + 895, LW + 550, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Jkzmsh, LX + 900, LY + 885, LW + 550, LH + 150, LS_10, FS, ZL);
-	}
-	// 计算商检单号的长度
-	int LengOfSjdh = fpmx.sSjdh.GetLength();
-	if (LengOfSjdh < 19)
-	{
-		xywhsf(fpmx.Sjdh, LX + 1610, LY + 895, LW + 340, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Sjdh, LX + 1610, LY + 885, LW + 340, LH + 150, LS_10, FS, ZL);
-	}
-	xywhsf(fpmx.Cjhm, LX + 1320, LY + 985, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.Jshj, LX + 1550, LY + 1080, LW, LH, LS_12, FT, ZL);
-	// 计算电话的长度
-	int LengOfDh = fpmx.sDh.GetLength();
-	if (LengOfDh < 33)
-	{
-		xywhsf(fpmx.Dh, LX + 1370, LY + 1170, LW + 550, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Dh, LX + 1370, LY + 1160, LW + 550, LH + 150, LS_10, FS, ZL);
-	}
-	// 计算账户的长度
-	int LengOfZh = fpmx.sZh.GetLength();
-	if (LengOfZh < 33)
-	{
-		xywhsf(fpmx.Zh, LX + 1370, LY + 1260, LW + 550, LH + 150, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Zh, LX + 1370, LY + 1250, LW + 550, LH + 150, LS_10, FS, ZL);
-	}
-	// 计算开户银行的长度
-	int LengOfKhyh = fpmx.sKhyh.GetLength();
-	if (LengOfKhyh < 43)
-	{
-		xywhsf(fpmx.Khyh, LX + 1170, LY + 1365, LW + 750, LH + 150, LS_10, FS, ZL);
-	}
-	else if (LengOfKhyh > 42 && LengOfKhyh < 49)
-	{
-		xywhsf(fpmx.Khyh, LX + 1170, LY + 1365, LW + 750, LH + 150, LS_9, FS, ZL);
-	}
-	else if (LengOfKhyh > 48 && LengOfKhyh < 53)
-	{
-		xywhsf(fpmx.Khyh, LX + 1170, LY + 1365, LW + 750, LH + 150, LS_8, FS, ZL);
-	}
-	else if (LengOfKhyh > 52 && LengOfKhyh < 61)
-	{
-		xywhsf(fpmx.Khyh, LX + 1170, LY + 1365, LW + 750, LH + 150, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Khyh, LX + 1170, LY + 1355, LW + 750, LH + 150, LS_7, FS, ZL);
-	}
-	xywhsf(fpmx.Zzsse, LX + 700, LY + 1465, LW, LH, LS_12, FT, ZL);
-	// 计算税务机关名称的长度
-	int LengOfSwjgmc = fpmx.sSwjgmc.GetLength();
-	if (LengOfSwjgmc < 37)
-	{
-		xywhsf(fpmx.Swjgmc, LX + 1255, LY + 1465, LW + 660, LH + 120, LS_10, FS, ZL);
-	}
-	else if (LengOfSwjgmc > 36 && LengOfSwjgmc < 41)
-	{
-		xywhsf(fpmx.Swjgmc, LX + 1255, LY + 1465, LW + 660, LH + 120, LS_9, FS, ZL);
-	}
-	else if (LengOfSwjgmc > 40 && LengOfSwjgmc < 47)
-	{
-		xywhsf(fpmx.Swjgmc, LX + 1255, LY + 1465, LW + 660, LH + 120, LS_8, FS, ZL);
-	}
-	else if (LengOfSwjgmc > 46 && LengOfSwjgmc < 53)
-	{
-		xywhsf(fpmx.Swjgmc, LX + 1255, LY + 1450, LW + 660, LH + 120, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Swjgmc, LX + 1255, LY + 1450, LW + 660, LH + 120, LS_7, FS, ZL);
-	}
-	xywhsf(fpmx.Swjgdm, LX + 1255, LY + 1500, LW, LH, LS_12, FT, ZL);
-	// 计算完税凭证的长度
-	int LengOfWspzhm = fpmx.sWspzhm.GetLength();
-	if (LengOfWspzhm < 26)
-	{
-		xywhsf(fpmx.Wspzhm, LX + 930, LY + 1575, LW + 470, LH + 120, LS_9, FT, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Wspzhm, LX + 930, LY + 1555, LW + 470, LH + 120, LS_9, FT, ZL);
-	}
-	// 计算吨位的长度
-	int LengOfDw = fpmx.sDw.GetLength();
-	if (LengOfDw < 6)
-	{
-		xywhsf(fpmx.Dw, LX + 1505, LY + 1575, LW + 100, LH + 120, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Dw, LX + 1505, LY + 1555, LW + 100, LH + 120, LS_10, FS, ZL);
-	}
-	// 计算限乘人数的长度
-	int LengOfXcrs = fpmx.sXcrs.GetLength();
-	if (LengOfXcrs < 9)
-	{
-		xywhsf(fpmx.Xcrs, LX + 1785, LY + 1575, LW + 150, LH + 120, LS_10, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Xcrs, LX + 1785, LY + 1555, LW + 150, LH + 120, LS_10, FS, ZL);
-	}
-	xywhsf(fpmx.Kpr, LX + 900, LY + 1655, LW, LH, LS_10, FS, ZL);
+	xywhsf(fpmx.Fpdm, 290, 50, 580, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Fphm, 290, 120, 580, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Jqbh, 290, 190, 580, 60, LS_12, FT, AM_VCL);
 
+	xywhsf(fpmx.Skm1, 980, 5, 1020, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm2, 980, 65, 1020, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm3, 980, 125, 1020, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm4, 980, 185, 1020, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm5, 980, 245, 1020, 60, LS_12, FT, AM_VCL);
 
+	xywhsf(fpmx.Ghfmc, 290, 310, 650, 60, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Sfzhm, 290, 370, 650, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Ghfsbh, 1420, 310, 650, 120, LS_12, FT, AM_VCL);
+	
+	xywhsf(fpmx.Cllx, 290, 440, 400, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Cpxh, 900, 440, 660, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Cd, 1690, 440, 310, 80, LS_10, FS, AM_VCL);
+
+	xywhsf(fpmx.Hgzh, 290, 535, 400, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Jkzmsh, 970, 535, 530, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Sjdh, 1690, 535, 310, 80, LS_10, FS, AM_VCL);
+
+	xywhsf(fpmx.Fdjhm, 290, 628, 650, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Cjhm, 1380, 628, 650, 80, LS_12, FT, AM_VCL);
+
+	xywhsf(fpmx.OX, 330, 755, 80, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.JshjDx, 350, 720, 1100, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Jshj, 1630, 720, 370, 80, LS_12, FT, AM_VCL);
+
+	xywhsf(fpmx.Xhdwmc, 290, 815, 1020, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Dh, 1440, 815, 560, 80, LS_10, FS, AM_VCL);
+
+	xywhsf(fpmx.Xhdwsbh, 290, 905, 1020, 80, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Zh, 1440, 905, 560, 80, LS_10, FS, AM_VCL);
+
+	xywhsf(fpmx.Dz, 290, 1000, 760, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Khyh, 1240, 1000, 760, 80, LS_10, FS, AM_VCL);
+
+	xywhsf(fpmx.Zzssl, 290, 1090, 225, 110, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Zzsse, 740, 1090, 245, 110, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Swjgmc, 1335, 1090, 665, 55, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Swjgdm, 1335, 1145, 665, 55, LS_12, FT, AM_VCL);
+
+	xywhsf(fpmx.Bhsj, 430, 1210, 300, 80, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Wspzhm, 1010, 1210, 460, 80, LS_9, FT, AM_VCL);
+	xywhsf(fpmx.Dw, 1590, 1210, 80, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Xcrs, 1860, 1210, 140, 80, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.Kpr, 960, 1310, 190, 60, LS_10, FS, AM_VCL);
 
 	addxml(fpmx.sKprq, fpmx.Kprq);
 	addxml(fpmx.sFpdm, fpmx.Fpdm);

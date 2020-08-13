@@ -167,7 +167,6 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			break;
 		}
 
-		int n_x = 100;
 		double nHjjeFontSize = 21, nHjseFontSize = 21;
 		if (_nHjjeLen > 8)
 		{
@@ -208,47 +207,85 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			{
 				int nScaledWidth = 160;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
 				int nScaledHeight = 160;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
-				::StretchBlt(m_hPrinterDC, nXoff + 80 + 180 - 160, -(nYoff + 30 + (180 - 160)), nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+				::StretchBlt(m_hPrinterDC, 190 + nXoff, -110 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 			}
 
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
 
-			MoveToEx(m_hPrinterDC, 1682 + nXoff - 95 + n_x, -945 - nYoff + 15, NULL);
-			LineTo(m_hPrinterDC, 1692 + nXoff - 95 + n_x, -958 - nYoff + 15);
-			MoveToEx(m_hPrinterDC, 1702 + nXoff - 95 + n_x, -945 - nYoff + 15, NULL);
-			LineTo(m_hPrinterDC, 1692 + nXoff - 95 + n_x, -958 - nYoff + 15);
-			MoveToEx(m_hPrinterDC, 1692 + nXoff - 95 + n_x, -958 - nYoff + 15, NULL);
-			LineTo(m_hPrinterDC, 1692 + nXoff - 95 + n_x, -976 - nYoff + 15);
-			MoveToEx(m_hPrinterDC, 1682 + nXoff - 95 + n_x, -958 - nYoff + 15, NULL);
-			LineTo(m_hPrinterDC, 1702 + nXoff - 95 + n_x, -958 - nYoff + 15);
-			MoveToEx(m_hPrinterDC, 1682 + nXoff - 95 + n_x, -967 - nYoff + 15, NULL);
-			LineTo(m_hPrinterDC, 1702 + nXoff - 95 + n_x, -967 - nYoff + 15);
+			RECT itemRect;
 
-			MoveToEx(m_hPrinterDC, 1672 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -870 - nYoff + 10, NULL);
-			LineTo(m_hPrinterDC, 1682 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -883 - nYoff + 10);
-			MoveToEx(m_hPrinterDC, 1692 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -870 - nYoff + 10, NULL);
-			LineTo(m_hPrinterDC, 1682 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -883 - nYoff + 10);
-			MoveToEx(m_hPrinterDC, 1682 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -883 - nYoff + 10, NULL);
-			LineTo(m_hPrinterDC, 1682 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -901 - nYoff + 10);
-			MoveToEx(m_hPrinterDC, 1672 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -883 - nYoff + 10, NULL);
-			LineTo(m_hPrinterDC, 1692 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -883 - nYoff + 10);
-			MoveToEx(m_hPrinterDC, 1672 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -890 - nYoff + 10, NULL);
-			LineTo(m_hPrinterDC, 1692 - (int)(_nHjjeLen * nHjjeFontSize) + nXoff - 90 + n_x - 10, -890 - nYoff + 10);
-			if (hjse.CompareNoCase(" *  *  * ") != 0)
+			int x = 1320;
+			int y = 610;
+			int w = 280;
+			int h = 50;
+			int nFontSize = LS_10;
+			CString strFontName = FT;
+			int z = AM_VCR;
+			CString strText = hjje;
+
+			itemRect.left = x + nXoff + 190;
+			itemRect.top = (-y - nYoff - 300);
+			itemRect.right = x + nXoff + 190 + w;
+			itemRect.bottom = (-y - h - nYoff - 300);
+
+			LONG r = PaintTile2(nFontSize, strFontName, itemRect, strText, z);
+			int n_x_RMB1 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB1 = itemRect.top - 5;
+			
+			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1, NULL);
+			LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
+			MoveToEx(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1, NULL);
+			LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
+			MoveToEx(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13, NULL);
+			LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 31);
+			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 13, NULL);
+			LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 13);
+			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 22, NULL);
+			LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 22);
+			if (hjse.CompareNoCase("***") != 0)
 			{
-				MoveToEx(m_hPrinterDC, 2042 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -870 - nYoff + 10, NULL);
-				LineTo(m_hPrinterDC, 2052 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -883 - nYoff + 10);
-				MoveToEx(m_hPrinterDC, 2062 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -870 - nYoff + 10, NULL);
-				LineTo(m_hPrinterDC, 2052 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -883 - nYoff + 10);
-				MoveToEx(m_hPrinterDC, 2052 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -883 - nYoff + 10, NULL);
-				LineTo(m_hPrinterDC, 2052 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -901 - nYoff + 10);
-				MoveToEx(m_hPrinterDC, 2042 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -883 - nYoff + 10, NULL);
-				LineTo(m_hPrinterDC, 2062 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -883 - nYoff + 10);
-				MoveToEx(m_hPrinterDC, 2042 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -890 - nYoff + 10, NULL);
-				LineTo(m_hPrinterDC, 2062 - (int)(_nHjseLen * nHjseFontSize) + nXoff - 60 + n_x - 10, -890 - nYoff + 10);
+				//xywhsf(fpmx.hjse, 1730, 610, 270, 50, LS_10, FT, AM_VCR);
+				x = 1730;
+				y = 610;
+				w = 270;
+				h = 50;
+				nFontSize = LS_10;
+				strFontName = FT;
+				z = AM_VCR;
+				strText = hjse;
+
+				itemRect.left = x + nXoff + 190;
+				itemRect.top = (-y - nYoff - 300);
+				itemRect.right = x + nXoff + 190 + w;
+				itemRect.bottom = (-y - h - nYoff - 300);
+
+				r = PaintTile2(nFontSize, strFontName, itemRect, strText, z);
+				int n_x_RMB2 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB2 = itemRect.top - 5;
+
+				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2, NULL);
+				LineTo(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 13);
+				MoveToEx(m_hPrinterDC, n_x_RMB2 + 20, n_y_RMB2, NULL);
+				LineTo(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 13);
+				MoveToEx(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 13, NULL);
+				LineTo(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 31);
+				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2 - 13, NULL);
+				LineTo(m_hPrinterDC, n_x_RMB2 + 20, n_y_RMB2 - 13);
+				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2 - 22, NULL);
+				LineTo(m_hPrinterDC, n_x_RMB2 + 20, n_y_RMB2 - 22);
 			}
+
+			int n_x_RMB3 = 1600 + 190, n_y_RMB3 = -685 - 300;
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3, n_y_RMB3 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 13 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3 + 20, n_y_RMB3 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 13 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 13 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 31 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3, n_y_RMB3 - 13 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 20, n_y_RMB3 - 13 - nYoff);
+			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3, n_y_RMB3 - 22 - nYoff, NULL);
+			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 20, n_y_RMB3 - 22 - nYoff);
 		}
 
 		while (xml.FindElem("Item"))
@@ -264,42 +301,28 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			int z = atoi(xml.GetAttrib("z"));
 			CString strText = xml.GetData();
 
-			itemRect.left = x + nXoff + 100;
-			itemRect.top = (-y - 5 - nYoff);
-			itemRect.right = x + nXoff + 100 + w;
-			itemRect.bottom = (-y + 5 - h - nYoff);
+			itemRect.left = x + nXoff + 190;
+			itemRect.top = (-y - nYoff - 300);
+			itemRect.right = x + nXoff + 190 + w;
+			itemRect.bottom = (-y - h - nYoff - 300);
 
-			if (w == 0 && h == 0)
-			{
-				CFont *pOldFont;
-				CFont fontHeader;
-				fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-				pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-				::TextOut(m_hPrinterDC, itemRect.left, itemRect.top - 5, strText, strText.GetLength());
-				::SelectObject(m_hPrinterDC, pOldFont);
-				fontHeader.DeleteObject();
-			}
-			else
-			{
-				PaintTile(nFontSize, strFontName, itemRect, strText, z, 0);
-			}
+			PaintTile1(nFontSize, strFontName, itemRect, strText, z);
 		}
 
 		// 输出大写金额开头圈叉符号
 		int x, y, tx, ty;
-		bool zsfp = xml.FindElem("OX");//正数发票
 		if (xml.FindElem("OX"))
 		{
 			x = atoi(xml.GetAttrib("x"));
 			y = atoi(xml.GetAttrib("y"));
-			tx = x + nXoff;
-			ty = -(y + nYoff);
+			tx = x + nXoff + 190;
+			ty = -(y + nYoff) - 300;
 
-			::Ellipse(m_hPrinterDC, tx + n_x - 20, ty + 10, tx + 30 + n_x - 20, ty - 30 + 10);
-			::MoveToEx(m_hPrinterDC, tx + 4 + n_x - 20, ty - 4 + 10, NULL);
-			::LineTo(m_hPrinterDC, tx + 25 + n_x - 20, ty - 25 + 10);
-			::MoveToEx(m_hPrinterDC, tx + 24 + n_x - 20, ty - 4 + 10, NULL);
-			::LineTo(m_hPrinterDC, tx + 4 + n_x - 20, ty - 24 + 10);
+			::Ellipse(m_hPrinterDC, tx - 20, ty + 10, tx + 30 - 20, ty - 30 + 10);
+			::MoveToEx(m_hPrinterDC, tx + 4 - 20, ty - 4 + 10, NULL);
+			::LineTo(m_hPrinterDC, tx + 25 - 20, ty - 25 + 10);
+			::MoveToEx(m_hPrinterDC, tx + 24 - 20, ty - 4 + 10, NULL);
+			::LineTo(m_hPrinterDC, tx + 4 - 20, ty - 24 + 10);
 		}
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
@@ -1113,8 +1136,8 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	//				            X                                      Y              W	          H	          S		        F      Z
 	if (m_sHx.IsEmpty())
 	{
-		xywhsf(fpmx.JqbhZW, LX + 220 - 10, LY + 200 - 10, LW, LH, LS_9, FS, ZL);
-		xywhsf(fpmx.Skpbh, LX + 220 - 10, LY + 250 - 10, LW, LH, LS_11, FT, ZL);
+		xywhsf(fpmx.JqbhZW, 180, -100, 350, 50, LS_9, FS, AM_VCL);
+		xywhsf(fpmx.Skpbh, 180, -50, 350, 50, LS_11, FT, AM_VCL);
 		xywhsf(fpmx.Xxfs, LX + 140 + 380, LY + 240, LW, LH, LS_12, FH, ZL);
 	}
 	else
@@ -1129,221 +1152,53 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Ncpsg, LX + 380, LY + 180, LW, LH, LS_12, FH, ZL);
 	//xywhsf(fpmx.Ncpxssgqy     ,LX+ 50								 ,LY+ 170       ,LW         ,LH         ,LS_16         ,FH    ,ZL);
 
-	if (fpdy.sFplxdm.Compare("007") == 0 && fpmx.sFpdm.GetLength() == 12)
-	{
-		xywhsf(fpmx.Fpdm, LX + 1855 - 10/* 1910 */, LY + 130 - 10, LW, LH, LS_9, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Fpdm, LX + 1890 - 10/* 1910 */, LY + 130 - 10, LW, LH, LS_9, FS, ZL);
-	}
-	xywhsf(fpmx.Fphm, LX + 1860 - 10/* 1880 */, LY + 170 - 10, LW, LH, LS_11, FT, ZL);
+	xywhsf(fpmx.Fpdm, 1750, -180, 250, 50, LS_9, FS, AM_VCR);
+	xywhsf(fpmx.Fphm, 1750, -130, 250, 50, LS_11, FT, AM_VCR);
 
-	xywhsf(fpmx.kprq.year, LX + 1730, LY + 220, LW, LH, LS_9, FT, ZL);
+	/*xywhsf(fpmx.kprq.year, LX + 1730, LY + 220, LW, LH, LS_9, FT, ZL);
 	xywhsf(fpmx.kprq.Year, LX + 1808, LY + 220, LW, LH, LS_9, FT, ZL);
 	xywhsf(fpmx.kprq.mouth, LX + 1848, LY + 220, LW, LH, LS_9, FT, ZL);
 	xywhsf(fpmx.kprq.Mouth, LX + 1883, LY + 220, LW, LH, LS_9, FT, ZL);
 	xywhsf(fpmx.kprq.day, LX + 1918 + 5, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.kprq.Day, LX + 1958, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.OX, LX + 650, LY + 980, LW, LH, LS_9, FT, ZL);
+	xywhsf(fpmx.kprq.Day, LX + 1958, LY + 220, LW, LH, LS_9, FT, ZL);*/
+	xywhsf(fpmx.Kprq, 1660, -80, 350, 60, LS_9, FT, AM_VCL);
 
-	if (LengOfGhfmc <= 50)
-	{
-		xywhsf(fpmx.Ghdwmc, LX + 380, LY + 310, LW + 800, LH + 60, LS_9, FS, ZL);
-	}
-	else if (LengOfGhfmc > 50 && LengOfGhfmc <= 56)
-	{
-		xywhsf(fpmx.Ghdwmc, LX + 380, LY + 310, LW + 800, LH + 60, LS_8, FS, ZL);
-	}
-	else if (LengOfGhfmc > 56 && LengOfGhfmc <= 64)
-	{
-		xywhsf(fpmx.Ghdwmc, LX + 380, LY + 310, LW + 800, LH + 60, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Ghdwmc, LX + 380, LY + 310, LW + 800, LH + 60, LS_6, FS, ZL);
-	}
+	xywhsf(fpmx.Ghdwmc, 340, 0, 780, 55, LS_9, FS, AM_VCL);
+	xywhsf(fpmx.Ghdwsbh, 340, 55, 780, 55, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Ghdwdzdh, 340, 110, 780, 55, LS_9, FS, AM_VCL);
+	xywhsf(fpmx.Ghdwyhzh, 340, 165, 780, 55, LS_9, FS, AM_VCL);
 
-	xywhsf(fpmx.Ghdwsbh, LX + 360 + 50, LY + 310 + 55 - 15, LW, LH, LS_12, FT, ZL);
 
-	if (LengOfGhfdzdh <= 50)
-	{
-		xywhsf(fpmx.Ghdwdzdh, LX + 380/*360*/, LY + 310 + 110 - 5, LW + 800, LH + 60, LS_9, FS, ZL);
-	}
-	else if (LengOfGhfdzdh > 50 && LengOfGhfdzdh <= 56)
-	{
-		xywhsf(fpmx.Ghdwdzdh, LX + 380, LY + 310 + 110 - 5, LW + 800, LH + 60, LS_8, FS, ZL);
-	}
-	else if (LengOfGhfdzdh > 56 && LengOfGhfdzdh <= 64)
-	{
-		xywhsf(fpmx.Ghdwdzdh, LX + 380, LY + 310 + 110 - 5, LW + 800, LH + 60, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Ghdwdzdh, LX + 380, LY + 310 + 110 - 5, LW + 800, LH + 60, LS_6, FS, ZL);
-	}
-
-	if (LengOfGhfyhzh <= 50)
-	{
-		xywhsf(fpmx.Ghdwyhzh, LX + 380, LY + 310 + 160 - 5, LW + 800, LH + 60, LS_9, FS, ZL);
-	}
-	else if (LengOfGhfyhzh > 50 && LengOfGhfyhzh <= 56)
-	{
-		xywhsf(fpmx.Ghdwyhzh, LX + 380, LY + 310 + 160 - 5, LW + 800, LH + 60, LS_8, FS, ZL);
-	}
-	else if (LengOfGhfyhzh > 56 && LengOfGhfyhzh <= 64)
-	{
-		xywhsf(fpmx.Ghdwyhzh, LX + 380, LY + 310 + 160 - 5, LW + 800, LH + 60, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Ghdwyhzh, LX + 380, LY + 310 + 160 - 5, LW + 800, LH + 60, LS_6, FS, ZL);
-	}
-
-	xywhsf(fpmx.skm1, LX + 1310 - 35, LY + 310, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.skm2, LX + 1310 - 35, LY + 310 + 45, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.skm3, LX + 1310 - 35, LY + 310 + 90, LW, LH, LS_12, FT, ZL);
-	xywhsf(fpmx.skm4, LX + 1310 - 35, LY + 310 + 135, LW, LH, LS_12, FT, ZL);
+	xywhsf(fpmx.skm1, 1230, 0, 750, 55, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm2, 1230, 55, 750, 55, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm3, 1230, 110, 750, 55, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm4, 1230, 165, 750, 55, LS_12, FT, AM_VCL);
 
 	for (int i = 0; i < fpmx.iFyxmCount; i++)
 	{
-		//计算商品名称长度
-		char* strSP = fpmx.fyxmxx[i].sSpmc.GetBuffer(0);
-		int LengOfSpmc = strlen(strSP);
-
-		if (LengOfSpmc >= 40)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSpmc, LX + 70, LY + 560 + i * 43, LW + 500, LH + 60, LS_6, FS, ZL);
-		}
-		else if (LengOfSpmc >= 34 && LengOfSpmc < 40)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSpmc, LX + 70, LY + 560 + i * 43, LW + 500, LH + 60, LS_7, FS, ZL);
-		}
-		else if (LengOfSpmc >= 30 && LengOfSpmc < 34)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSpmc, LX + 70, LY + 560 + i * 43, LW + 500, LH + 60, LS_8, FS, ZL);
-		}
-		else
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSpmc, LX + 70, LY + 560 + i * 43, LW + 500, LH + 60, LS_9, FS, ZL);
-		}
-		//计算商品规格型号长度
-		char* str2 = fpmx.fyxmxx[i].sGgxh.GetBuffer(0);
-		int LengOfGgxh = strlen(str2);
-		if (LengOfGgxh >= 18)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssGgxh, LX + 595, LY + 560 + i * 43, LW + 250, LH + 60, LS_6, FS, ZL);
-		}
-		else if (LengOfGgxh >= 16 && LengOfGgxh < 18)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssGgxh, LX + 595, LY + 560 + i * 43, LW + 250, LH + 60, LS_7, FS, ZL);
-		}
-		else if (LengOfGgxh >= 14 && LengOfGgxh < 16)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssGgxh, LX + 595, LY + 560 + i * 43, LW + 250, LH + 60, LS_8, FS, ZL);
-		}
-		else {
-
-			xywhsf(fpmx.fyxmxx[i].ssGgxh, LX + 595, LY + 560 + i * 43, LW + 250, LH + 60, LS_9, FS, ZL);
-		}
-		//计算单位长度
-		char* str3 = fpmx.fyxmxx[i].sDw.GetBuffer(0);
-		int LengOfDw = strlen(str3);
-		if (LengOfDw >= 8)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssDw, LX + 845, LY + 560 + i * 43, LW + 120, LH + 60, LS_6, FS, ZL);
-		}
-		else if (LengOfDw >= 6 && LengOfDw < 8)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssDw, LX + 845, LY + 560 + i * 43, LW + 120, LH + 60, LS_7, FS, ZL);
-		}
-		else {
-			xywhsf(fpmx.fyxmxx[i].ssDw, LX + 845, LY + 560 + i * 43, LW + 120, LH + 60, LS_9, FS, ZL);
-		}
-		//计算数量长度
-// 		char* str4 = fpmx.fyxmxx[i].sSpsl.GetBuffer(0);
-		int LengOfSpsl = 0;
+		xywhsf(fpmx.fyxmxx[i].ssSpmc, 30, 270 + 40 * i, 460, 40, LS_9, FS, AM_VCL);
+		xywhsf(fpmx.fyxmxx[i].ssGgxh, 540, 270 + 40 * i, 230, 40, LS_9, FS, AM_VCL);
+		xywhsf(fpmx.fyxmxx[i].ssDw, 790, 270 + 40 * i, 100, 40, LS_9, FS, AM_VCL);
 		if (fpmx.fyxmxx[i].sSpsl.GetLength() > 13)
 		{
 			fpmx.fyxmxx[i].sSpsl = fpmx.fyxmxx[i].sSpsl.Mid(0, 13);
 		}
-		char* str4 = fpmx.fyxmxx[i].sSpsl.GetBuffer(0);
-		LengOfSpsl = strlen(str4);
-
-		if (LengOfSpsl >= 11 && LengOfSpsl <= 13)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSpsl, LX + 940 + 5, LY + 560 + i * 43, LW + 200, LH + 43, LS_8, FS, ZR);
-		}
-		else
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSpsl, LX + 940 + 5, LY + 560 + i * 43, LW + 200, LH + 43, LS_9, FS, ZR);
-		}
-		//计算单价长度
-// 		char* str5 = fpmx.fyxmxx[i].sDj.GetBuffer(0);
-		int LengOfDj = 0;
+		xywhsf(fpmx.fyxmxx[i].ssSpsl, 920, 270 + 40 * i, 170, 40, LS_9, FS, AM_VCR);
 		if (fpmx.fyxmxx[i].sDj.GetLength() > 13)
 		{
 			fpmx.fyxmxx[i].sDj = fpmx.fyxmxx[i].sDj.Mid(0, 13);
 		}
-		char* str5 = fpmx.fyxmxx[i].sDj.GetBuffer(0);
-		LengOfDj = strlen(str5);
+		xywhsf(fpmx.fyxmxx[i].ssDj, 1120, 270 + 40 * i, 170, 40, LS_9, FS, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssJe, 1320, 270 + 40 * i, 280, 40, LS_9, FS, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssSl, 1610, 270 + 40 * i, 95, 40, LS_9, FS, AM_ZC);
+		xywhsf(fpmx.fyxmxx[i].ssSe, 1730, 270 + 40 * i, 270, 40, LS_9, FT, AM_VCR);
+	}
+	xywhsf(fpmx.hjje, 1320, 610, 280, 50, LS_10, FT, AM_VCR);
+	xywhsf(fpmx.hjse, 1730, 610, 270, 50, LS_10, FT, AM_VCR);
 
-		if (LengOfDj >= 11 && LengOfDj <= 13)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssDj, LX + 1150, LY + 560 + i * 43, LW + 200, LH + 43, LS_8, FS, ZR);
-		}
-		else
-		{
-			xywhsf(fpmx.fyxmxx[i].ssDj, LX + 1150, LY + 560 + i * 43, LW + 200, LH + 43, LS_9, FS, ZR);
-		}
-
-		xywhsf(fpmx.fyxmxx[i].ssJe, LX + 1340, LY + 560 + i * 43, LW + 300, LH + 43, LS_9, FS, ZR);
-		if (fpmx.fyxmxx[i].sSl.GetLength() > 4)
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSl, LX + 1660, LY + 560 + i * 43, LW + 100, LH + 43, LS_7, FT, ZC);
-		}
-		else
-		{
-			xywhsf(fpmx.fyxmxx[i].ssSl, LX + 1660, LY + 560 + i * 43, LW + 100, LH + 43, LS_9, FS, ZC);
-		}
-		xywhsf(fpmx.fyxmxx[i].ssSe, LX + 1740, LY + 560 + i * 43, LW + 300, LH + 43, LS_9, FT, ZR);
-	}
-	if (fpmx.sHjje.GetLength() > 8)
-	{
-		xywhsf(fpmx.hjje, LX + 1340, LY + 900, LW + 300, LH + 60, LS_9, FT, ZR);
-	}
-	else
-	{
-		xywhsf(fpmx.hjje, LX + 1340, LY + 900, LW + 300, LH + 60, LS_10, FT, ZR);
-	}
-
-	if (fpmx.sHjse.GetLength() > 8)
-	{
-		xywhsf(fpmx.hjse, LX + 1740, LY + 900, LW + 300, LH + 60, LS_9, FT, ZR);
-	}
-	else
-	{
-		xywhsf(fpmx.hjse, LX + 1740, LY + 900, LW + 300, LH + 60, LS_10, FT, ZR);
-	}
-
-	if (fpmx.sJshjDx.GetLength() > 50)
-	{
-		xywhsf(fpmx.jshjDx, LX + 650 + 30, LY + 975, LW, LH, LS_8, FS, ZL);   //大写价税合计
-	}
-	else
-	{
-		xywhsf(fpmx.jshjDx, LX + 650 + 30, LY + 975, LW, LH, LS_9, FS, ZL);   //大写价税合计
-	}
-	xywhsf(fpmx.jshj, LX + 1660, LY + 970, LW, LH, LS_11, FT, ZL);   //小写价税合计
-	/*if(fpmx.sFpzt.CompareNoCase("1") == 0 )
-	{
-		xywhsf(fpmx.bzF                  ,LX+ 1260                   ,LY+ 1045      ,LW +800    ,LH +35     ,LS_9          ,FS    ,ZL );
-		xywhsf(fpmx.bz                   ,LX+ 1260                   ,LY+ 1045+35   ,LW +800    ,LH +200    ,LS_9          ,FS    ,ZL );
-	}
-	else
-	{*/
-	//xywhsf(fpmx.bz						     ,LX+ 1260               ,LY+ 1045      ,LW +800    ,LH +200     ,LS_9         ,FS    ,ZL );
-	//}
+	xywhsf(fpmx.OX, 590, 695, 80, 85, LS_9, FT, ZL);
+	xywhsf(fpmx.jshjDx, 610, 660, 680, 85, LS_9, FS, AM_VCL);   //大写价税合计
+	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL);   //小写价税合计
 
 	if (fpdy.sFplxdm.CompareNoCase("007") == 0 && m_sHx.IsEmpty())
 	{
@@ -1352,65 +1207,17 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	}
 	else
 	{
-		xywhsf(fpmx.bz, LX + 1260, LY + 1045, LW + 800, LH + 200, LS_9, FS, ZL);
+		xywhsf(fpmx.bz, 1240, 750, 740, 200, LS_9, FS, AM_VCL);
 	}
 
-	if (LengOfXhfmc <= 50)
-	{
-		xywhsf(fpmx.Xhdwmc, LX + 380, LY + 1045 + 5, LW + 800, LH + 60, LS_9, FS, ZL);
-	}
-	else if (LengOfXhfmc > 50 && LengOfXhfmc <= 56)
-	{
-		xywhsf(fpmx.Xhdwmc, LX + 380, LY + 1045 + 5, LW + 800, LH + 60, LS_8, FS, ZL);
-	}
-	else if (LengOfXhfmc > 56 && LengOfXhfmc <= 64)
-	{
-		xywhsf(fpmx.Xhdwmc, LX + 380, LY + 1045 + 5, LW + 800, LH + 60, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Xhdwmc, LX + 380, LY + 1045 + 5, LW + 800, LH + 60, LS_6, FS, ZL);
-	}
+	xywhsf(fpmx.Xhdwmc, 340, 750, 780, 50, LS_9, FS, AM_VCL);
+	xywhsf(fpmx.Xhdwsbh, 340, 800, 780, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Xhdwdzdh, 340, 850, 780, 50, LS_9, FS, AM_VCL);
+	xywhsf(fpmx.Xhdwyhzh, 340, 900, 780, 50, LS_9, FS, AM_VCL);
 
-	xywhsf(fpmx.Xhdwsbh, LX + 380 + 50, LY + 1045 + 40 + 5 + 5, LW, LH, LS_12, FT, ZL);
-
-	if (LengOfXhdwdzdh <= 50)
-	{
-		xywhsf(fpmx.Xhdwdzdh, LX + 380, LY + 1045 + 95 + 5, LW + 800, LH + 60, LS_9, FS, ZL);
-	}
-	else if (LengOfXhdwdzdh > 50 && LengOfXhdwdzdh <= 56)
-	{
-		xywhsf(fpmx.Xhdwdzdh, LX + 380, LY + 1045 + 95 + 5, LW + 800, LH + 60, LS_8, FS, ZL);
-	}
-	else if (LengOfXhdwdzdh > 56 && LengOfXhdwdzdh <= 64)
-	{
-		xywhsf(fpmx.Xhdwdzdh, LX + 380, LY + 1045 + 95 + 5, LW + 800, LH + 60, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Xhdwdzdh, LX + 380, LY + 1045 + 95 + 5, LW + 800, LH + 60, LS_6, FS, ZL);
-	}
-
-	if (LengOfXhdwyhzh <= 50)
-	{
-		xywhsf(fpmx.Xhdwyhzh, LX + 380, LY + 1045 + 140 + 5 - 4, LW + 800, LH + 60, LS_9, FS, ZL);
-	}
-	else if (LengOfXhdwyhzh > 50 && LengOfXhdwyhzh <= 56)
-	{
-		xywhsf(fpmx.Xhdwyhzh, LX + 380, LY + 1045 + 140 + 5 - 4, LW + 800, LH + 60, LS_8, FS, ZL);
-	}
-	else if (LengOfXhdwyhzh > 56 && LengOfXhdwyhzh <= 64)
-	{
-		xywhsf(fpmx.Xhdwyhzh, LX + 380, LY + 1045 + 140 + 5 - 4, LW + 800, LH + 60, LS_7, FS, ZL);
-	}
-	else
-	{
-		xywhsf(fpmx.Xhdwyhzh, LX + 380, LY + 1045 + 140 + 5 - 4, LW + 800, LH + 60, LS_6, FS, ZL);
-	}
-
-	xywhsf(fpmx.skr, LX + 270, LY + 1250 + 5, LW, LH, LS_10, FS, ZL);
-	xywhsf(fpmx.fhr, LX + 790, LY + 1250 + 5, LW, LH, LS_10, FS, ZL);
-	xywhsf(fpmx.kpr, LX + 1260, LY + 1250 + 5, LW, LH, LS_10, FS, ZL);
+	xywhsf(fpmx.skr, 200, 950, 330, 60, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.fhr, 720, 950, 290, 60, LS_10, FS, AM_VCL);
+	xywhsf(fpmx.kpr, 1190, 950, 250, 60, LS_10, FS, AM_VCL);
 
 	if (m_sHx.IsEmpty())
 	{
@@ -1422,19 +1229,21 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		addxml(fpmx.sJym, fpmx.Hxjym);
 	}
 
-	addxml(fpmx.sCpy, fpmx.Cpy);
-	addxml(fpmx.sNcpsg, fpmx.Ncpsg);
-	addxml(fpmx.sXxfs, fpmx.Xxfs);
+	//addxml(fpmx.sCpy, fpmx.Cpy);
+	//addxml(fpmx.sNcpsg, fpmx.Ncpsg);
+	//addxml(fpmx.sXxfs, fpmx.Xxfs);
 	//addxml(fpmx.sNcpxssgqy, fpmx.Ncpxssgqy);
 
 	addxml(fpmx.sFpdm, fpmx.Fpdm);
 	addxml(fpmx.sFphm, fpmx.Fphm);
-	addxml(fpmx.kprq.sDay, fpmx.kprq.Day);
+	/*addxml(fpmx.kprq.sDay, fpmx.kprq.Day);
 	addxml(fpmx.kprq.sday, fpmx.kprq.day);
 	addxml(fpmx.kprq.sMouth, fpmx.kprq.Mouth);
 	addxml(fpmx.kprq.smouth, fpmx.kprq.mouth);
 	addxml(fpmx.kprq.sYear, fpmx.kprq.Year);
-	addxml(fpmx.kprq.syear, fpmx.kprq.year);
+	addxml(fpmx.kprq.syear, fpmx.kprq.year);*/
+	CString time = fpmx.kprq.syear + "年" + fpmx.kprq.smouth + "月" + fpmx.kprq.sday + "日";
+	addxml(time, fpmx.Kprq);
 
 	addxml(fpmx.sGhdwmc, fpmx.Ghdwmc);
 	addxml(fpmx.sGhdwsbh, fpmx.Ghdwsbh);
