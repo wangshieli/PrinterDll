@@ -1200,8 +1200,8 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 
 	if (fpdy.sFplxdm.CompareNoCase("007") == 0 && m_sHx.IsEmpty())
 	{
-		xywhsf(fpmx.bzF, LX + 1260, LY + 1045, LW + 800, LH + 200, LS_9, FS, ZL);
-		xywhsf(fpmx.bz, LX + 1260, LY + 1045 + 38, LW + 800, LH + 200, LS_9, FS, ZL);
+		xywhsf(fpmx.bzF, 1240, 755, 740, 40, LS_9, FS, AM_VCL);
+		xywhsf(fpmx.bz, 1240, 795, 740, 155, LS_9, FS, AM_ZL);
 	}
 	else
 	{
