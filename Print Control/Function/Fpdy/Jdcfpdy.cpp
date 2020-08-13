@@ -483,11 +483,11 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Fphm, 290, 120, 580, 60, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Jqbh, 290, 190, 580, 60, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.Skm1, 980, 5, 1020, 60, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Skm2, 980, 65, 1020, 60, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Skm3, 980, 125, 1020, 60, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Skm4, 980, 185, 1020, 60, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Skm5, 980, 245, 1020, 60, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm1, 980, 20, 1020, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm2, 980, 70, 1020, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm3, 980, 120, 1020, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm4, 980, 170, 1020, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Skm5, 980, 220, 1020, 50, LS_12, FT, AM_VCL);
 
 	xywhsf(fpmx.Ghfmc, 290, 310, 650, 60, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Sfzhm, 290, 370, 650, 60, LS_12, FT, AM_VCL);
@@ -506,7 +506,7 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 
 	xywhsf(fpmx.OX, 330, 755, 80, 80, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.JshjDx, 350, 720, 1100, 80, LS_10, FS, AM_VCL);
-	xywhsf(fpmx.Jshj, 1630, 720, 370, 80, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Jshj, 1620, 720, 380, 80, LS_12, FT, AM_VCL);
 
 	xywhsf(fpmx.Xhdwmc, 290, 815, 1020, 80, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Dh, 1440, 815, 560, 80, LS_10, FS, AM_VCL);
@@ -518,11 +518,11 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Khyh, 1240, 1000, 760, 80, LS_10, FS, AM_VCL);
 
 	xywhsf(fpmx.Zzssl, 290, 1090, 225, 110, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Zzsse, 740, 1090, 245, 110, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Zzsse, 730, 1090, 255, 110, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Swjgmc, 1335, 1090, 665, 55, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Swjgdm, 1335, 1145, 665, 55, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.Bhsj, 430, 1210, 300, 80, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Bhsj, 420, 1210, 310, 80, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Wspzhm, 1010, 1210, 460, 80, LS_9, FT, AM_VCL);
 	xywhsf(fpmx.Dw, 1590, 1210, 80, 80, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Xcrs, 1860, 1210, 140, 80, LS_10, FS, AM_VCL);

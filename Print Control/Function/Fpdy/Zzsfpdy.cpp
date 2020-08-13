@@ -582,7 +582,7 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				printRect.right = x + nXoff + 38 + w;
 				printRect.bottom = (-y - 300 - h - nYoff);
 
-				PaintTile(nFontSize, strFontName, printRect, strText, z);
+				PaintTile(nFontSize, strFontName, printRect, strText, z, 5, 5, 5);
 				//MoveToEx(m_hPrinterDC, printRect.left, printRect.bottom, NULL);
 				//LineTo(m_hPrinterDC, printRect.right, printRect.bottom);
 			}
@@ -1138,19 +1138,17 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	{
 		xywhsf(fpmx.JqbhZW, 180, -100, 350, 50, LS_9, FS, AM_VCL);
 		xywhsf(fpmx.Skpbh, 180, -50, 350, 50, LS_11, FT, AM_VCL);
-		xywhsf(fpmx.Xxfs, LX + 140 + 380, LY + 240, LW, LH, LS_12, FH, ZL);
+		xywhsf(fpmx.Xxfs, 520, -50, 330, 50, LS_12, FH, AM_VCL);
 	}
 	else
 	{
 		xywhsf(fpmx.Hxjym, LX + 220, LY + 250 - 25, LW, LH, LS_9, FT, ZL);
 		xywhsf(fpmx.Xxfs, LX + 140 + 380, LY + 180, LW, LH, LS_12, FH, ZL);
 	}
-	//	xywhsf(fpmx.Xxfs          ,LX+ 140+380                            ,LY+ 240       ,LW         ,LH         ,LS_12         ,FH    ,ZL);
 
-	xywhsf(fpmx.Cpy, LX + 140 + 390, LY + 180, LW, LH, LS_10, FH, ZL);
+	xywhsf(fpmx.Cpy, 560, -100, 270, 50, LS_10, FH, AM_VCL);
 
-	xywhsf(fpmx.Ncpsg, LX + 380, LY + 180, LW, LH, LS_12, FH, ZL);
-	//xywhsf(fpmx.Ncpxssgqy     ,LX+ 50								 ,LY+ 170       ,LW         ,LH         ,LS_16         ,FH    ,ZL);
+	xywhsf(fpmx.Ncpsg, 390, -100, 120, 50, LS_12, FH, AM_VCL);
 
 	xywhsf(fpmx.Fpdm, 1750, -180, 250, 50, LS_9, FS, AM_VCR);
 	xywhsf(fpmx.Fphm, 1750, -130, 250, 50, LS_11, FT, AM_VCR);
@@ -1169,10 +1167,10 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Ghdwyhzh, 340, 165, 780, 55, LS_9, FS, AM_VCL);
 
 
-	xywhsf(fpmx.skm1, 1230, 0, 750, 55, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.skm2, 1230, 55, 750, 55, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.skm3, 1230, 110, 750, 55, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.skm4, 1230, 165, 750, 55, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm1, 1230, 10, 750, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm2, 1230, 60, 750, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm3, 1230, 110, 750, 50, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.skm4, 1230, 160, 750, 50, LS_12, FT, AM_VCL);
 
 	for (int i = 0; i < fpmx.iFyxmCount; i++)
 	{
@@ -1229,9 +1227,9 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		addxml(fpmx.sJym, fpmx.Hxjym);
 	}
 
-	//addxml(fpmx.sCpy, fpmx.Cpy);
-	//addxml(fpmx.sNcpsg, fpmx.Ncpsg);
-	//addxml(fpmx.sXxfs, fpmx.Xxfs);
+	addxml(fpmx.sCpy, fpmx.Cpy);
+	addxml(fpmx.sNcpsg, fpmx.Ncpsg);
+	addxml(fpmx.sXxfs, fpmx.Xxfs);
 	//addxml(fpmx.sNcpxssgqy, fpmx.Ncpxssgqy);
 
 	addxml(fpmx.sFpdm, fpmx.Fpdm);
