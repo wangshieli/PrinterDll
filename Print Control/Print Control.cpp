@@ -13,6 +13,7 @@
 #include "Function/Bbdy/Khbmdy.h"
 #include "Function/Bbdy/Spbmdy.h"
 #include "Function/Bbdy/Hzxxbdy.h"
+#include "Function/Bbdy/Fpzlhz.h"
 
 #include "Helper/Log/TraceLog.h"
 
@@ -127,11 +128,15 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 	}
 	else if (sDylx.Compare("2") == 0) //报表打印
 	{
-		CKhbmdy c;
-		//CSpbmdy c;
-		//CHzxxbdy c;
-		c.Dlfpdy(pszPost);
-		return;
+		CString bblx;
+		if (xml.FindElem("bblx")) bblx = xml.GetData();
+		if (bblx.Compare("FPZLHZ") == 0)
+		{
+			CFpzlhz zlhz;
+			CString strResult = zlhz.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
 	}
 	else
 	{

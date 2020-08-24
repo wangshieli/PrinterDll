@@ -317,6 +317,7 @@ SPBM_BBXX CSpbmdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 			if (xml.FindElem("mc"))   bbxm.st_sMc = xml.GetData();
 			if (xml.FindElem("sl"))     bbxm.st_sSl = xml.GetData();
 			if (xml.FindElem("spflbm"))     bbxm.st_sSpflbm = xml.GetData();
+			xml.OutOfElem();
 
 			bbxx.st_lSpbmBbxm.push_back(bbxm);
 		}

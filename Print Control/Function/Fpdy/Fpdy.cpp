@@ -244,7 +244,8 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		|| (r > recv_r
 			&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 				&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-				&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))) //如果多行，居中左对齐
+				&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))
+		|| (z == AM_ZC && ((rect.top = rect.top - (h - recv_h) / 2) && 0))) //如果多行，居中左对齐
 	{
 		do
 		{

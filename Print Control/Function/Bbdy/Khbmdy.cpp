@@ -111,6 +111,7 @@ KHBM_BBXX CKhbmdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 			if (xml.FindElem("nsrsbh"))   bbxm.st_sNsrsbh = xml.GetData();
 			if (xml.FindElem("yhzh"))     bbxm.st_sYhzh = xml.GetData();
 			if (xml.FindElem("yjdz"))     bbxm.st_sYjdz = xml.GetData();
+			xml.OutOfElem();
 			
 			bbxx.st_lKhbmBbxm.push_back(bbxm);
 		}

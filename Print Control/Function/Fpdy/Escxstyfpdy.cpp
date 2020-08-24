@@ -108,7 +108,7 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
 	nXoff = atoi(_sLeft);
 	nYoff = atoi(_sTop);
-	nQRCodeSize = atoi(_sQRSize) * 10;
+	nQRCodeSize = atoi(_sQRSize);
 
 	do
 	{
@@ -169,14 +169,14 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 			{
 				int nScaledWidth = 160;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
 				int nScaledHeight = 160;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
-				::StretchBlt(m_hPrinterDC, 240 + nXoff, -55 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+				::StretchBlt(m_hPrinterDC, 225 + nXoff, -90 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
 			}
 
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
 
-			int n_x_RMB1 = 1810, n_y_RMB1 = -1000;
+			int n_x_RMB1 = 1800, n_y_RMB1 = -1030;
 
 			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - nYoff, NULL);
 			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
@@ -203,10 +203,10 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 			int z = atoi(xml.GetAttrib("z"));
 			CString strText = xml.GetData();
 
-			itemRect.left = x + nXoff + 210;
-			itemRect.top = (-y - nYoff - 290);
-			itemRect.right = x + nXoff + 210 + w;
-			itemRect.bottom = (-y - h - nYoff - 290);
+			itemRect.left = x + nXoff + 200;
+			itemRect.top = (-y - nYoff - 320);
+			itemRect.right = x + nXoff + 200 + w;
+			itemRect.bottom = (-y - h - nYoff - 320);
 
 			PaintTile1(nFontSize, strFontName, itemRect, strText, z);
 		}
@@ -217,8 +217,8 @@ LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
 		{
 			x = atoi(xml.GetAttrib("x"));
 			y = atoi(xml.GetAttrib("y"));
-			tx = x + nXoff + 210;
-			ty = -(y + nYoff) - 290;
+			tx = x + nXoff + 200;
+			ty = -(y + nYoff) - 320;
 
 			::Ellipse(m_hPrinterDC, tx - 20, ty + 10, tx + 10, ty - 20);
 			::MoveToEx(m_hPrinterDC, tx - 16, ty + 6, NULL);
