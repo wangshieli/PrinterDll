@@ -129,6 +129,7 @@ public:
 
 protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
+	void setBuiltInOffset(IN int nType, OUT int &_x, OUT int &_y);
 
 	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC);
 	void PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC);

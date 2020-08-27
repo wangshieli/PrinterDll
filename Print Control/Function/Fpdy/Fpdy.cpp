@@ -113,6 +113,68 @@ void CFpdyBase::setSysDefprinter(CString& printer)
 	::SetDefaultPrinter(printer);
 }
 
+// nType = 1机动车  2二手车  3转普票
+void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
+{
+	CString _sPrinter = m_sPrinterName;
+	_sPrinter.MakeUpper();
+
+	if (_sPrinter.Find("EPSON") != -1)
+	{
+		if (nType == 1)
+		{
+			_x = -30;
+			_y = -20;
+		}
+		else if (nType == 2)
+		{
+			_x = -25;
+			_y = -45;
+		}
+		else if (nType == 3)
+		{
+			_x = -30;
+			_y = -50;
+		}
+	}
+	else if (_sPrinter.Find("FUJITSU") != -1)
+	{
+		if (nType == 1)
+		{
+			_x = 10;
+			_y = 0;
+		}
+		else if (nType == 2)
+		{
+			_x = 0;
+			_y = 0;
+		}
+		else if (nType == 3)
+		{
+			_x = 0;
+			_y = -10;
+		}
+	}
+	else if (_sPrinter.Find("JOLIMARK") != -1)
+	{
+		if (nType == 1)
+		{
+			_x = 0;
+			_y = -40;
+		}
+		else if (nType == 2)
+		{
+			_x = 0;
+			_y = -40;
+		}
+		else if (nType == 3)
+		{
+			_x = 0;
+			_y = -55;
+		}
+	}
+}
+
 LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z)
 {
 	LONG r = 0;

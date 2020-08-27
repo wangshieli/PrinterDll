@@ -251,7 +251,7 @@ void GetDllPath(CString& dllpath)
 	char drive[_MAX_DRIVE];
 	char dir[_MAX_DIR];
 	_splitpath_s(path, drive, _MAX_DRIVE, dir, _MAX_DIR, NULL, 0, NULL, 0);
-	_makepath_s(path, MAX_PATH, drive, dir, "printer", "ini");
+	_makepath_s(path, MAX_PATH, drive, dir, "printerset", "ini");
 	dllpath = path;
 
 	DEBUG_TRACELOG_STR("dllpath", dllpath);

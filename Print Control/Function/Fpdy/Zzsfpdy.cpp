@@ -122,7 +122,9 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 
 	int nrt = 0;
 	int nXoff = 0;
+	int _nXoff = 0;
 	int nYoff = 0;
+	int _nYoff = 0;
 	int nQRCodeSize = 0;
 
 	// 添加读取配置文件功能
@@ -130,9 +132,13 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 	CString _sLeft = "";
 	CString _sQRSize = "";
 	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
+	setBuiltInOffset(3, _nXoff, _nYoff);
 	nXoff = atoi(_sLeft);
 	nYoff = atoi(_sTop);
 	nQRCodeSize = atoi(_sQRSize) * 10;
+
+	nXoff += _nXoff;
+	nYoff += _nYoff;
 
 	int _nHjjeLen = strlen(hjje);
 	int _nHjseLen = strlen(hjse);
