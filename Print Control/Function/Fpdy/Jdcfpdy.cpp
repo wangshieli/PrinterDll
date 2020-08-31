@@ -568,6 +568,10 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sSwjgmc, fpmx.Swjgmc);
 	addxml(fpmx.sSwjgdm, fpmx.Swjgdm);
 	addxml(fpmx.sWspzhm, fpmx.Wspzhm);
+	if (fpmx.sDw.GetLength() > 4)
+	{
+		fpmx.sDw.Insert(4, "\r\n");
+	}
 	addxml(fpmx.sDw, fpmx.Dw);
 	addxml(fpmx.sXcrs, fpmx.Xcrs);
 	addxml(fpmx.sKpr, fpmx.Kpr);
