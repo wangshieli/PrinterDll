@@ -139,6 +139,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\exe权限提升工具";
+copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\newskkp_TempVer";</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
