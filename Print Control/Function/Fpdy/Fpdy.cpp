@@ -116,6 +116,7 @@ void CFpdyBase::setSysDefprinter(CString& printer)
 // nType = 1机动车  2二手车  3转普票
 void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 {
+	return;
 	CString _sPrinter = m_sPrinterName;
 	_sPrinter.MakeUpper();
 
@@ -177,7 +178,6 @@ void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 
 LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z)
 {
-	LONG r = 0;
 	CFont *pOldFont;
 	CFont fontHeader;
 	int fontSize = FontSize;
@@ -205,13 +205,13 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
 		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
 	}
-	else if (z == AM_VCL)
+	else if (z == AM_VCL || z == AM_VCL_S)
 	{
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT;
 		flags2 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
 		flags3 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
 	}
-	else if (z == AM_VCR)
+	else if (z == AM_VCR || z == AM_VCR_S)
 	{
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
 		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
@@ -223,12 +223,14 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
-	r = trect.right;
-	if ((h <= recv_h && ((fontSize -= 2) || 1)) 
+	LONG r = trect.right;
+	if (((h <= recv_h
 		|| (r > recv_r
-			&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1) 
-			&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-			&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))) //如果多行，居中左对齐
+			&& (z == AM_VCR_S || z == AM_VCL_S
+				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= 1) || 1))
+		|| (z == AM_ZC && ((rect.top = rect.top - (h - recv_h) / 2) && 0))) //如果多行，居中左对齐
 	{
 		do
 		{
@@ -240,13 +242,13 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 			h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
 			r = trect.right;
-		} while ((h <= recv_h && ((fontSize -= 2) || 1))
+		} while (((h <= recv_h
 			|| (r > recv_r
-				&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX )|| 1)
-					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))));
-		rect.top = rect.top - (h - recv_h) / 2;
-	}	
+				&& (z == AM_VCR_S || z == AM_VCL_S
+					|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+						&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+						&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= 1) || 1)));
+	}
 
 	::SelectObject(m_hPrinterDC, pOldFont);
 	fontHeader.DeleteObject();
@@ -283,13 +285,13 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
 		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
 	}
-	else if (z == AM_VCL)
+	else if (z == AM_VCL || z == AM_VCL_S)
 	{
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT;
 		flags2 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
 		flags3 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
 	}
-	else if (z == AM_VCR)
+	else if (z == AM_VCR || z == AM_VCR_S)
 	{
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
 		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
@@ -302,11 +304,12 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
 	LONG r = trect.right;
-	if ((h <= recv_h && ((fontSize -= 2) || 1))
+	if (((h <= recv_h 
 		|| (r > recv_r
-			&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
-				&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-				&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1)))
+			&& (z == AM_VCR_S || z == AM_VCL_S
+				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= 1) || 1))
 		|| (z == AM_ZC && ((rect.top = rect.top - (h - recv_h) / 2) && 0))) //如果多行，居中左对齐
 	{
 		do
@@ -319,11 +322,12 @@ void CFpdyBase::PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 			h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
 			r = trect.right;
-		} while ((h <= recv_h && ((fontSize -= 2) || 1))
+		} while (((h <= recv_h
 			|| (r > recv_r
-				&& (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
-					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))));
+				&& (z == AM_VCR_S || z == AM_VCL_S
+					|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+						&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+						&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= 1) || 1)));
 		rect.top = rect.top - (h - recv_h) / 2;
 	}
 
@@ -384,7 +388,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
 
-		fontSize -= 2;
+		fontSize -= 1;
 		fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 		trect = rect;
 		pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
@@ -400,6 +404,69 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 
 	::SelectObject(m_hPrinterDC, pOldFont);
 	fontHeader.DeleteObject();
+}
+
+int CFpdyBase::DataPrintMaxLen(const char * lpszData, int nLineMaxLen)
+{
+	if (NULL == lpszData || 0 >= nLineMaxLen)
+		return 0;
+
+	int nLen = strlen(lpszData);
+	if (nLen <= nLineMaxLen)
+		return nLen;
+
+	int i = 0; //字符串移动下标
+	int k = 0; //记录要截取的长度
+
+	// 字段最后一位不是汉字，则直接截取
+	if ((unsigned char)(lpszData[nLineMaxLen - 1]) < 0xA0)
+	{
+		k = nLineMaxLen;
+	}
+
+	// 字段最后一位是汉字，而倒数第二位不是汉字则直接截取到倒数第二位
+	else if ((unsigned char)(lpszData[nLineMaxLen - 1]) >= 0xA0
+		&& (unsigned char)(lpszData[nLineMaxLen - 2]) < 0xA0)
+	{
+		k = nLineMaxLen - 1;
+	}
+	// 从头开始一个个字符的判断，
+	// 看最后一个字符是属于要截取的汉字的一部分,
+	// 还是不属于截取的范围
+	else
+	{
+		while (i < nLineMaxLen)
+		{
+			if ((unsigned char)(lpszData[i]) >= 0xA0
+
+				&& (unsigned char)(lpszData[i + 1]) >= 0xA0)
+			{
+				if (k + 2 <= nLineMaxLen)
+				{
+					k += 2;
+					i += 2;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				if (k + 1 <= nLineMaxLen)
+				{
+					k++;
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	return k;
 }
 
 BOOL CFpdyBase::GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL * phDevNames, HGLOBAL * phDevMode)

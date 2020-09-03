@@ -79,6 +79,7 @@ BEGIN_MESSAGE_MAP(CTestPrintDllDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CTestPrintDllDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CTestPrintDllDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTestPrintDllDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CTestPrintDllDlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -337,4 +338,81 @@ void CTestPrintDllDlg::OnBnClickedButton4()
 
 	char zc[1024] = { 0 };
 	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+}
+
+int  newlineStr(const char *lpszData, int nLineMaxLen)
+{
+	int _nSize = 0;
+	if (NULL == lpszData || 0 >= nLineMaxLen)
+		return _nSize;
+
+	int nLen = strlen(lpszData);
+	if (nLen <= nLineMaxLen)
+		return nLen;
+
+	int i = 0; //字符串移动下标
+	int k = 0; //记录要截取的长度
+
+	// 字段最后一位不是汉字，则直接截取
+	if ((unsigned char)(lpszData[nLineMaxLen - 1]) < 0xA0)
+	{
+		k = nLineMaxLen;
+	}
+
+	// 字段最后一位是汉字，而倒数第二位不是汉字则直接截取到倒数第二位
+	else if ((unsigned char)(lpszData[nLineMaxLen - 1]) >= 0xA0
+		&& (unsigned char)(lpszData[nLineMaxLen - 2]) < 0xA0)
+	{
+		k = nLineMaxLen - 1;
+	}
+	// 从头开始一个个字符的判断，
+	// 看最后一个字符是属于要截取的汉字的一部分,
+	// 还是不属于截取的范围
+	else
+	{
+		while (i < nLineMaxLen)
+		{
+			if ((unsigned char)(lpszData[i]) >= 0xA0
+
+				&& (unsigned char)(lpszData[i + 1]) >= 0xA0)
+			{
+				if (k + 2 <= nLineMaxLen)
+				{
+					k += 2;
+					i += 2;
+				}
+				else
+				{
+					break;
+				}
+			}
+			else
+			{
+				if (k + 1 <= nLineMaxLen)
+				{
+					k++;
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	_nSize = k;
+	
+	return _nSize;
+}
+
+
+void CTestPrintDllDlg::OnBnClickedButton5()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString _data = "abc123一二三四五六七八九十ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩabc123一二三四五六七八九十ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ12345678";
+
+	int len = newlineStr((const char*)_data, 101);
+
+	CString d = _data.Left(len);
 }

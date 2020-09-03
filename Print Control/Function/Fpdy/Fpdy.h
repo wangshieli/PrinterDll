@@ -46,6 +46,9 @@
 #define AM_VCL	3	// 垂直居中左对齐
 #define AM_VCR	4	// 垂直居中右对齐
 
+#define AM_VCL_S	5	// 垂直居中左对齐
+#define AM_VCR_S	6	// 垂直居中右对齐
+
 #define A4_W	2100
 #define A4_H	2970
 
@@ -134,6 +137,8 @@ protected:
 	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC);
 	void PaintTile1(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC);
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = ZC, int s = 5, int l = 0, int r = 0);
+
+	int DataPrintMaxLen(const char *lpszData, int nLineMaxLen);
 
 private:
 	void GetQRcodePath();

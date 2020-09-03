@@ -222,9 +222,9 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 
 			RECT itemRect;
 
-			int x = 1320;
+			int x = 1320 + 30;
 			int y = 610;
-			int w = 280;
+			int w = 280 - 30;
 			int h = 50;
 			int nFontSize = LS_10;
 			CString strFontName = FT;
@@ -252,9 +252,9 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			if (hjse.CompareNoCase("***") != 0)
 			{
 				//xywhsf(fpmx.hjse, 1730, 610, 270, 50, LS_10, FT, AM_VCR);
-				x = 1730;
+				x = 1730 + 30;
 				y = 610;
-				w = 270;
+				w = 270 - 30;
 				h = 50;
 				nFontSize = LS_10;
 				strFontName = FT;
@@ -1076,30 +1076,6 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 {
 	CMarkup xml;
 
-	//计算出购货方名称的长度	
-	char* str = fpmx.sGhdwmc.GetBuffer(0);
-	int LengOfGhfmc = strlen(str);
-
-	//计算出购货方地址电话长度
-	char* str2 = fpmx.sGhdwdzdh.GetBuffer(0);
-	int LengOfGhfdzdh = strlen(str2);
-
-	//计算出购货方银行账号
-	char* str3 = fpmx.sGhdwyhzh.GetBuffer(0);
-	int LengOfGhfyhzh = strlen(str3);
-
-	//计算出销货方名称的长度
-	char* strXH = fpmx.sXhdwmc.GetBuffer(0);
-	int LengOfXhfmc = strlen(strXH);
-
-	//计算出销货单位地址电话长度
-	char* str4 = fpmx.sXhdwdzdh.GetBuffer(0);
-	int LengOfXhdwdzdh = strlen(str4);
-
-	//计算出销货单位银行账号
-	char* str5 = fpmx.sXhdwyhzh.GetBuffer(0);
-	int LengOfXhdwyhzh = strlen(str5);
-
 	fpmx.sJqbhZW = "机器编号：";
 	if (fpmx.sFpzt.CompareNoCase("01") == 0)
 	{
@@ -1138,8 +1114,6 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		}
 	}
 
-	//fpmx.sTspzbs = "农场品销售";"农场品收购";
-	//				            X                                      Y              W	          H	          S		        F      Z
 	if (m_sHx.IsEmpty())
 	{
 		xywhsf(fpmx.JqbhZW, 180, -100, 350, 50, LS_9, FS, AM_VCL);
@@ -1159,12 +1133,6 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Fpdm, 1750, -180, 250, 50, LS_9, FS, AM_VCR);
 	xywhsf(fpmx.Fphm, 1750, -130, 250, 50, LS_11, FT, AM_VCR);
 
-	/*xywhsf(fpmx.kprq.year, LX + 1730, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.kprq.Year, LX + 1808, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.kprq.mouth, LX + 1848, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.kprq.Mouth, LX + 1883, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.kprq.day, LX + 1918 + 5, LY + 220, LW, LH, LS_9, FT, ZL);
-	xywhsf(fpmx.kprq.Day, LX + 1958, LY + 220, LW, LH, LS_9, FT, ZL);*/
 	xywhsf(fpmx.Kprq, 1660, -80, 350, 60, LS_9, FT, AM_VCL);
 
 	xywhsf(fpmx.Ghdwmc, 340, 0, 780, 55, LS_9, FS, AM_VCL);
@@ -1180,29 +1148,34 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 
 	for (int i = 0; i < fpmx.iFyxmCount; i++)
 	{
-		xywhsf(fpmx.fyxmxx[i].ssSpmc, 30, 270 + 40 * i, 460, 40, LS_9, FS, AM_VCL);
-		xywhsf(fpmx.fyxmxx[i].ssGgxh, 540, 270 + 40 * i, 230, 40, LS_9, FS, AM_VCL);
-		xywhsf(fpmx.fyxmxx[i].ssDw, 790, 270 + 40 * i, 100, 40, LS_9, FS, AM_VCL);
+		fpmx.fyxmxx[i].sSpmc = fpmx.fyxmxx[i].sSpmc.Left(DataPrintMaxLen(fpmx.fyxmxx[i].sSpmc, 92));
+		xywhsf(fpmx.fyxmxx[i].ssSpmc, 30, 260 + 45 * i, 460 - 15, 45, LS_9, FS, AM_VCL);
+
+		xywhsf(fpmx.fyxmxx[i].ssGgxh, 540, 260 + 45 * i, 230, 45, LS_9, FS, AM_VCL);
+
+		fpmx.fyxmxx[i].sDw = fpmx.fyxmxx[i].sDw.Left(DataPrintMaxLen(fpmx.fyxmxx[i].sDw, 16));
+		xywhsf(fpmx.fyxmxx[i].ssDw, 790, 260 + 45 * i, 100, 45, LS_9, FS, AM_VCL);
+
 		if (fpmx.fyxmxx[i].sSpsl.GetLength() > 13)
 		{
 			fpmx.fyxmxx[i].sSpsl = fpmx.fyxmxx[i].sSpsl.Mid(0, 13);
 		}
-		xywhsf(fpmx.fyxmxx[i].ssSpsl, 920, 270 + 40 * i, 170, 40, LS_9, FS, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssSpsl, 920, 260 + 45 * i, 170, 45, LS_9, FS, AM_VCR);
 		if (fpmx.fyxmxx[i].sDj.GetLength() > 13)
 		{
 			fpmx.fyxmxx[i].sDj = fpmx.fyxmxx[i].sDj.Mid(0, 13);
 		}
-		xywhsf(fpmx.fyxmxx[i].ssDj, 1120, 270 + 40 * i, 170, 40, LS_9, FS, AM_VCR);
-		xywhsf(fpmx.fyxmxx[i].ssJe, 1320, 270 + 40 * i, 280, 40, LS_9, FS, AM_VCR);
-		xywhsf(fpmx.fyxmxx[i].ssSl, 1610, 270 + 40 * i, 95, 40, LS_9, FS, AM_ZC);
-		xywhsf(fpmx.fyxmxx[i].ssSe, 1730, 270 + 40 * i, 270, 40, LS_9, FT, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssDj, 1120, 260 + 45 * i, 170, 45, LS_9, FS, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssJe, 1320, 260 + 45 * i, 280, 45, LS_9, FS, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssSl, 1610, 260 + 45 * i, 95, 45, LS_9, FS, AM_ZC);
+		xywhsf(fpmx.fyxmxx[i].ssSe, 1730, 260 + 45 * i, 270, 45, LS_9, FT, AM_VCR);
 	}
-	xywhsf(fpmx.hjje, 1320, 610, 280, 50, LS_10, FT, AM_VCR);
-	xywhsf(fpmx.hjse, 1730, 610, 270, 50, LS_10, FT, AM_VCR);
+	xywhsf(fpmx.hjje, 1320 + 30, 610, 280 - 30, 50, LS_10, FT, AM_VCR_S);
+	xywhsf(fpmx.hjse, 1730 + 30, 610, 270 - 30, 50, LS_10, FT, AM_VCR_S);
 
 	xywhsf(fpmx.OX, 590, 695, 80, 85, LS_9, FT, ZL);
-	xywhsf(fpmx.jshjDx, 610, 660, 680, 85, LS_9, FS, AM_VCL);   //大写价税合计
-	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL);   //小写价税合计
+	xywhsf(fpmx.jshjDx, 610, 660, 680, 85, LS_9, FS, AM_VCL_S);   //大写价税合计
+	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL_S);   //小写价税合计
 
 	if (fpdy.sFplxdm.CompareNoCase("007") == 0 && m_sHx.IsEmpty())
 	{
@@ -1236,16 +1209,9 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sCpy, fpmx.Cpy);
 	addxml(fpmx.sNcpsg, fpmx.Ncpsg);
 	addxml(fpmx.sXxfs, fpmx.Xxfs);
-	//addxml(fpmx.sNcpxssgqy, fpmx.Ncpxssgqy);
 
 	addxml(fpmx.sFpdm, fpmx.Fpdm);
 	addxml(fpmx.sFphm, fpmx.Fphm);
-	/*addxml(fpmx.kprq.sDay, fpmx.kprq.Day);
-	addxml(fpmx.kprq.sday, fpmx.kprq.day);
-	addxml(fpmx.kprq.sMouth, fpmx.kprq.Mouth);
-	addxml(fpmx.kprq.smouth, fpmx.kprq.mouth);
-	addxml(fpmx.kprq.sYear, fpmx.kprq.Year);
-	addxml(fpmx.kprq.syear, fpmx.kprq.year);*/
 	CString time = fpmx.kprq.syear + "年" + fpmx.kprq.smouth + "月" + fpmx.kprq.sday + "日";
 	addxml(time, fpmx.Kprq);
 
@@ -1291,9 +1257,6 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sFhr, fpmx.fhr);
 	addxml(fpmx.sKpr, fpmx.kpr);
 
-	/*
-	if( fpmx.sFpzt.CompareNoCase("0") == 0)//发票状态标志为0 正数发票有圈叉符号
-	{*/
 	xml.AddElem("OX", "1");
 	xml.AddAttrib("x", fpmx.OX.x);
 	xml.AddAttrib("y", fpmx.OX.y);
@@ -1303,7 +1266,6 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xml.AddAttrib("f", fpmx.OX.f);
 	xml.IntoElem();
 	xml.OutOfElem();
-	//}
 
 	return xml.GetDoc();
 }

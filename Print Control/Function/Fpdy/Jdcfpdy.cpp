@@ -510,8 +510,16 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Fdjhm, 290, 628, 650, 80, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Cjhm, 1380, 628, 650, 80, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.OX, 330, 755, 80, 80, LS_10, FS, AM_VCL);
-	xywhsf(fpmx.JshjDx, 350, 720, 1100, 80, LS_10, FS, AM_VCL);
+	if (fpmx.sFpzt.CompareNoCase("00") == 0)//发票状态标志为0 正数发票有圈叉符号
+	{
+		xywhsf(fpmx.OX, 330, 755, 80, 80, LS_10, FS, AM_VCL);
+		xywhsf(fpmx.JshjDx, 350, 720, 1100, 80, LS_10, FS, AM_VCL);
+	}
+	else
+	{
+		xywhsf(fpmx.JshjDx, 290, 720, 1100, 80, LS_10, FS, AM_VCL);
+	}
+
 	xywhsf(fpmx.Jshj, 1620, 720, 380, 80, LS_12, FT, AM_VCL);
 
 	xywhsf(fpmx.Xhdwmc, 290, 815, 1020, 80, LS_10, FS, AM_VCL);
@@ -528,7 +536,7 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Swjgmc, 1335, 1090, 665, 55, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Swjgdm, 1335, 1145, 665, 55, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.Bhsj, 420, 1210, 310, 80, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Bhsj, 420, 1210, 310, 80, LS_12, FT, AM_VCL_S);
 	xywhsf(fpmx.Wspzhm, 1010, 1210, 460, 80, LS_9, FT, AM_VCL);
 	xywhsf(fpmx.Dw, 1590, 1210, 80, 80, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Xcrs, 1860, 1210, 140, 80, LS_10, FS, AM_VCL);
