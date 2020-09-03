@@ -1184,7 +1184,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	}
 	else
 	{
-		xywhsf(fpmx.bz, 1240, 750, 740, 200, LS_9, FS, AM_VCL);
+		xywhsf(fpmx.bz, 1240, 750, 740, 200, LS_9, FS, AM_ZL);
 	}
 
 	xywhsf(fpmx.Xhdwmc, 340, 750, 780, 50, LS_9, FS, AM_VCL);
