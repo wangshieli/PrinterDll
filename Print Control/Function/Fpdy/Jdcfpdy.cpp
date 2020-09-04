@@ -242,7 +242,7 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff- 330);
 
-			PaintTile1(nFontSize, strFontName, itemRect, strText, z);
+			PaintTile(nFontSize, strFontName, itemRect, strText, z);
 		}
 
 		// 输出大写金额开头圈叉符号

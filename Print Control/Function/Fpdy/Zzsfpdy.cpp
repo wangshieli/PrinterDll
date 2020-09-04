@@ -312,7 +312,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff - 300);
 
-			PaintTile1(nFontSize, strFontName, itemRect, strText, z);
+			PaintTile(nFontSize, strFontName, itemRect, strText, z);
 		}
 
 		// 输出大写金额开头圈叉符号
@@ -588,7 +588,7 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				printRect.right = x + nXoff + 38 + w;
 				printRect.bottom = (-y - 300 - h - nYoff);
 
-				PaintTile(nFontSize, strFontName, printRect, strText, z, 5, 5, 5);
+				PaintTile(nFontSize, strFontName, printRect, strText, z, 4, 2, 2);
 				//MoveToEx(m_hPrinterDC, printRect.left, printRect.bottom, NULL);
 				//LineTo(m_hPrinterDC, printRect.right, printRect.bottom);
 			}
@@ -1295,23 +1295,23 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 	for (pos = fpmx.fpqdxx.begin(); pos != fpmx.fpqdxx.end(); pos++)
 	{
 		int nShiting = 0;
-		xywhsf(pos->sequenceNum, nShiting, nLY + i * nLY, XU_W, 70, LS_9, FS, ZL);
+		xywhsf(pos->sequenceNum, nShiting, nLY + i * nLY, XU_W, 70, LS_9, FS, AM_VCL);
 		nShiting += XU_W;
-		xywhsf(pos->ssSpmc, nShiting, nLY + i * nLY, MC_W, 70, LS_9, FS, ZL);
+		xywhsf(pos->ssSpmc, nShiting, nLY + i * nLY, MC_W, 70, LS_9, FS, AM_VCL);
 		nShiting += MC_W;
-		xywhsf(pos->ssGgxh, nShiting, nLY + i * nLY, XH_W, 70, LS_9, FS, ZL);
+		xywhsf(pos->ssGgxh, nShiting, nLY + i * nLY, XH_W, 70, LS_9, FS, AM_VCL);
 		nShiting += XH_W;
-		xywhsf(pos->ssDw, nShiting, nLY + i * nLY, DW_W, 70, LS_9, FS, ZL);
+		xywhsf(pos->ssDw, nShiting, nLY + i * nLY, DW_W, 70, LS_9, FS, AM_VCL);
 		nShiting += DW_W;
-		xywhsf(pos->ssSpsl, nShiting, nLY + i * nLY, SL_W, 70, LS_9, FS, ZR);
+		xywhsf(pos->ssSpsl, nShiting, nLY + i * nLY, SL_W, 70, LS_9, FS, AM_VCR_S);
 		nShiting += SL_W;
-		xywhsf(pos->ssDj, nShiting, nLY + i * nLY, DJ_W, 70, LS_9, FS, ZR);
+		xywhsf(pos->ssDj, nShiting, nLY + i * nLY, DJ_W, 70, LS_9, FS, AM_VCR_S);
 		nShiting += DJ_W;
-		xywhsf(pos->ssJe, nShiting, nLY + i * nLY, JE_W, 70, LS_9, FS, ZR);
+		xywhsf(pos->ssJe, nShiting, nLY + i * nLY, JE_W, 70, LS_9, FS, AM_VCR_S);
 		nShiting += JE_W;
-		xywhsf(pos->ssSl, nShiting, nLY + i * nLY, SLV_W, 70, LS_9, FS, ZR);
+		xywhsf(pos->ssSl, nShiting, nLY + i * nLY, SLV_W, 70, LS_9, FS, AM_VCR_S);
 		nShiting += SLV_W;
-		xywhsf(pos->ssSe, nShiting, nLY + i * nLY, SE_W, 70, LS_9, FS, ZR);
+		xywhsf(pos->ssSe, nShiting, nLY + i * nLY, SE_W, 70, LS_9, FS, AM_VCR_S);
 		nShiting += SE_W;
 
 		i++;
@@ -1370,18 +1370,18 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 			int je_hj_y = 2730 - 300 - 230 - 60; //2730打印区高度  300标头  230备注top 60合计高度
 			int je_zk_y = je_hj_y - 60;
 			int je_xj_y = je_zk_y - 60;
-			xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, ZR);
-			xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, ZR);
-			xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, ZR);
-			xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, ZR);
-			xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, ZR);
-			xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, ZR);
-			xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, ZL);
-			xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, ZL);
-			xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, ZL);
-			xywhsf(fpmx.Fphm, 1080, 216 - 300, 500, 65, LS_11, FS, ZL);
-			xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, ZL);
-			xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, ZL);
+			xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+			xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+			xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+			xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+			xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+			xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+			xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
+			xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
+			xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, AM_VCL_S);
+			xywhsf(fpmx.Fphm, 1080, 216 - 300, 500, 65, LS_11, FS, AM_VCL_S);
+			xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, AM_VCL_S);
+			xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, AM_VCL);
 
 			if (k == 0)
 			{
@@ -1428,18 +1428,18 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 	int je_hj_y = 2730 - 300 - 230 - 60;
 	int je_zk_y = je_hj_y - 60;
 	int je_xj_y = je_zk_y - 60;
-	xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, ZR);
-	xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, ZR);
-	xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, ZR);
-	xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, ZR);
-	xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, ZR);
-	xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, ZR);
-	xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, ZL);
-	xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, ZL);
-	xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, ZL);
-	xywhsf(fpmx.Fphm, 1080 , 216 - 300, 500, 65, LS_11, FS, ZL);
-	xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, ZL);
-	xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, ZL);
+	xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+	xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+	xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+	xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+	xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+	xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+	xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
+	xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
+	xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, AM_VCL_S);
+	xywhsf(fpmx.Fphm, 1080 , 216 - 300, 500, 65, LS_11, FS, AM_VCL_S);
+	xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, AM_VCL_S);
+	xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, AM_VCL);
 
 	addxml(fpmx.sGhdwmc, fpmx.Ghdwmc);
 	addxml(fpmx.sXhdwmc, fpmx.Xhdwmc);

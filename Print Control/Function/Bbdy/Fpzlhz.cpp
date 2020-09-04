@@ -157,7 +157,7 @@ LONG CFpzlhz::PrintQD(LPCSTR billxml, CString bblx)
 					itemRect.right = x + nXoff + 10 + w;
 					itemRect.bottom = (-y - 10 - h - nYoff);
 
-					PaintTile1(nFontSize, strFontName, itemRect, strText, z);
+					PaintTile(nFontSize, strFontName, itemRect, strText, z);
 				}
 				xml.OutOfElem();
 			}
@@ -189,7 +189,7 @@ LONG CFpzlhz::PrintQD(LPCSTR billxml, CString bblx)
 
 					Rectangle(m_hPrinterDC, itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
 
-					PaintTile1(nFontSize, strFontName, itemRect, strText, z);
+					PaintTile(nFontSize, strFontName, itemRect, strText, z);
 					MoveToEx(m_hPrinterDC, itemRect.left, itemRect.bottom, NULL);
 					LineTo(m_hPrinterDC, itemRect.right, itemRect.bottom);
 				}
@@ -364,25 +364,25 @@ CString CFpzlhz::GenerateItemMXXml(FPZLHZ_BBXX bbxx)
 		xywhsf(pos->xmMc, nShiting, i * nLY + ny, MC_W, nLY, LS_9, FS, AM_ZC);
 		nShiting += MC_W;
 
-		xywhsf(pos->xmHj, nShiting, i * nLY + ny, XM_1, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmHj, nShiting, i * nLY + ny, XM_1, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_1;
 
-		xywhsf(pos->xmS1, nShiting, i * nLY + ny, XM_2, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmS1, nShiting, i * nLY + ny, XM_2, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_2;
 
-		xywhsf(pos->xmS2, nShiting, i * nLY + ny, XM_3, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmS2, nShiting, i * nLY + ny, XM_3, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_3;
 
-		xywhsf(pos->xmS3, nShiting, i * nLY + ny, XM_4, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmS3, nShiting, i * nLY + ny, XM_4, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_4;
 
-		xywhsf(pos->xmS4, nShiting, i * nLY + ny, XM_5, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmS4, nShiting, i * nLY + ny, XM_5, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_5;
 
-		xywhsf(pos->xmS5, nShiting, i * nLY + ny, XM_6, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmS5, nShiting, i * nLY + ny, XM_6, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_6;
 
-		xywhsf(pos->xmQt, nShiting, i * nLY + ny, XM_7, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmQt, nShiting, i * nLY + ny, XM_7, nLY, LS_9, FS, AM_ZC_S);
 		nShiting += XM_7;
 		i++;
 	}
