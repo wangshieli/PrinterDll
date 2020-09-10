@@ -1281,8 +1281,6 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 	double nHjse = 0.00;
 	double dZKJE = 0.00;
 	double dZKSE = 0.00;
-	fpmx.sKprq = fpmx.sKprq.Mid(0, 8);
-
 
 	if (m_nOrientation == DMORIENT_LANDSCAPE)
 	{
