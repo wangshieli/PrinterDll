@@ -49,6 +49,7 @@
 #define AM_VCL_S	5	// 垂直居中左对齐
 #define AM_VCR_S	6	// 垂直居中右对齐
 #define AM_ZC_S		7	// 水平居中
+#define AM_ZL_EX	8	// 多行，不调整字体大小
 
 #define A4_W	2100
 #define A4_H	2970

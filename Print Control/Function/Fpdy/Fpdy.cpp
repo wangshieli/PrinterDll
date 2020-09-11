@@ -294,7 +294,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		flags2 = DT_SINGLELINE | DT_VCENTER;
 		flags3 = DT_SINGLELINE | DT_VCENTER;
 	}
-	else if (z == AM_ZL)
+	else if (z == AM_ZL || z == AM_ZL_EX)
 	{
 		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
@@ -322,13 +322,13 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
 	LONG r = trect.right;
-	if (((h <= recv_h + _s
+	if ((z != AM_ZL_EX) && (((h <= recv_h + _s
 		|| (r > recv_r
 			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= 1) || 1))
-		|| ((z == AM_ZC || z == AM_ZC_S) && ((rect.top = rect.top - (h - recv_h) / 2) && 0))) //如果多行，居中左对齐
+		|| ((z == AM_ZC || z == AM_ZC_S) && ((rect.top = rect.top - (h - recv_h) / 2) && 0)))) //如果多行，居中左对齐
 	{
 		do
 		{
