@@ -59,7 +59,12 @@
 #define xywhsf(A,X,Y,W,H,S,F,Z)\
 		((A).x)=(X) ;((A).y)= (Y) ;((A).w)= (W); \
 		((A).h)=(H) ;((A).s)= (S) ;((A).f)= (F); \
-		((A).z)=(Z)  
+		((A).z)=(Z) ;((A).fc)= 1 
+
+#define xywhsf_fc(A,X,Y,W,H,S,F,Z,FC)\
+		((A).x)=(X) ;((A).y)= (Y) ;((A).w)= (W); \
+		((A).h)=(H) ;((A).s)= (S) ;((A).f)= (F); \
+		((A).z)=(Z) ;((A).fc)= (FC) 
 
 //生成XML内部段
 #define addxml(a,b)  \
@@ -67,6 +72,7 @@
 	xml.AddAttrib("y",b.y);xml.AddAttrib("w",b.w); \
 	xml.AddAttrib("h",b.h);xml.AddAttrib("s",b.s); \
 	xml.AddAttrib("f",b.f);xml.AddAttrib("z",b.z); \
+	xml.AddAttrib("fc",b.fc)
 
 struct XM //打印属性（坐标、宽高、字体、字号）
 {
@@ -77,6 +83,7 @@ struct XM //打印属性（坐标、宽高、字体、字号）
 	int s;//字号
 	CString f;//字体
 	int z;//左对齐或者右对齐
+	int fc;//字号变大幅度
 };
 
 typedef struct _dy
@@ -136,8 +143,8 @@ protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
 	void setBuiltInOffset(IN int nType, OUT int &_x, OUT int &_y);
 
-	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int _s = 0, int _l = 0, int _r = 0);
-	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int _s = 0, int _l = 0, int _r = 0);
+	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 
 	int DataPrintMaxLen(const char *lpszData, int nLineMaxLen);
 

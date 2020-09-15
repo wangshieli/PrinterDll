@@ -235,6 +235,7 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
+			int fc = atoi(xml.GetAttrib("fc"));
 			CString strText = xml.GetData();
 
 			itemRect.left = x + nXoff + 190;
@@ -242,7 +243,7 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString zzzse)
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff- 330);
 
-			PaintTile(nFontSize, strFontName, itemRect, strText, z);
+			PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
 		}
 
 		// 输出大写金额开头圈叉符号
@@ -495,13 +496,13 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.Skm4, 980, 170, 1020, 50, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Skm5, 980, 220, 1020, 50, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.Ghfmc, 290, 310, 650, 60, LS_10, FS, AM_VCL);
+	xywhsf_fc(fpmx.Ghfmc, 290, 310, 650, 60, LS_10, FS, AM_VCL, 10);
 	xywhsf(fpmx.Sfzhm, 290, 370, 650, 60, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Ghfsbh, 1420, 310, 650, 120, LS_12, FT, AM_VCL);
 	
-	xywhsf(fpmx.Cllx, 290, 440, 400, 80, LS_10, FS, AM_VCL);
-	xywhsf(fpmx.Cpxh, 900, 440, 660, 80, LS_10, FS, AM_VCL);
-	xywhsf(fpmx.Cd, 1690, 440, 310, 80, LS_10, FS, AM_VCL);
+	xywhsf_fc(fpmx.Cllx, 290, 440, 400, 80, LS_10, FS, AM_VCL, 10);
+	xywhsf_fc(fpmx.Cpxh, 900, 440, 660, 80, LS_10, FS, AM_VCL, 10);
+	xywhsf_fc(fpmx.Cd, 1690, 440, 310, 80, LS_10, FS, AM_VCL, 10);
 
 	xywhsf(fpmx.Hgzh, 290, 535, 400, 80, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Jkzmsh, 970, 535, 530, 80, LS_10, FS, AM_VCL);
@@ -522,18 +523,18 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 
 	xywhsf(fpmx.Jshj, 1620, 720, 380, 80, LS_12, FT, AM_VCL);
 
-	xywhsf(fpmx.Xhdwmc, 290, 815, 1020, 80, LS_10, FS, AM_VCL);
+	xywhsf_fc(fpmx.Xhdwmc, 290, 815, 1020, 80, LS_10, FS, AM_VCL, 10);
 	xywhsf(fpmx.Dh, 1440, 815, 560, 80, LS_10, FS, AM_VCL);
 
 	xywhsf(fpmx.Xhdwsbh, 290, 905, 1020, 80, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Zh, 1440, 905, 560, 80, LS_10, FS, AM_VCL);
 
-	xywhsf(fpmx.Dz, 290, 1000, 760, 80, LS_10, FS, AM_VCL);
-	xywhsf(fpmx.Khyh, 1240, 1000, 760, 80, LS_10, FS, AM_VCL);
+	xywhsf_fc(fpmx.Dz, 290, 1000, 760, 80, LS_10, FS, AM_VCL, 10);
+	xywhsf_fc(fpmx.Khyh, 1240, 1000, 760, 80, LS_10, FS, AM_VCL, 10);
 
 	xywhsf(fpmx.Zzssl, 290, 1090, 225, 110, LS_12, FT, AM_VCL);
 	xywhsf(fpmx.Zzsse, 730, 1090, 255, 110, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Swjgmc, 1335, 1090, 665, 55, LS_10, FS, AM_VCL);
+	xywhsf_fc(fpmx.Swjgmc, 1335, 1090, 665, 55, LS_10, FS, AM_VCL, 10);
 	xywhsf(fpmx.Swjgdm, 1335, 1145, 665, 55, LS_12, FT, AM_VCL);
 
 	xywhsf(fpmx.Bhsj, 420, 1210, 310, 80, LS_12, FT, AM_VCL_S);
@@ -593,6 +594,7 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 		xml.AddAttrib("h", fpmx.OX.h);
 		xml.AddAttrib("s", fpmx.OX.s);
 		xml.AddAttrib("f", fpmx.OX.f);
+		xml.AddAttrib("fc", fpmx.OX.fc);
 		xml.IntoElem();
 		xml.OutOfElem();
 	}

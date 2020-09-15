@@ -1376,6 +1376,7 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
+			int fc = atoi(xml.GetAttrib("fc"));
 			CString strText = xml.GetData();
 
 			itemRect.left = x + nXoff + 100;
@@ -1396,7 +1397,7 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 			}
 			else
 			{
-				PaintTile(nFontSize, strFontName, itemRect, strText, z, 0);
+				PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
 			}
 			//RECT printRect;
 			//CFont ftPrint;

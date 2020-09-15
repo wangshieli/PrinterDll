@@ -305,6 +305,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
+			int fc = atoi(xml.GetAttrib("fc"));
 			CString strText = xml.GetData();
 
 			itemRect.left = x + nXoff + 190;
@@ -312,7 +313,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff - 300);
 
-			PaintTile(nFontSize, strFontName, itemRect, strText, z);
+			PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
 		}
 
 		// 输出大写金额开头圈叉符号
@@ -578,6 +579,7 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				int nFontSize = atoi(xml.GetAttrib("s"));
 				CString strFontName = xml.GetAttrib("f");
 				int z = atoi(xml.GetAttrib("z"));
+				int fc = atoi(xml.GetAttrib("fc"));
 				CString strText = xml.GetData();
 
 				ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
@@ -588,7 +590,7 @@ LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 				printRect.right = x + nXoff + 38 + w;
 				printRect.bottom = (-y - 300 - h - nYoff);
 
-				PaintTile(nFontSize, strFontName, printRect, strText, z, 4, 2, 2);
+				PaintTile(nFontSize, strFontName, printRect, strText, z, fc, 4, 2, 2);
 				//MoveToEx(m_hPrinterDC, printRect.left, printRect.bottom, NULL);
 				//LineTo(m_hPrinterDC, printRect.right, printRect.bottom);
 			}
@@ -1264,6 +1266,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xml.AddAttrib("h", fpmx.OX.h);
 	xml.AddAttrib("s", fpmx.OX.s);
 	xml.AddAttrib("f", fpmx.OX.f);
+	xml.AddAttrib("fc", fpmx.OX.fc);
 	xml.IntoElem();
 	xml.OutOfElem();
 
