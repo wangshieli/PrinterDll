@@ -1367,7 +1367,7 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 
 		while (xml.FindElem("Item"))
 		{
-			RECT itemRect;
+			/*RECT itemRect;
 
 			int x = atoi(xml.GetAttrib("x"));
 			int y = atoi(xml.GetAttrib("y"));
@@ -1398,78 +1398,78 @@ LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
 			else
 			{
 				PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
+			}*/
+			RECT printRect;
+			CFont ftPrint;
+			CString strText = xml.GetData();
+			int x = atoi(xml.GetAttrib("x"));
+			int y = atoi(xml.GetAttrib("y"));
+			int w = atoi(xml.GetAttrib("w"));
+			int h = atoi(xml.GetAttrib("h"));
+			int nFontSize = atoi(xml.GetAttrib("s"));
+			CString strFontName = xml.GetAttrib("f");
+			int z = atoi(xml.GetAttrib("z"));
+			ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
+			::SelectObject(m_hPrinterDC, ftPrint);
+			printRect.left = x + nXoff + 100;
+			printRect.top = -(y - 5 + nYoff);
+
+			if (w == 0 && h == 0)
+			{
+				::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
 			}
-			//RECT printRect;
-			//CFont ftPrint;
-			//CString strText = xml.GetData();
-			//int x = atoi(xml.GetAttrib("x"));
-			//int y = atoi(xml.GetAttrib("y"));
-			//int w = atoi(xml.GetAttrib("w"));
-			//int h = atoi(xml.GetAttrib("h"));
-			//int nFontSize = atoi(xml.GetAttrib("s"));
-			//CString strFontName = xml.GetAttrib("f");
-			//int z = atoi(xml.GetAttrib("z"));
-			//ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			//::SelectObject(m_hPrinterDC, ftPrint);
-			//printRect.left = x + nXoff + 100;
-			//printRect.top = -(y - 5 + nYoff);
+			else
+			{
+				printRect.right = x + nXoff + w + 100;
+				printRect.bottom = -((y + 5 + nYoff) + h);
 
-			//if (w == 0 && h == 0)
-			//{
-			//	::TextOut(m_hPrinterDC, printRect.left, printRect.top, strText, strText.GetLength());
-			//}
-			//else
-			//{
-			//	printRect.right = x + nXoff + w + 100;
-			//	printRect.bottom = -((y + 5 + nYoff) + h);
+				RECT testRect = printRect;
 
-			//	RECT testRect = printRect;
+				if (z == 0)
+				{
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_NOPREFIX);
+				}
+				else if (z == 2)
+				{
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
+				}
+				else
+				{
+					::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
+				}
 
-			//	if (z == 0)
-			//	{
-			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_NOPREFIX);
-			//	}
-			//	else if (z == 2)
-			//	{
-			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_CENTER | DT_NOPREFIX);
-			//	}
-			//	else
-			//	{
-			//		::DrawText(m_hPrinterDC, strText, strText.GetLength(), &testRect,/*DT_NOCLIP*/DT_EDITCONTROL | DT_WORDBREAK | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX);
-			//	}
-
-			//	if (printRect.right >= testRect.right)
-			//	{
-			//		if (z == 0)
-			//		{
-			//			::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
-			//		}
-			//		else if (z == 2)
-			//		{
-			//			::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
-			//		}
-			//		else
-			//		{
-			//			::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
-			//		}
-			//	}
-			//	else
-			//	{
-			//		if (z == 0)
-			//		{
-			//			::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
-			//		}
-			//		else if (z == 2)
-			//		{
-			//			::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
-			//		}
-			//		else
-			//		{
-			//			::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
-			//		}
-			//	}
-			//}
-			//ftPrint.DeleteObject();
+				if (printRect.right >= testRect.right)
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP | DT_SINGLELINE|*/ DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					}
+				}
+				else
+				{
+					if (z == 0)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX);
+					}
+					else if (z == 2)
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect, DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX);
+					}
+					else
+					{
+						::DrawText(m_hPrinterDC, strText, strText.GetLength(), &printRect,/*DT_NOCLIP |*/DT_EDITCONTROL | DT_WORDBREAK | DT_RIGHT | DT_NOPREFIX);
+					}
+				}
+			}
+			ftPrint.DeleteObject();
 		}
 
 		// 输出大写金额开头圈叉符号

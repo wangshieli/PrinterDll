@@ -533,7 +533,7 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf_fc(fpmx.Khyh, 1240, 1000, 760, 80, LS_10, FS, AM_VCL, 10);
 
 	xywhsf(fpmx.Zzssl, 290, 1090, 225, 110, LS_12, FT, AM_VCL);
-	xywhsf(fpmx.Zzsse, 730, 1090, 255, 110, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Zzsse, 730, 1090, 255, 110, LS_12, FT, AM_VCL_S);
 	xywhsf_fc(fpmx.Swjgmc, 1335, 1090, 665, 55, LS_10, FS, AM_VCL, 10);
 	xywhsf(fpmx.Swjgdm, 1335, 1145, 665, 55, LS_12, FT, AM_VCL);
 
