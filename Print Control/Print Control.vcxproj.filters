@@ -96,10 +96,13 @@
     <ClInclude Include="Function\Bbdy\Hzxxbdy.h">
       <Filter>Function\Bbdy</Filter>
     </ClInclude>
-    <ClInclude Include="Function\Bbdy\Fpcxdy.h">
+    <ClInclude Include="Function\Bbdy\Fpzlhz.h">
       <Filter>Function\Bbdy</Filter>
     </ClInclude>
-    <ClInclude Include="Function\Bbdy\Fpzlhz.h">
+    <ClInclude Include="Function\Bbdy\Fpkcdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Ykfpcxdy.h">
       <Filter>Function\Bbdy</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,10 +152,13 @@
     <ClCompile Include="Function\Bbdy\Hzxxbdy.cpp">
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
-    <ClCompile Include="Function\Bbdy\Fpcxdy.cpp">
+    <ClCompile Include="Function\Bbdy\Fpzlhz.cpp">
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
-    <ClCompile Include="Function\Bbdy\Fpzlhz.cpp">
+    <ClCompile Include="Function\Bbdy\Fpkcdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Ykfpcxdy.cpp">
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
   </ItemGroup>

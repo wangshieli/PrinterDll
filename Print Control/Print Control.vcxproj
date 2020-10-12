@@ -168,11 +168,12 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Function\Bbdy\Fpcxdy.h" />
+    <ClInclude Include="Function\Bbdy\Fpkcdy.h" />
     <ClInclude Include="Function\Bbdy\Fpzlhz.h" />
     <ClInclude Include="Function\Bbdy\Hzxxbdy.h" />
     <ClInclude Include="Function\Bbdy\Khbmdy.h" />
     <ClInclude Include="Function\Bbdy\Spbmdy.h" />
+    <ClInclude Include="Function\Bbdy\Ykfpcxdy.h" />
     <ClInclude Include="Function\Fpdy\Escxstyfpdy.h" />
     <ClInclude Include="Function\Fpdy\Fpdy.h" />
     <ClInclude Include="Function\Fpdy\Jdcfpdy.h" />
@@ -189,9 +190,9 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Function\Bbdy\Fpcxdy.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    <ClCompile Include="Function\Bbdy\Fpkcdy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Fpzlhz.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -206,6 +207,10 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Spbmdy.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Ykfpcxdy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

@@ -42,7 +42,7 @@
 
 #define AM_ZC	0	// 水平居中
 #define AM_VC	1	// 垂直居中
-#define AM_ZL	2	// 左对齐对齐
+#define AM_ZL	2	// 左对齐切水平居中，主要用于机动车吨位
 #define AM_VCL	3	// 垂直居中左对齐
 #define AM_VCR	4	// 垂直居中右对齐
 
@@ -50,6 +50,8 @@
 #define AM_VCR_S	6	// 垂直居中右对齐
 #define AM_ZC_S		7	// 水平居中
 #define AM_ZL_EX	8	// 多行，不调整字体大小
+
+#define AM_ZC_CHEKC 9 // 绘画区域过大时，普通水平垂直居中不能自动调整左对齐，主要用在发票查询打印客户名称商品名称
 
 #define A4_W	2100
 #define A4_H	2970

@@ -80,6 +80,8 @@ BEGIN_MESSAGE_MAP(CTestPrintDllDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CTestPrintDllDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTestPrintDllDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CTestPrintDllDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CTestPrintDllDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CTestPrintDllDlg::OnBnClickedButton7)
 END_MESSAGE_MAP()
 
 
@@ -415,4 +417,43 @@ void CTestPrintDllDlg::OnBnClickedButton5()
 	int len = newlineStr((const char*)_data, 101);
 
 	CString d = _data.Left(len);
+}
+
+
+void CTestPrintDllDlg::OnBnClickedButton6()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	TRACE(_T("开始打印006FP!\r\n"));
+	CMarkup xml006fp;
+	if (!xml006fp.Load("KCCX.xml"))
+	{
+		TRACE(_T("打开006FP.xml失败!\r\n"));
+		return;
+	}
+
+	CString fpXmlData = xml006fp.GetDoc();
+	OutputDebugString(fpXmlData);
+
+	char zc[1024] = { 0 };
+	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+}
+
+
+void CTestPrintDllDlg::OnBnClickedButton7()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	TRACE(_T("开始打印006FP!\r\n"));
+	CMarkup xml006fp;
+	if (!xml006fp.Load("YKFPCX.xml"))
+	{
+		TRACE(_T("打开006FP.xml失败!\r\n"));
+		return;
+	}
+
+	CString fpXmlData = xml006fp.GetDoc();
+	OutputDebugString(fpXmlData);
+
+	char zc[1024] = { 0 };
+	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }

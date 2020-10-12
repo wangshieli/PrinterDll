@@ -14,6 +14,8 @@
 #include "Function/Bbdy/Spbmdy.h"
 #include "Function/Bbdy/Hzxxbdy.h"
 #include "Function/Bbdy/Fpzlhz.h"
+#include "Function/Bbdy/Fpkcdy.h"
+#include "Function/Bbdy/Ykfpcxdy.h"
 
 #include "Helper/Log/TraceLog.h"
 
@@ -134,6 +136,20 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		{
 			CFpzlhz zlhz;
 			CString strResult = zlhz.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("FPKCCX") == 0)
+		{
+			CFpkcdy kcdy;
+			CString strResult = kcdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("YKFPCX") == 0)
+		{
+			CYkfpcxdy ykfpcxdy;
+			CString strResult = ykfpcxdy.Dlfpdy(pszPost);
 			strcpy(pszRecv, strResult);
 			return;
 		}

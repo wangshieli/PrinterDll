@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="gbk"?>
+<business id="20007" comment="发票查询">
+	<body yylxdm="1">
+		<returncode>0</returncode>
+		<returnmsg>成功</returnmsg>
+		<dylx>2</dylx>
+		<bblx>YKFPCX</bblx>
+		<dyfs>0</dyfs>
+		<printername>EPSON LQ-630K ESC/P2</printername>
+		<returndata>
+			<bbxx count="1">
+				<group xh="1">
+					<title>已开发票</title>
+					<sm>打印日期：2010年9月20日</sm>
+					<t1>发票类型</t1>
+					<t2>发票状态</t2>
+					<t3>发票代码</t3>
+					<t4>发票号码</t4>
+					<t5>上传状态</t5>
+					<t6>客户名称</t6>
+					<t7>主要商品名称</t7>
+					<t8>税额</t8>
+					<t9>合计金额</t9>
+					<t10>价税合计</t10>
+					<t11>原发票代码</t11>
+					<t12>原发票号码</t12>
+					<t13>通知单编号</t13>
+					<t14>开票人</t14>
+					<t15>开票日期</t15>
+					<t16>作废人</t16>
+					<t17>作废日期</t17>
+					<t18>客户识别号</t18>
+					<t19>清单标识</t19>
+					<fpxxs count="2">
+						<fpxx xh="1">
+							<fplx>004</fplx>
+							<fpzt>0</fpzt>
+							<fpdm>1100191150</fpdm>
+							<fphm>20206670</fphm>
+							<sczt>已上传</sczt>
+							<khmc>中华人民共和国中华人民共和国中华人民共和国中华人民共和国中华人民共和国中华人民共和国中华人民共和国中</khmc>
+							<zyspmc>*棉花*美达24X CD-ROM商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称</zyspmc>
+							<se>16.8</se>
+							<hjje>1680</hjje>
+							<jshj>1696.8</jshj>
+							<yfpdm/>
+							<yfphm/>
+							<tzdbh/>
+							<kpr>管理员</kpr>
+							<kprq>2020-09-02</kprq>
+							<zfr/>
+							<zfrq/>
+						</fpxx>
+						<fpxx xh="2">
+							<fplx>004</fplx>
+							<fpzt>0</fpzt>
+							<fpdm>1100191150</fpdm>
+							<fphm>20206671</fphm>
+							<sczt>已上传</sczt>
+							<khmc>中华人民共和国中华人民共和国中华人民共和国中华人民共和国中华人民共和国中华人民共和国中华人民共和国中</khmc>
+							<zyspmc>*棉花*美达24X CD-ROM商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称</zyspmc>
+							<se>44.8</se>
+							<hjje>4480</hjje>
+							<jshj>4524.8</jshj>
+							<yfpdm/>
+							<yfphm/>
+							<tzdbh/>
+							<kpr>管理员</kpr>
+							<kprq>2020-09-02</kprq>
+							<zfr/>
+							<zfrq/>
+						</fpxx>
+					</fpxxs>
+				</group>
+			</bbxx>
+		</returndata>
+	</body>
+</business>

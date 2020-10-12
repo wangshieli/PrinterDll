@@ -1176,7 +1176,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.hjse, 1730 + 30, 610, 270 - 30, 50, LS_10, FT, AM_VCR_S);
 
 	xywhsf(fpmx.OX, 590, 695, 80, 85, LS_9, FT, ZL);
-	xywhsf(fpmx.jshjDx, 610, 660, 680, 85, LS_9, FS, AM_VCL_S);   //大写价税合计
+	xywhsf(fpmx.jshjDx, 610, 660, 790, 85, LS_9, FS, AM_VCL_S);   //大写价税合计
 	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL_S);   //小写价税合计
 
 	if (fpdy.sFplxdm.CompareNoCase("007") == 0 && m_sHx.IsEmpty())
@@ -1424,58 +1424,62 @@ CString CZzsfpdy::GenerateItemMXXml(ZZSFP_FPXX fpmx)
 		}
 		j++;
 	}
-	int je_x = XU_W + MC_W + XH_W + DW_W + SL_W + DJ_W;
-	int se_x = je_x + JE_W + SLV_W;
-	int je_hj_y = 2730 - 300 - 230 - 60;
-	int je_zk_y = je_hj_y - 60;
-	int je_xj_y = je_zk_y - 60;
-	xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
-	xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
-	xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, AM_VCR_S);
-	xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, AM_VCR_S);
-	xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
-	xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
-	xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
-	xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
-	xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, AM_VCL_S);
-	xywhsf(fpmx.Fphm, 1080 , 216 - 300, 500, 65, LS_11, FS, AM_VCL_S);
-	xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, AM_VCL_S);
-	xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, AM_VCL);
 
-	addxml(fpmx.sGhdwmc, fpmx.Ghdwmc);
-	addxml(fpmx.sXhdwmc, fpmx.Xhdwmc);
-	addxml(fpmx.sFpdm, fpmx.Fpdm);
-	addxml(fpmx.sFphm, fpmx.Fphm);
-
-	fpmx.sJEtemp.Format("%.2f", (nJE + dZKJE));
-	fpmx.sSEtemp.Format("%.2f", (nSE + dZKSE));
-
-	fpmx.sZKJETemp.Format("%.2f", dZKJE);
-	fpmx.sZKSETemp.Format("%.2f", dZKSE);
-
-	nHjje += (nJE + dZKJE);
-	nHjse += (nSE + dZKSE);
-	fpmx.sHjjeTemp.Format("%.2f", nHjje);
-	fpmx.sHjseTemp.Format("%.2f", nHjse);
-
-	addxml(fpmx.sJEtemp, fpmx.xjje);
-	addxml(fpmx.sSEtemp, fpmx.xjse);
-	addxml(fpmx.sZKJETemp, fpmx.zkje);
-	addxml(fpmx.sZKSETemp, fpmx.zkse);
-	addxml(fpmx.sHjjeTemp, fpmx.hjje);
-	addxml(fpmx.sHjseTemp, fpmx.hjse);
-
-	addxml(fpmx.sBz, fpmx.bz);
-
-	if (num < m_nPageSize && k == 0)
+	if (!bNewPage)
 	{
-		fpmx.sKprq.Insert(4, _T("年"));
-		fpmx.sKprq.Insert(8, _T("月"));
-		fpmx.sKprq.Insert(12, _T("日"));
+		int je_x = XU_W + MC_W + XH_W + DW_W + SL_W + DJ_W;
+		int se_x = je_x + JE_W + SLV_W;
+		int je_hj_y = 2730 - 300 - 230 - 60;
+		int je_zk_y = je_hj_y - 60;
+		int je_xj_y = je_zk_y - 60;
+		xywhsf(fpmx.xjje, je_x, je_xj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+		xywhsf(fpmx.xjse, se_x, je_xj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+		xywhsf(fpmx.zkje, je_x, je_zk_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+		xywhsf(fpmx.zkse, se_x, je_zk_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+		xywhsf(fpmx.hjje, je_x, je_hj_y, JE_W, 60, LS_9, FS, AM_VCR_S);
+		xywhsf(fpmx.hjse, se_x, je_hj_y, SE_W, 60, LS_9, FS, AM_VCR_S);
+		xywhsf(fpmx.Ghdwmc, 285, 86 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
+		xywhsf(fpmx.Xhdwmc, 285, 153 - 300, 1500, 65, LS_11, FS, AM_VCL_S);
+		xywhsf(fpmx.Fpdm, 480, 218 - 300, 500, 65, LS_11, FS, AM_VCL_S);
+		xywhsf(fpmx.Fphm, 1080, 216 - 300, 500, 65, LS_11, FS, AM_VCL_S);
+		xywhsf(fpmx.Kprq, 1360, 2310, 300, 65, LS_11, FS, AM_VCL_S);
+		xywhsf(fpmx.bz, XH_W, 2200, 1934 - XH_W, 80, LS_9, FS, AM_VCL);
+
+		addxml(fpmx.sGhdwmc, fpmx.Ghdwmc);
+		addxml(fpmx.sXhdwmc, fpmx.Xhdwmc);
+		addxml(fpmx.sFpdm, fpmx.Fpdm);
+		addxml(fpmx.sFphm, fpmx.Fphm);
+
+		fpmx.sJEtemp.Format("%.2f", (nJE + dZKJE));
+		fpmx.sSEtemp.Format("%.2f", (nSE + dZKSE));
+
+		fpmx.sZKJETemp.Format("%.2f", dZKJE);
+		fpmx.sZKSETemp.Format("%.2f", dZKSE);
+
+		nHjje += (nJE + dZKJE);
+		nHjse += (nSE + dZKSE);
+		fpmx.sHjjeTemp.Format("%.2f", nHjje);
+		fpmx.sHjseTemp.Format("%.2f", nHjse);
+
+		addxml(fpmx.sJEtemp, fpmx.xjje);
+		addxml(fpmx.sSEtemp, fpmx.xjse);
+		addxml(fpmx.sZKJETemp, fpmx.zkje);
+		addxml(fpmx.sZKSETemp, fpmx.zkse);
+		addxml(fpmx.sHjjeTemp, fpmx.hjje);
+		addxml(fpmx.sHjseTemp, fpmx.hjse);
+
+		addxml(fpmx.sBz, fpmx.bz);
+
+		if (num < m_nPageSize && k == 0)
+		{
+			fpmx.sKprq.Insert(4, _T("年"));
+			fpmx.sKprq.Insert(8, _T("月"));
+			fpmx.sKprq.Insert(12, _T("日"));
+		}
+		addxml(fpmx.sKprq, fpmx.Kprq);
+		xml.OutOfElem();
+		bNewPage = TRUE;
 	}
-	addxml(fpmx.sKprq, fpmx.Kprq);
-	xml.OutOfElem();
-	bNewPage = TRUE;
 
 	return xml.GetDoc();
 }

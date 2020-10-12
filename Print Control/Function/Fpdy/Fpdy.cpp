@@ -193,7 +193,7 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
 		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
 	}
-	else if (z == AM_ZC_S)
+	else if (z == AM_ZC_S || z == AM_ZC_CHEKC)
 	{
 		flags1 = DT_SINGLELINE | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
 		flags2 = DT_SINGLELINE | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
@@ -239,7 +239,7 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
-		|| ((z == AM_ZC || z == AM_ZC_S) && ((rect.top = rect.top - (h - recv_h) / 2) && 0))) //如果多行，居中左对齐
+		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((rect.top = rect.top - (h - recv_h) / 2) && 0))) //如果多行，居中左对齐
 	{
 		do
 		{
@@ -282,7 +282,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
 		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
 	}
-	else if (z == AM_ZC_S)
+	else if (z == AM_ZC_S || z == AM_ZC_CHEKC)
 	{
 		flags1 = DT_SINGLELINE | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
 		flags2 = DT_SINGLELINE | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
@@ -328,7 +328,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
-		|| ((z == AM_ZC || z == AM_ZC_S) && ((rect.top = rect.top - (h - recv_h) / 2) && 0)))) //如果多行，居中左对齐
+		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((rect.top = rect.top - (h - recv_h) / 2) && 0)))) //如果多行，居中左对齐
 	{
 		do
 		{
