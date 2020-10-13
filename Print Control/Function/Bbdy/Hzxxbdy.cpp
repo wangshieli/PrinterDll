@@ -8,26 +8,19 @@
 #define LINEFEED_P (22+4) //换行数，标识 竖向
 #define LINEFEED_L (16) //换行数，标识 横向
 
-#define MC_W	408
-#define SL_W	306
-#define DJ_W	204
-#define JE_W	204
-#define SLV_W	204
-#define SE_W	204
+#define XGF_W	225
+#define XGFMCSH_W 300
+#define XGFMCSH_W1 450
+
+#define MC_W 450
+#define SL_W 175
+#define DJ_W 325
+#define JE_W 360
+#define SLV_W 90
+#define SE_W 325
 
 CHzxxbdy::CHzxxbdy() :m_nPageSize(LINEFEED_P)
 {
-	m_sGfmc = "";
-	m_sGfsh = "";
-	m_sXfmc = "";
-	m_sXfsh = "";
-	m_sFpdm = "";
-	m_sFphm = "";
-	m_sHjje = "";
-	m_sHjse = "";
-	m_sSqf = "";// 0购方  1销方
-	m_sSqyy = ""; // 0已抵扣  1未抵扣
-	m_sSqdbh = "";
 }
 
 CHzxxbdy::~CHzxxbdy()
@@ -82,7 +75,7 @@ CString CHzxxbdy::Dlfpdy(LPCTSTR sInputInfo)
 	return GenerateXMLFpdy(fpdy, rtn);
 }
 
-LONG CHzxxbdy::PrintQD(LPCSTR billxml, CString strFplxdm)
+LONG CHzxxbdy::PrintQD(LPCSTR billxml, CString bblx)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -95,10 +88,10 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 	CString _sTop = "";
 	CString _sLeft = "";
 	CString _sQRSize = "";
-	CString _sItem = strFplxdm + "_QD";
+	CString _sItem = bblx;
 	ZLib_GetIniYbjValue(_sItem, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft) * 10;
-	nYoff = atoi(_sTop) * 10;
+	nXoff = atoi(_sLeft);
+	nYoff = atoi(_sTop);
 
 	do
 	{
@@ -135,246 +128,96 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml, CString strFplxdm)
 			int npn = atoi(xml.GetAttrib("pn"));
 			xml.IntoElem();
 
-			CString strTemp;
-			CFont *pOldFont;
-			CFont fontHeader;
-
 			CRect PaintRect;
-			PaintRect.left = 0 + nXoff;
-			PaintRect.top = 0 - nYoff;
-			PaintRect.right = 2010 + nXoff;
-			PaintRect.bottom = -1830 - 900 - nYoff;
+			PaintRect.left = 10 + nXoff;
+			PaintRect.top = 10 - nYoff;
+			PaintRect.right = 2000 + nXoff;
+			PaintRect.bottom = -2870 - nYoff;
 
-			RECT rect;
-			rect.left = PaintRect.left;
-			rect.top = PaintRect.top;
-			rect.right = PaintRect.right;
-			rect.bottom = PaintRect.top - 100;
+			if (xml.FindElem("PageHeader"))
+			{
+				xml.IntoElem();
+				while (xml.FindElem("Item"))
+				{
+					RECT itemRect;
 
-			PaintTile(150, "FixedSys", rect, "开具红字增值税专用发票信息表");
+					int x = atoi(xml.GetAttrib("x"));
+					int y = atoi(xml.GetAttrib("y"));
+					int w = atoi(xml.GetAttrib("w"));
+					int h = atoi(xml.GetAttrib("h"));
+					int nFontSize = atoi(xml.GetAttrib("s"));
+					CString strFontName = xml.GetAttrib("f");
+					int z = atoi(xml.GetAttrib("z"));
+					CString strText = xml.GetData();
 
-			fontHeader.CreatePointFont(120, "FixedSys", CDC::FromHandle(m_hPrinterDC));
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+					itemRect.left = x + nXoff + 10;
+					itemRect.top = (-y - 10 - nYoff);
+					itemRect.right = x + nXoff + 10 + w;
+					itemRect.bottom = (-y - 10 - h - nYoff);
 
-			TextOut(m_hPrinterDC, PaintRect.left + 40, PaintRect.top - 100, CString("填开日期："), strlen("填开日期：") + 1);
+					if (z == -5)
+					{
+						CPen pen;
+						pen.CreatePen(PS_SOLID, 7, RGB(0, 0, 0));
+						CPen* pOld = (CPen*)(::SelectObject(m_hPrinterDC, pen));
+						/*CFont fontHeader;
+						fontHeader.CreatePointFont(180, "黑体", CDC::FromHandle(m_hPrinterDC));
+						CFont *pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));*/
+						MoveToEx(m_hPrinterDC, itemRect.left, itemRect.top, NULL);
+						LineTo(m_hPrinterDC, itemRect.right, itemRect.bottom);
+						::SelectObject(m_hPrinterDC, pOld);
+						pen.DeleteObject();
 
-			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 600, PaintRect.top - 100, CString("共"), 2);
-			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 680, PaintRect.top - 100, CString("页"), 2);
-			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 740, PaintRect.top - 100, CString("第"), 2);
-			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 830, PaintRect.top - 100, CString("页"), 2);
-			char buffer[5] = { 0 };
-			itoa(npn, buffer, 10);
-			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 780, PaintRect.top - 100, buffer, strlen(buffer));
-			itoa(m_nAllPageNum, buffer, 10);
-			TextOut(m_hPrinterDC, PaintRect.left + 1005 + 640, PaintRect.top - 100, buffer, strlen(buffer));
+						//::SelectObject(m_hPrinterDC, pOldFont);
+						//fontHeader.DeleteObject();
+					}
+					else
+					{
+						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+					}					
+				}
+				xml.OutOfElem();
+			}
 
-			//Rectangle 画矩形框
-			Rectangle(m_hPrinterDC, PaintRect.left + 38, PaintRect.top - 165, PaintRect.right - 38, PaintRect.bottom);// 底部留了150
-			::SelectObject(m_hPrinterDC, pOldFont);
-			fontHeader.DeleteObject(); // 框体打印完成
+			if (xml.FindElem("PageData"))
+			{
+				xml.IntoElem();
+				CFont fontHeader;
+				fontHeader.CreatePointFont(120, "FixedSys", CDC::FromHandle(m_hPrinterDC));
+				CFont *pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
-			fontHeader.CreatePointFont(95, "FixedSys", CDC::FromHandle(m_hPrinterDC));// 话竖线
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+				while (xml.FindElem("Item"))
+				{
+					RECT itemRect;
 
-			int nShiting = 38;
+					int x = atoi(xml.GetAttrib("x"));
+					int y = atoi(xml.GetAttrib("y"));
+					int w = atoi(xml.GetAttrib("w"));
+					int h = atoi(xml.GetAttrib("h"));
+					int nFontSize = atoi(xml.GetAttrib("s"));
+					CString strFontName = xml.GetAttrib("f");
+					int z = atoi(xml.GetAttrib("z"));
+					CString strText = xml.GetData();
 
-#define XFT_H	(70+70+35)	// 头项目高
-#define XFT_1_W	(102 * 2)	// ”购销方“ 宽
-#define XFT_2_W	(102 * 3)	// 购销方 名称宽
-#define XFMC_H (105)		// 购销方名称 高
-#define XFSH_H (XFT_H - XFMC_H)	// 购销方税号 高
-#define XFMC_D_W (967 - XFT_1_W - XFT_2_W)	// 购销方 名称数据宽
-			int fontSize = 95;
-			LPCSTR fontType = FH;
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + nShiting + XFT_1_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFT_H;
-			PaintTile(fontSize, fontType, rect, "销售方");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			nShiting += XFT_1_W;
+					itemRect.left = x + nXoff + 10;
+					itemRect.top = (-y - 10 - nYoff);
+					itemRect.right = x + nXoff + 10 + w;
+					itemRect.bottom = (-y - 10 - h - nYoff);
 
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + nShiting + XFT_2_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H;
-			PaintTile(fontSize, fontType, rect, "名称");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
+					if (w != 0) // 宽度为0 ，画竖线， 高度为零， 画横线
+					{
+						Rectangle(m_hPrinterDC, itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
+						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+					}
+					else
+					{
+						MoveToEx(m_hPrinterDC, itemRect.right, itemRect.top, NULL);
+						LineTo(m_hPrinterDC, itemRect.right, itemRect.bottom);
+					}
 
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFMC_H;
-			rect.right = PaintRect.left + nShiting + XFT_2_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H - XFSH_H;
-			PaintTile(fontSize, fontType, rect, "税号");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			nShiting += XFT_2_W;
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + nShiting + XFMC_D_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H;
-			PaintTile(fontSize, fontType, rect, m_sXfmc);
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFMC_H;
-			rect.right = PaintRect.left + nShiting + XFMC_D_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H - XFSH_H;
-			PaintTile(fontSize, fontType, rect, m_sXfsh);
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			nShiting += XFMC_D_W;
-
-
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + nShiting + XFT_1_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFT_H;
-			PaintTile(fontSize, fontType, rect, "购货方");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			nShiting += XFT_1_W;
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + nShiting + XFT_2_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H;
-			PaintTile(fontSize, fontType, rect, "名称");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFMC_H;
-			rect.right = PaintRect.left + nShiting + XFT_2_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H - XFSH_H;
-			PaintTile(fontSize, fontType, rect, "税号");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			nShiting += XFT_2_W;
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165;
-			rect.right = PaintRect.left + nShiting + XFMC_D_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H;
-			PaintTile(fontSize, fontType, rect, m_sGfmc);
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFMC_H;
-			rect.right = PaintRect.left + nShiting + XFMC_D_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFMC_H - XFSH_H;
-			PaintTile(fontSize, fontType, rect, m_sGfsh);
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			nShiting += XFMC_D_W;
-
-			nShiting = 38;
-#define KJNR_H	(1225)
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFT_H;
-			rect.right = PaintRect.left + nShiting + XFT_1_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFT_H - KJNR_H;
-			PaintTile(fontSize, fontType, rect, "开具\r\n红字\r\n专用\r\n发票\r\n内容");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, PaintRect.right - nShiting, rect.bottom);// 直接画到最右边
-			nShiting += XFT_1_W;
-			int nSmPointLeft = rect.right; // 说明模块开始的左边
-			int nSmPointTop = rect.bottom; // 说明模块开始的右边
-
-			nShiting = 38;
-#define SM_H (800)
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFT_H - KJNR_H;
-			rect.right = PaintRect.left + nShiting + XFT_1_W; // 1
-			rect.bottom = PaintRect.top - 165 - XFT_H - KJNR_H - SM_H;
-			PaintTile(fontSize, fontType, rect, "说明");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, PaintRect.right - nShiting, rect.bottom);// 直接画到最右边
-			nShiting += XFT_1_W;
-
-			rect.left = nSmPointLeft + 50;
-			rect.top = nSmPointTop - 135;
-			rect.right = rect.left + 1000;
-			rect.bottom = rect.top - 100;
-			PaintTile(125, fontType, rect, "一、购买方", ZL);
-
-			rect.left = nSmPointLeft + 50;
-			rect.top = rect.bottom;
-			rect.right = rect.left + 1000;
-			rect.bottom = rect.top - 50;
-			PaintTile(80, "FixedSys", rect, "对应蓝字专用发票抵扣增值税销项税额情况", ZL);
-
-			rect.left = nSmPointLeft + 50 + 70;
-			rect.top = rect.bottom;
-			rect.right = rect.left + 1000;
-			rect.bottom = rect.top - 70;
-			PaintTile(90, fontType, rect,"1、已抵扣", ZL);
-
-			rect.left = nSmPointLeft + 50 + 70;
-			rect.top = rect.bottom;
-			rect.right = rect.left + 1000;
-			rect.bottom = rect.top - 50;
-			PaintTile(90, fontType, rect, "2、未抵扣", ZL);
-
-			rect.left = nSmPointLeft + 50;
-			rect.top = rect.bottom;
-			rect.right = rect.left + 1500;
-			rect.bottom = rect.top - 50;
-			PaintTile(80, "FixedSys", rect, "对应蓝字专用发票的代码：________________ 号码：________________", ZL);
-
-			rect.left = nSmPointLeft + 50;
-			rect.top = rect.bottom;
-			rect.right = rect.left + 1000;
-			rect.bottom = rect.top - 100;
-			PaintTile(125, fontType, rect, "二、销售方", ZL);
-
-			rect.left = nSmPointLeft + 50;
-			rect.top = rect.bottom;
-			rect.right = rect.left + 1500;
-			rect.bottom = rect.top - 50;
-			PaintTile(80, "FixedSys", rect, "对应蓝字专用发票的代码：________________ 号码：________________", ZL);
-
-			nShiting = 38;
-#define SQBH_H (335)
-			rect.left = PaintRect.left + nShiting;
-			rect.top = PaintRect.top - 165 - XFT_H - KJNR_H - SM_H;
-			rect.right = PaintRect.left + nShiting + XFT_1_W; // 1
-			rect.bottom = PaintRect.bottom;
-			PaintTile(fontSize, fontType, rect, "红字专\r\n用发票\r\n信息表\r\n编号");
-			MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);// 右边线
-			LineTo(m_hPrinterDC, rect.right, rect.bottom);
-			MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL); // 底部线
-			LineTo(m_hPrinterDC, PaintRect.right - nShiting, rect.bottom);// 直接画到最右边
+				}
+				xml.OutOfElem();
+			}
 
 			::EndPage(m_hPrinterDC);
 			xml.OutOfElem();
@@ -407,26 +250,28 @@ HZXXB_BBXX CHzxxbdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 	xml.FindElem("group");
 	xml.IntoElem();
 
-	if (xml.FindElem("gfmc")) m_sGfmc = xml.GetData();
-	if (xml.FindElem("gfsh")) m_sGfsh = xml.GetData();
-	if (xml.FindElem("xfmc")) m_sXfmc = xml.GetData();
-	if (xml.FindElem("xfsh")) m_sXfsh = xml.GetData();
-	if (xml.FindElem("fpdm")) m_sFpdm = xml.GetData();
-	if (xml.FindElem("fphm")) m_sFphm = xml.GetData();
-	if (xml.FindElem("hjje")) m_sHjje = xml.GetData();
-	if (xml.FindElem("hjse")) m_sHjse = xml.GetData();
-	if (xml.FindElem("sqf")) m_sSqf = xml.GetData();
-	if (xml.FindElem("sqyy")) m_sSqyy = xml.GetData();
-	if (xml.FindElem("sqdbh")) m_sSqdbh = xml.GetData();
+	if (xml.FindElem("title")) bbxx.st_sTitle = xml.GetData();
+	if (xml.FindElem("sm")) bbxx.st_sSm = xml.GetData();
+	if (xml.FindElem("gfmc")) bbxx.st_sGfmc = xml.GetData();
+	if (xml.FindElem("gfsh")) bbxx.st_sGfsh = xml.GetData();
+	if (xml.FindElem("xfmc")) bbxx.st_sXfmc = xml.GetData();
+	if (xml.FindElem("xfsh")) bbxx.st_sXfsh = xml.GetData();
+	if (xml.FindElem("fpdm")) bbxx.st_sFpdm = xml.GetData();
+	if (xml.FindElem("fphm")) bbxx.st_sFphm = xml.GetData();
+	if (xml.FindElem("hjje")) bbxx.st_sHjje = xml.GetData();
+	if (xml.FindElem("hjse")) bbxx.st_sHjse = xml.GetData();
+	if (xml.FindElem("sqf")) bbxx.st_sSqf = xml.GetData();
+	if (xml.FindElem("sqyy")) bbxx.st_sSqyy = xml.GetData();
+	if (xml.FindElem("xxbbh")) bbxx.st_sXxbbh = xml.GetData();
 
-	if (xml.FindElem("bbxm"))
+	if (xml.FindElem("bbxms"))
 	{
-		bbxx.st_nBbxmCount = atoi(xml.GetAttrib("count"));
+		int xmCount = atoi(xml.GetAttrib("count"));
 		xml.IntoElem();
-		for (int i = 0; i < bbxx.st_nBbxmCount; i++)
+		for (int i = 0; i < xmCount; i++)
 		{
-			xml.FindElem("group");
-			bbxm.st_nXh = atoi(xml.GetAttrib("xh"));
+			xml.FindElem("bbxm");
+			//bbxm.st_nXh = atoi(xml.GetAttrib("xh"));
 			xml.IntoElem();
 			if (xml.FindElem("mc")) bbxm.st_sMc = xml.GetData();
 			if (xml.FindElem("sl"))   bbxm.st_sSl = xml.GetData();
@@ -459,88 +304,244 @@ CString CHzxxbdy::GenerateFpdyXml(HZXXB_BBXX bbxx, CString dylx, BBDY bbdy)
 CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 {
 	CMarkup xml;
-	int i = 0;
-	int k = 0;
+	//m_nPageSize = LINEFEED_L;
+	m_nPageSize = 19;
 
-	int nTmp = 900;
-	int nTmpKprq = 35;
+	xml.AddElem("NewPage");
+	xml.AddAttrib("pn", 1);
+	xml.IntoElem();
+	xml.AddElem("PageHeader");
+	xml.IntoElem();
+	
 
-	//if (m_nOrientation == DMORIENT_LANDSCAPE)
-	//{
-	//	m_nPageSize = LINEFEED_L;
-	//	nTmp = 195;
-	//	nTmpKprq = 20;
-	//}
+	int x0 = 0;
 
-	int nLY = 70;
+	int y = 0;
+	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
+	y += 100;
+	xywhsf(bbxx.xmSm, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	y += 50;
+	addxml(bbxx.st_sTitle, bbxx.xmTitle);
+	addxml(bbxx.st_sSm, bbxx.xmSm);
+	xml.OutOfElem();
 
+	xml.AddElem("PageData");
+	xml.IntoElem();
+	XM _xm;
+	int x1 = x0 + XGF_W;
+	int x2 = x1 + XGFMCSH_W;
+	int x3 = x2 + XGFMCSH_W1;
+	int x4 = x3 + XGF_W;
+	int x5 = x4 + XGFMCSH_W;
+	int x6 = x5 + XGFMCSH_W1;
+	xywhsf(_xm, x0, y, XGF_W, 200, LS_16, FS, AM_ZC);
+	addxml("销售方", _xm);
+	xywhsf(_xm, x1, y, XGFMCSH_W, 110, LS_16, FS, AM_ZC);
+	addxml("名称", _xm);
+	xywhsf(_xm, x1, y + 110, XGFMCSH_W, 90, LS_16, FS, AM_ZC);
+	addxml("纳税人识别号", _xm);
+	xywhsf(_xm, x2, y, XGFMCSH_W1, 110, LS_16, FS, AM_ZC);
+	addxml(bbxx.st_sXfmc, _xm);
+	xywhsf(_xm, x2, y + 110, XGFMCSH_W1, 90, LS_16, FS, AM_ZC);
+	addxml(bbxx.st_sXfsh, _xm);
+
+	xywhsf(_xm, x3, y, XGF_W, 200, LS_16, FS, AM_ZC);
+	addxml("购买方", _xm);
+	xywhsf(_xm, x4, y, XGFMCSH_W, 110, LS_16, FS, AM_ZC);
+	addxml("名称", _xm);
+	xywhsf(_xm, x4, y + 110, XGFMCSH_W, 90, LS_16, FS, AM_ZC);
+	addxml("纳税人识别号", _xm);
+	xywhsf(_xm, x5, y, XGFMCSH_W1, 110, LS_16, FS, AM_ZC);
+	addxml(bbxx.st_sGfmc, _xm);
+	xywhsf(_xm, x5, y + 110, XGFMCSH_W1, 90, LS_16, FS, AM_ZC);
+	addxml(bbxx.st_sGfsh, _xm);
+	y += 200;
+
+	// 处理数据项
+	int nW = 70; // 标题项高度
+	x0 = XGF_W;
+	x1 = x0 + MC_W;
+	x2 = x1 + SL_W;
+	x3 = x2 + DJ_W;
+	x4 = x3 + JE_W;
+	x5 = x4 + SLV_W;
+	x6 = x5 + SE_W;
+
+	int _y = y;
+
+	xywhsf(_xm, x0, y, MC_W, nW, LS_9, FS, AM_ZC);
+	addxml("货物（劳务服务）名称", _xm);
+	xywhsf(_xm, x1, y, SL_W, nW, LS_9, FS, AM_ZC);
+	addxml("数量", _xm);
+	xywhsf(_xm, x2, y, DJ_W, nW, LS_9, FS, AM_ZC);
+	addxml("单价", _xm);
+	xywhsf(_xm, x3, y, JE_W, nW, LS_9, FS, AM_ZC);
+	addxml("金额", _xm);
+	xywhsf(_xm, x4, y, SLV_W, nW, LS_9, FS, AM_ZC);
+	addxml("税率", _xm);
+	xywhsf(_xm, x5, y, SE_W, nW, LS_9, FS, AM_ZC);	
+	addxml("税额", _xm);
+	_y += nW;
+
+	int nLY = 140; // 数据行高度
+	m_nLineNum = 0;
 	LTHZXXB_BBXM::iterator pos;
 	for (pos = bbxx.st_lHzxxbBbxm.begin(); pos != bbxx.st_lHzxxbBbxm.end(); pos++)
 	{
-		int nShiting = 0;
-
-		xywhsf(pos->xmMc, nShiting, nLY + i * nLY, MC_W, 70, LS_9, FS, ZL);
-		nShiting += MC_W;
-
-		xywhsf(pos->xmSl, nShiting, nLY + i * nLY, SL_W, 70, LS_9, FS, ZC);
-		nShiting += SL_W;
-
-		xywhsf(pos->xmJe, nShiting, nLY + i * nLY, JE_W, 70, LS_9, FS, ZC);
-		nShiting += JE_W;
-
-		xywhsf(pos->xmSlv, nShiting, nLY + i * nLY, SLV_W, 70, LS_9, FS, ZC);
-		nShiting += SLV_W;
-
-		xywhsf(pos->xmSe, nShiting, nLY + i * nLY, SE_W, 70, LS_9, FS, ZC);
-		nShiting += SE_W;
-
-		i++;
-		if (i%m_nPageSize == 0)
-		{
-			i = 0;
-		}
-		m_nLineNum++;
+		xywhsf(pos->xmMc, x0, _y, MC_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		xywhsf(pos->xmSl, x1, _y, SL_W, nLY, LS_9, FS, AM_VCR_S);
+		xywhsf(pos->xmDj, x2, _y, DJ_W, nLY, LS_9, FS, AM_VCR_S);
+		xywhsf(pos->xmJe, x3, _y, JE_W, nLY, LS_9, FS, AM_VCR_S);
+		xywhsf(pos->xmSlv, x4, _y, SLV_W, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmSe, x5, _y, SE_W, nLY, LS_9, FS, AM_VCR_S);
+		_y += nLY;
 	}
 
-	m_nAllPageNum = m_nLineNum / m_nPageSize;
-	if (0 != m_nLineNum % m_nPageSize)
+	int nTemp = 9 - bbxx.st_lHzxxbBbxm.size();
+	for (int i = 0; i < nTemp; i++)
 	{
-		m_nAllPageNum++;
+		xywhsf(_xm, x0, _y, MC_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		addxml("", _xm);
+		xywhsf(_xm, x1, _y, SL_W, nLY, LS_9, FS, AM_VCR_S);
+		addxml("", _xm);
+		xywhsf(_xm, x2, _y, DJ_W, nLY, LS_9, FS, AM_VCR_S);
+		addxml("", _xm);
+		xywhsf(_xm, x3, _y, JE_W, nLY, LS_9, FS, AM_VCR_S);
+		addxml("", _xm);
+		xywhsf(_xm, x4, _y, SLV_W, nLY, LS_9, FS, AM_ZC);
+		addxml("", _xm);
+		xywhsf(_xm, x5, _y, SE_W, nLY, LS_9, FS, AM_VCR_S);
+		addxml("", _xm);
+		_y += nLY;
 	}
 
-	int j = 0;
+	int hj_w = 75;
+	xywhsf(_xm, x0, _y, MC_W, hj_w, LS_9, FS, AM_ZC);
+	addxml("合计", _xm);
+	xywhsf(_xm, x1, _y, SL_W, hj_w, LS_9, FS, AM_ZC);
+	addxml("", _xm);
+	xywhsf(_xm, x2, _y, DJ_W, hj_w, LS_9, FS, AM_ZC);
+	addxml("", _xm);
+	xywhsf(_xm, x3, _y, JE_W, hj_w, LS_9, FS, AM_VCR_S);
+	addxml(bbxx.st_sHjje, _xm);
+	xywhsf(_xm, x4, _y, SLV_W, hj_w, LS_9, FS, AM_ZC);
+	addxml("", _xm);
+	xywhsf(_xm, x5, _y, SE_W, hj_w, LS_9, FS, AM_VCR_S);
+	addxml(bbxx.st_sHjse, _xm);
+	_y += hj_w;
+
 	int num = 0;
-	BOOL bNewPage = TRUE;
-	int nNewPageNum = 1;
 	for (pos = bbxx.st_lHzxxbBbxm.begin(); pos != bbxx.st_lHzxxbBbxm.end(); pos++)
 	{
-		if (bNewPage)
-		{
-			xml.AddElem("NewPage");
-			xml.AddAttrib("pn", nNewPageNum++);
-			xml.IntoElem();
-			bNewPage = FALSE;
-		}
 		addxml(pos->st_sMc, pos->xmMc);
 		addxml(pos->st_sSl, pos->xmSl);
 		addxml(pos->st_sDj, pos->xmDj);
 		addxml(pos->st_sJe, pos->xmJe);
 		addxml(pos->st_sSlv, pos->xmSlv);
 		addxml(pos->st_sSe, pos->xmSe);
-
-		num++;
-		if (num % m_nPageSize == 0)
-		{
-			// 够一页，增加页码
-			xml.OutOfElem();
-			bNewPage = TRUE;
-		}
-		j++;
 	}
 
-	// 最后一页增加 页码
+	x0 = 0;
+	xywhsf(_xm, x0, y, XGF_W, _y - y, LS_16, FS, AM_ZC);
+	addxml("开具\r\n红字\r\n专用\r\n发票\r\n内容", _xm);
+	y = _y;
+
+	int w = x6 - XGF_W;
+	xywhsf(_xm, x0, y, XGF_W, 750, LS_16, FS, AM_ZC);
+	addxml("说明", _xm);
+	xywhsf(_xm, x6, y, 0, 750, LS_16, FS, AM_ZC); // 宽度为0 ，画竖线， 高度为零， 画横线
+	addxml("", _xm);
+	xml.OutOfElem();// 退出pagedata
+	xml.OutOfElem();// 退出NewPage
+
+	xml.SetDoc(xml.GetDoc());
+	xml.FindElem("NewPage");
+	xml.IntoElem();
+	xml.FindElem("PageHeader");
+	xml.IntoElem();// 进入pageheader // 把说明中的内容放到pageheader防止打印矩形框
+	// 这里处理说明中的内容
+	_y = y;
+	_y += 85;
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 80, LS_16, FH, AM_VCL_S);
+	addxml("一、购买方      □", _xm);
+	if (bbxx.st_sSqf.Compare("0") == 0)
+	{
+		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
+		addxml("√", _xm);
+		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_16, FH, -5);
+		addxml("√", _xm);
+	}
+	_y += 80;
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 60, LS_12, FS, AM_VCL_S);
+	addxml("对应蓝字专用发票抵扣增值税销项税额情况：", _xm);
+	_y += 60;
+	xywhsf(_xm, XGF_W + 190, _y, w - 150, 80, LS_12, FH, AM_VCL_S);
+	addxml("1、已抵扣    □", _xm);
+	if (bbxx.st_sSqyy.Compare("0") == 0 && bbxx.st_sSqf.Compare("0") == 0)
+	{
+		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
+		addxml("√", _xm);
+		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_16, FH, -5);
+		addxml("√", _xm);
+	}
+	_y += 80;
+	xywhsf(_xm, XGF_W + 190, _y, w - 150, 80, LS_12, FH, AM_VCL_S);
+	addxml("2、未抵扣    □", _xm);
+	if (bbxx.st_sSqyy.Compare("1") == 0 && bbxx.st_sSqf.Compare("0") == 0)
+	{
+		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
+		addxml("√", _xm);
+		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_16, FH, -5);
+		addxml("√", _xm);
+	}
+	_y += 80;
+	_y += 20;
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 60, LS_12, FS, AM_VCL_S);
+	addxml("对应蓝字专用发票的代码：________________ 号码：________________", _xm);
+	if (bbxx.st_sSqyy.Compare("1") == 0 && bbxx.st_sSqf.Compare("0") == 0)
+	{
+		xywhsf(_xm, XGF_W + 20 + 530, _y, 300, 40, LS_12, FS, AM_VCL_S);
+		addxml(bbxx.st_sFpdm, _xm);
+		xywhsf(_xm, XGF_W + 20 + 1020, _y, 300, 40, LS_12, FS, AM_VCL_S);
+		addxml(bbxx.st_sFphm, _xm);
+	}
+	_y += 60;
+
+	_y += 20;
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 80, LS_16, FH, AM_VCL_S);
+	addxml("一、销售方      □", _xm);
+	if (bbxx.st_sSqf.Compare("1") == 0)
+	{
+		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
+		addxml("√", _xm);
+		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_16, FH, -5);
+		addxml("√", _xm);
+	}
+	_y += 80;
+	_y += 20;
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 60, LS_12, FS, AM_VCL_S);
+	addxml("对应蓝字专用发票的代码：________________ 号码：________________", _xm);
+	if (bbxx.st_sSqf.Compare("1") == 0)
+	{
+		xywhsf(_xm, XGF_W + 20 + 530, _y, 300, 40, LS_12, FS, AM_VCL_S);
+		addxml(bbxx.st_sFpdm, _xm);
+		xywhsf(_xm, XGF_W + 20 + 1020, _y, 300, 40, LS_12, FS, AM_VCL_S);
+		addxml(bbxx.st_sFphm, _xm);
+	}
+	_y += 60;
+	xml.OutOfElem();// 退出pageheader
+	y += 750;// 说明的数据处理完成
+
+	xml.FindElem("PageData");
+	xml.IntoElem();// 再次进入pagedata
+	// 红字专\r\n用发票\r\n信息表\r\n编号
+	xywhsf(_xm, x0, y, XGF_W, 250, LS_16, FS, AM_ZC);
+	addxml("红字专\r\n用发票\r\n信息表\r\n编号", _xm);
+
+	xywhsf(_xm, XGF_W, y, w, 250, LS_16, FS, AM_ZC);
+	addxml(bbxx.st_sXxbbh, _xm);
+	xml.OutOfElem();// 退出pagedata
 	xml.OutOfElem();
-	bNewPage = TRUE;
 
 	return xml.GetDoc();
 }

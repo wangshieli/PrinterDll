@@ -82,6 +82,7 @@ BEGIN_MESSAGE_MAP(CTestPrintDllDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON5, &CTestPrintDllDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CTestPrintDllDlg::OnBnClickedButton6)
 	ON_BN_CLICKED(IDC_BUTTON7, &CTestPrintDllDlg::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON8, &CTestPrintDllDlg::OnBnClickedButton8)
 END_MESSAGE_MAP()
 
 
@@ -456,4 +457,38 @@ void CTestPrintDllDlg::OnBnClickedButton7()
 
 	char zc[1024] = { 0 };
 	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+}
+
+
+void CTestPrintDllDlg::OnBnClickedButton8()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	CMarkup xml;
+	xml.AddElem("I1");
+		xml.IntoElem();
+			xml.AddElem("I2");
+			xml.IntoElem();
+				xml.AddElem("T1", 1);
+			xml.OutOfElem();
+			xml.AddElem("I3");
+			xml.IntoElem();
+				xml.AddElem("T2", 2);
+			xml.OutOfElem();
+		xml.OutOfElem();
+
+	CString str = xml.GetDoc();
+	xml.SetDoc(str);
+	xml.FindElem("I1");
+	xml.IntoElem();
+	xml.FindElem("I2");
+	xml.IntoElem();
+	xml.AddElem("T3", 3);
+	xml.OutOfElem();
+	xml.FindElem("I3");
+	xml.IntoElem();
+	xml.AddElem("T4", 4);
+	xml.OutOfElem();
+	xml.OutOfElem();
+	str = xml.GetDoc();
 }

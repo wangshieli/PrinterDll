@@ -1,36 +1,40 @@
-<?xml version="1.0" encoding="gbk"?><business id="20007" comment="发票查询">
+<?xml version="1.0" encoding="gbk"?>
+<business id="20007" comment="发票查询">
 	<body yylxdm="1">
 		<returncode>0</returncode>
 		<returnmsg>成功</returnmsg>
+		<dylx>2</dylx>
+		<bblx>HZXXB</bblx>
+		<dyfs>0</dyfs>
+		<printername>EPSON LQ-630K ESC/P2</printername>
 		<returndata>
 			<bbxx count="1">
 				<group xh="1">
-					<gfmc>1101101101108888</gfmc>
-					<gfsh>1101101101108888</gfsh>
-					<xfmc>444444444</xfmc>
-					<xfsh>44444444444444444444</xfsh>
-					<fpdm>1234567890</fpdm>
-					<fphm>1234567890</fphm>
+					<title>开具红字增值税专用发票信息表</title>
+					<sm>填开日期:</sm>
+					<gfmc>11111</gfmc>
+					<gfsh>QWEEEEEEEEEEEEEEEEEE</gfsh>
+					<xfmc>北京测试环境</xfmc>
+					<xfsh>1101101101101111</xfsh>
+					<fpdm>111111111111</fpdm>
+					<fphm>11111111</fphm>
 					<hjje>-560</hjje>
 					<hjse>-50.4</hjse>
-					<sqf>0</sqf>
+					<sqf>1</sqf>
 					<sqyy>0</sqyy>
-					<sqdbh>1234567890123456</sqdbh>
-					<bbxm count="1">
-						<group xh="1">
-							<mc>*棉花*美达24X CD-ROM</mc>
+					<xxbbh/>
+					<bbxms count="1">
+						<bbxm>
+							<mc>*棉花*美达24X CD-ROM商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称</mc>
 							<sl>-1</sl>
 							<dj>560</dj>
-							<je>"-560</je>
+							<je>-560</je>
 							<slv>0.09</slv>
 							<se>-50.4</se>
-						</group>
-					</bbxm>
+						</bbxm>
+					</bbxms>
 				</group>
 			</bbxx>
 		</returndata>
-		<dylx>0</dylx>
-		<dyfs>0</dyfs>
-		<printername>预设</printername>
 	</body>
 </business>

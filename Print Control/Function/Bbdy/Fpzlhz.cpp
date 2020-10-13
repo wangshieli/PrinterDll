@@ -300,12 +300,6 @@ CString CFpzlhz::GenerateItemMXXml(FPZLHZ_BBXX bbxx)
 {
 	CMarkup xml;
 	int i = 0;
-	//if (m_nOrientation == DMORIENT_LANDSCAPE)
-	//{
-	//	m_nPageSize = LINEFEED_L;
-	//	nTmp = 195;
-	//	nTmpKprq = 20;
-	//}
 
 	xywhsf(bbxx.xmTitle, 0, 0, 1990, 100, LS_16, FS, AM_ZC);
 	xywhsf(bbxx.xmZbrq, 0, 100, 1990, 50, LS_10, FS, AM_VCL);

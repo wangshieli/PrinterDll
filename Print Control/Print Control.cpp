@@ -153,6 +153,13 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 			strcpy(pszRecv, strResult);
 			return;
 		}
+		else if (bblx.Compare("HZXXB") == 0)
+		{
+			CHzxxbdy hzxxbdy;
+			CString strResult = hzxxbdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
 	}
 	else
 	{

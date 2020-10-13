@@ -33,14 +33,57 @@ typedef struct _hzxxb_bbxx
 		clear();
 	}
 
-	int st_nBbxmCount;
-	LTHZXXB_BBXM st_lHzxxbBbxm;
-
 	void clear()
 	{
+		st_sTitle = "";
+		st_sSm = "";
+
+		st_sGfmc = "";
+		st_sGfsh = "";
+		st_sXfmc = "";
+		st_sXfsh = "";
+		st_sFpdm = "";
+		st_sFphm = "";
+		st_sHjje = "";
+		st_sHjse = "";
+		st_sSqf = "";
+		st_sSqyy = "";
+		st_sXxbbh = "";
+
 		st_nBbxmCount = 0;
 		st_lHzxxbBbxm.clear();
 	}
+
+	CString st_sTitle;
+	CString st_sSm;
+
+	XM xmTitle;
+	XM xmSm;
+
+	CString st_sGfmc;
+	CString st_sGfsh;
+	CString st_sXfmc;
+	CString st_sXfsh;
+	CString st_sFpdm;
+	CString st_sFphm;
+	CString st_sHjje;
+	CString st_sHjse;
+	CString st_sSqf;// 0¹º·½  1Ïú·½
+	CString st_sSqyy; // 0ÒÑµÖ¿Û  1Î´µÖ¿Û
+	CString st_sXxbbh;
+
+	XM xmGfmc;
+	XM xmGfsh;
+	XM xmXfmc;
+	XM xmXfsh;
+	XM xmFpdm;
+	XM xmFphm;
+	XM xmHjje;
+	XM xmHjse;
+	XM xmXxbbh;
+
+	int st_nBbxmCount;
+	LTHZXXB_BBXM st_lHzxxbBbxm;
 }HZXXB_BBXX;
 
 class CHzxxbdy :public CFpdyBase
@@ -66,17 +109,5 @@ private:
 
 	//	int m_nOrientation;
 	int m_nPageSize;
-
-	CString m_sGfmc;
-	CString m_sGfsh;
-	CString m_sXfmc;
-	CString m_sXfsh;
-	CString m_sFpdm;
-	CString m_sFphm;
-	CString m_sHjje;
-	CString m_sHjse;
-	CString m_sSqf;// 0¹º·½  1Ïú·½
-	CString m_sSqyy; // 0ÒÑµÖ¿Û  1Î´µÖ¿Û
-	CString m_sSqdbh;
 };
 
