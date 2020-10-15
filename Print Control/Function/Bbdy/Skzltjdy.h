@@ -5,7 +5,7 @@
 
 using namespace std;
 
-typedef struct _fpzlhz_tjxx
+typedef struct _skzltj_tjxx
 {
 	int st_nXh;
 	CString st_sMc;
@@ -14,7 +14,6 @@ typedef struct _fpzlhz_tjxx
 	CString st_s2;
 	CString st_s3;
 	CString st_s4;
-	CString st_s5;
 	CString st_sQt;
 
 	XM xmXh;
@@ -24,22 +23,56 @@ typedef struct _fpzlhz_tjxx
 	XM xmS2;
 	XM xmS3;
 	XM xmS4;
-	XM xmS5;
 	XM xmQt;
-}FPZLHZ_TJXX;
+}SKZLTJ_TJXX;
 
-typedef list<FPZLHZ_TJXX> LTFPZLHZ_TJXX;
+typedef list<SKZLTJ_TJXX> LTSKZLTJ_TJXX;
 
-typedef struct _fpzlhz_bbxx
+typedef struct _skzltj_bbxx
 {
-	_fpzlhz_bbxx()
+	_skzltj_bbxx()
 	{
 		clear();
 	}
 
 	void clear()
 	{
-		st_lFpzlhzTjxx.clear();
+		st_sTitle = "";
+		st_sZbrq = "";
+		st_sSsrq = "";
+		st_sSm = "";
+		st_sNsrsbh = "";
+		st_sQymc = "";
+		st_sDzdh = "";
+
+		st_sTitle1 = "";
+		st_sCqkc = "";
+		st_sZsfp = "";
+		st_sFsfp = "";
+		st_sGjfp = "";
+		st_sZffp = "";
+		st_sFffp = "";
+		st_sThfp = "";
+		st_sQmkc = "";
+
+		st_sTitle2 = "";
+		st_sJedw = "";
+
+		st_sXh = "";
+		st_sMc = "";
+		st_sHj = "";
+		st_sT1 = "";
+		st_sT2 = "";
+		st_sT3 = "";
+		st_sT4 = "";
+		st_sQt = "";
+
+		st_sDi = "µÚ";
+		st_sYe1 = "Ò³";
+		st_sGong = "¹²";
+		st_sYe2 = "Ò³";
+
+		st_lSkzltjTjxx.clear();
 	}
 
 	CString st_sTitle;
@@ -49,7 +82,7 @@ typedef struct _fpzlhz_bbxx
 	CString st_sNsrsbh;
 	CString st_sQymc;
 	CString st_sDzdh;
-	
+
 	XM xmTitle;
 	XM xmZbrq;
 	XM xmSsrq;
@@ -91,7 +124,6 @@ typedef struct _fpzlhz_bbxx
 	CString st_sT2;
 	CString st_sT3;
 	CString st_sT4;
-	CString st_sT5;
 	CString st_sQt;
 
 	XM xmXh;
@@ -101,17 +133,31 @@ typedef struct _fpzlhz_bbxx
 	XM xmT2;
 	XM xmT3;
 	XM xmT4;
-	XM xmT5;
 	XM xmQt;
 
-	LTFPZLHZ_TJXX st_lFpzlhzTjxx;
-}FPZLHZ_BBXX;
+	CString st_sDi;
+	CString st_sYe1;
+	CString st_sGong;
+	CString st_sYe2;
+	XM xmDi;
+	XM xmYe1;
+	XM xmGong;
+	XM xmYe2;
 
-class CFpzlhz :public CFpdyBase
+	XM xmP1;
+	XM xmP2;
+
+	XM xm1;
+	XM xm2;
+
+	LTSKZLTJ_TJXX st_lSkzltjTjxx;
+}SKZLTJ_BBXX;
+
+class CSkzltjdy :public CFpdyBase
 {
 public:
-	CFpzlhz();
-	~CFpzlhz();
+	CSkzltjdy();
+	~CSkzltjdy();
 
 public:
 	CString Dlfpdy(LPCTSTR sInputInfo);
@@ -120,9 +166,9 @@ public:
 	LONG PrintQD(LPCSTR billxml, CString bblx);
 
 private:
-	FPZLHZ_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
-	CString GenerateFpdyXml(FPZLHZ_BBXX bbxx, CString dylx, BBDY bbdy);
-	CString GenerateItemMXXml(FPZLHZ_BBXX bbxx);
+	SKZLTJ_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
+	CString GenerateFpdyXml(SKZLTJ_BBXX bbxx, CString dylx, BBDY bbdy);
+	CString GenerateItemMXXml(SKZLTJ_BBXX bbxx);
 
 private:
 	int m_nLineNum;

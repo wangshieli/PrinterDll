@@ -33,10 +33,11 @@ CYkfpcxdy::~CYkfpcxdy()
 
 CString CYkfpcxdy::Dlfpdy(LPCTSTR sInputInfo)
 {
-	FPDY fpdy;
+	BBDY bbdy;
 	CMarkup xml;
-	YKFPCX_BBXX bmxx;
+	YKFPCX_BBXX bbxx;
 	CString printXml("");
+	m_sPrinterName.Empty();
 
 	int rtn = 0;
 	CString sCode = "", sMsg = "";
@@ -55,34 +56,35 @@ CString CYkfpcxdy::Dlfpdy(LPCTSTR sInputInfo)
 	xml.FindElem("body");
 	if (xml.GetAttrib("yylxdm").CompareNoCase("1") != 0 && xml.GetAttrib("yylxdm").CompareNoCase("2") != 0)
 	{
-		fpdy.sErrorCode.Format("%d", -3);
-		fpdy.sErrorInfo = "输入XML格式中yylxdm不正确";
-		return GenerateXMLFpdy(fpdy);
+		bbdy.sErrorCode.Format("%d", -3);
+		bbdy.sErrorInfo = "输入XML格式中yylxdm不正确";
+		return GenerateXMLFpdy(bbdy);
 	}
-	fpdy.iYylxdm = atoi(xml.GetAttrib("yylxdm"));
+	bbdy.iYylxdm = atoi(xml.GetAttrib("yylxdm"));
 	xml.IntoElem();
 	if (xml.FindElem("returncode"))		sCode = xml.GetData();
 	if (xml.FindElem("returnmsg"))		sMsg = xml.GetData();
 	if (sCode.Compare("0") != 0)
 	{
-		fpdy.sErrorCode = sCode;
-		fpdy.sErrorInfo = sMsg;
-		return GenerateXMLFpdy(fpdy);
+		bbdy.sErrorCode = sCode;
+		bbdy.sErrorInfo = sMsg;
+		return GenerateXMLFpdy(bbdy);
 	}
-	if (xml.FindElem("dylx"))   fpdy.sDylx = xml.GetData();
-	if (xml.FindElem("bblx")) fpdy.sFplxdm = xml.GetData();
-	if (xml.FindElem("dyfs"))   fpdy.sDyfs = xml.GetData();
+
+	if (xml.FindElem("dylx"))   bbdy.sDylx = xml.GetData();
+	if (xml.FindElem("dyfs"))   bbdy.sDyfs = xml.GetData();
 	if (xml.FindElem("printername"))	m_sPrinterName = xml.GetData();
-	if (xml.FindElem("printtasknameflag")) m_sPrintTaskNameFlag = xml.GetData();
+	m_iPldy = atoi(bbdy.sDyfs.GetBuffer(0));
 
-	bmxx = ParseFpmxFromXML(sInputInfo, fpdy);
+	m_sTempFplxdm = bbdy.sFplxdm;
 
-	printXml = GenerateFpdyXml(bmxx, fpdy.sDylx, fpdy);
+	bbxx = ParseFpmxFromXML(sInputInfo, bbdy);
 
+	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
 
-	rtn = PrintQD(printXml, fpdy.sFplxdm);
+	rtn = PrintQD(printXml, bbdy.sFplxdm);
 
-	return GenerateXMLFpdy(fpdy, rtn);
+	return GenerateXMLFpdy(bbdy, rtn);
 }
 
 LONG CYkfpcxdy::PrintQD(LPCSTR billxml, CString bblx)

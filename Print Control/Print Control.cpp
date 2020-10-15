@@ -16,6 +16,14 @@
 #include "Function/Bbdy/Fpzlhz.h"
 #include "Function/Bbdy/Fpkcdy.h"
 #include "Function/Bbdy/Ykfpcxdy.h"
+#include "Function/Bbdy/Khbmdy.h"
+#include "Function/Bbdy/Spbmdy.h"
+#include "Function/Bbdy/Smbmdy.h"
+#include "Function/Bbdy/Jdcbmdy.h"
+#include "Function/Bbdy/Fpzlqddy.h"
+#include "Function/Bbdy/Skzltjdy.h"
+#include "Function/Bbdy/Fplycdy.h"
+#include "Function/Bbdy/Logdy.h"
 
 #include "Helper/Log/TraceLog.h"
 
@@ -157,6 +165,62 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		{
 			CHzxxbdy hzxxbdy;
 			CString strResult = hzxxbdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("KHBM") == 0)
+		{
+			CKhbmdy khbmdy;
+			CString strResult = khbmdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("SPBM") == 0)
+		{
+			CSpbmdy spbmdy;
+			CString strResult = spbmdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("SMBM") == 0)
+		{
+			CSmbmdy smbmdy;
+			CString strResult = smbmdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("JDCBM") == 0)
+		{
+			CJdcbmdy jdcbmdy;
+			CString strResult = jdcbmdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("FPZLQD") == 0)
+		{
+			CFpzlqddy fpzlqddy;
+			CString strResult = fpzlqddy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("SKZLTJ") == 0)
+		{
+			CSkzltjdy skzltjdy;
+			CString strResult = skzltjdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("FPLYC") == 0)
+		{
+			CFplycdy fplycdy;
+			CString strResult = fplycdy.Dlfpdy(pszPost);
+			strcpy(pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("LOGDY") == 0)
+		{
+			CLogdy logdy;
+			CString strResult = logdy.Dlfpdy(pszPost);
 			strcpy(pszRecv, strResult);
 			return;
 		}

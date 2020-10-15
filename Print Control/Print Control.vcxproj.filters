@@ -105,6 +105,24 @@
     <ClInclude Include="Function\Bbdy\Ykfpcxdy.h">
       <Filter>Function\Bbdy</Filter>
     </ClInclude>
+    <ClInclude Include="Function\Bbdy\Smbmdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Jdcbmdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Fpzlqddy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Skzltjdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Fplycdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="Function\Bbdy\Logdy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Print Control.cpp">
@@ -159,6 +177,24 @@
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Ykfpcxdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Smbmdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Jdcbmdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Fpzlqddy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Skzltjdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Fplycdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Logdy.cpp">
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
   </ItemGroup>

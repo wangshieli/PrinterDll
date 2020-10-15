@@ -29,10 +29,11 @@ CHzxxbdy::~CHzxxbdy()
 
 CString CHzxxbdy::Dlfpdy(LPCTSTR sInputInfo)
 {
-	FPDY fpdy;
+	BBDY bbdy;
 	CMarkup xml;
-	HZXXB_BBXX bmxx;
+	HZXXB_BBXX bbxx;
 	CString printXml("");
+	m_sPrinterName.Empty();
 
 	int rtn = 0;
 	CString sCode = "", sMsg = "";
@@ -51,28 +52,35 @@ CString CHzxxbdy::Dlfpdy(LPCTSTR sInputInfo)
 	xml.FindElem("body");
 	if (xml.GetAttrib("yylxdm").CompareNoCase("1") != 0 && xml.GetAttrib("yylxdm").CompareNoCase("2") != 0)
 	{
-		fpdy.sErrorCode.Format("%d", -3);
-		fpdy.sErrorInfo = "输入XML格式中yylxdm不正确";
-		return GenerateXMLFpdy(fpdy);
+		bbdy.sErrorCode.Format("%d", -3);
+		bbdy.sErrorInfo = "输入XML格式中yylxdm不正确";
+		return GenerateXMLFpdy(bbdy);
 	}
-	fpdy.iYylxdm = atoi(xml.GetAttrib("yylxdm"));
+	bbdy.iYylxdm = atoi(xml.GetAttrib("yylxdm"));
 	xml.IntoElem();
 	if (xml.FindElem("returncode"))		sCode = xml.GetData();
 	if (xml.FindElem("returnmsg"))		sMsg = xml.GetData();
 	if (sCode.Compare("0") != 0)
 	{
-		fpdy.sErrorCode = sCode;
-		fpdy.sErrorInfo = sMsg;
-		return GenerateXMLFpdy(fpdy);
+		bbdy.sErrorCode = sCode;
+		bbdy.sErrorInfo = sMsg;
+		return GenerateXMLFpdy(bbdy);
 	}
 
-	bmxx = ParseFpmxFromXML(sInputInfo, fpdy);
+	if (xml.FindElem("dylx"))   bbdy.sDylx = xml.GetData();
+	if (xml.FindElem("dyfs"))   bbdy.sDyfs = xml.GetData();
+	if (xml.FindElem("printername"))	m_sPrinterName = xml.GetData();
+	m_iPldy = atoi(bbdy.sDyfs.GetBuffer(0));
 
-	printXml = GenerateFpdyXml(bmxx, fpdy.sDylx, fpdy);
+	m_sTempFplxdm = bbdy.sFplxdm;
 
-	rtn = PrintQD(printXml, fpdy.sFplxdm);
+	bbxx = ParseFpmxFromXML(sInputInfo, bbdy);
 
-	return GenerateXMLFpdy(fpdy, rtn);
+	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
+
+	rtn = PrintQD(printXml, bbdy.sFplxdm);
+
+	return GenerateXMLFpdy(bbdy, rtn);
 }
 
 LONG CHzxxbdy::PrintQD(LPCSTR billxml, CString bblx)

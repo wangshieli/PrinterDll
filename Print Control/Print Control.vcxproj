@@ -169,9 +169,15 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="Function\Bbdy\Fpkcdy.h" />
+    <ClInclude Include="Function\Bbdy\Fplycdy.h" />
     <ClInclude Include="Function\Bbdy\Fpzlhz.h" />
+    <ClInclude Include="Function\Bbdy\Fpzlqddy.h" />
     <ClInclude Include="Function\Bbdy\Hzxxbdy.h" />
+    <ClInclude Include="Function\Bbdy\Jdcbmdy.h" />
     <ClInclude Include="Function\Bbdy\Khbmdy.h" />
+    <ClInclude Include="Function\Bbdy\Logdy.h" />
+    <ClInclude Include="Function\Bbdy\Skzltjdy.h" />
+    <ClInclude Include="Function\Bbdy\Smbmdy.h" />
     <ClInclude Include="Function\Bbdy\Spbmdy.h" />
     <ClInclude Include="Function\Bbdy\Ykfpcxdy.h" />
     <ClInclude Include="Function\Fpdy\Escxstyfpdy.h" />
@@ -194,7 +200,15 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Function\Bbdy\Fplycdy.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Function\Bbdy\Fpzlhz.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Fpzlqddy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -202,9 +216,24 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Function\Bbdy\Jdcbmdy.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Function\Bbdy\Khbmdy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Logdy.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Skzltjdy.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Smbmdy.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Spbmdy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

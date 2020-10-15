@@ -1,35 +1,30 @@
 #include "../../pch.h"
-#include "Fpkcdy.h"
+#include "Jdcbmdy.h"
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
 #include "../../Helper/ZLib/ZLib.h"
 
-#define T1_W	200
-#define T2_W	250
-#define T3_W	200
-#define T4_W	250
-#define T5_W	200
-#define T6_W	200
-#define T7_W	200
-#define T8_W	200
-#define T9_W	200
+#define XU_W	150
+#define MC_W	500
+#define XH_W	500
+#define CD_W	300
+#define DJ_W	250
+#define CJ_W	250
 
-CFpkcdy::CFpkcdy()
+CJdcbmdy::CJdcbmdy()
 {
-
 }
 
-CFpkcdy::~CFpkcdy()
+CJdcbmdy::~CJdcbmdy()
 {
-
 }
 
-CString CFpkcdy::Dlfpdy(LPCTSTR sInputInfo)
+CString CJdcbmdy::Dlfpdy(LPCTSTR sInputInfo)
 {
 	BBDY bbdy;
 	CMarkup xml;
-	FPKCCX_BBXX bbxx;
+	JDCBM_BBXX bbxx;
 	CString printXml("");
 	m_sPrinterName.Empty();
 
@@ -81,7 +76,7 @@ CString CFpkcdy::Dlfpdy(LPCTSTR sInputInfo)
 	return GenerateXMLFpdy(bbdy, rtn);
 }
 
-LONG CFpkcdy::PrintQD(LPCSTR billxml, CString bblx)
+LONG CJdcbmdy::PrintQD(LPCSTR billxml, CString bblx)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -193,9 +188,7 @@ LONG CFpkcdy::PrintQD(LPCSTR billxml, CString bblx)
 
 					Rectangle(m_hPrinterDC, itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
 
-					PaintTile(nFontSize, strFontName, itemRect, strText, z);
-					MoveToEx(m_hPrinterDC, itemRect.left, itemRect.bottom, NULL);
-					LineTo(m_hPrinterDC, itemRect.right, itemRect.bottom);
+					PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 0, 2);
 				}
 				xml.OutOfElem();
 			}
@@ -210,12 +203,12 @@ LONG CFpkcdy::PrintQD(LPCSTR billxml, CString bblx)
 	return nrt;
 }
 
-FPKCCX_BBXX CFpkcdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
+JDCBM_BBXX CJdcbmdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 {
 	CMarkup xml;
-	FPKCCX_BBXX bbxx;
+	JDCBM_BBXX bbxx;
 	bbxx.clear();
-	FPKCCX_FPXX bbxm;
+	JDCBM_BMXX bmxx;
 	int booltrue = false;
 	CString sl = "";
 
@@ -232,37 +225,31 @@ FPKCCX_BBXX CFpkcdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 	xml.IntoElem();
 
 	if (xml.FindElem("title")) bbxx.st_sTitle = xml.GetData();
-	if (xml.FindElem("sm")) bbxx.st_sSkpbh = xml.GetData();
+	if (xml.FindElem("zbrq")) bbxx.st_sSm = xml.GetData();
 	if (xml.FindElem("t1")) bbxx.st_sT1 = xml.GetData();
 	if (xml.FindElem("t2")) bbxx.st_sT2 = xml.GetData();
 	if (xml.FindElem("t3")) bbxx.st_sT3 = xml.GetData();
 	if (xml.FindElem("t4")) bbxx.st_sT4 = xml.GetData();
 	if (xml.FindElem("t5")) bbxx.st_sT5 = xml.GetData();
 	if (xml.FindElem("t6")) bbxx.st_sT6 = xml.GetData();
-	if (xml.FindElem("t7")) bbxx.st_sT7 = xml.GetData();
-	if (xml.FindElem("t8")) bbxx.st_sT8 = xml.GetData();
-	if (xml.FindElem("t9")) bbxx.st_sT9 = xml.GetData();
 
-	if (xml.FindElem("fpxxs"))
+	if (xml.FindElem("bmxxs"))
 	{
-		int fpxxCount = atoi(xml.GetAttrib("count"));
+		int nCount = atoi(xml.GetAttrib("count"));
 		xml.IntoElem();
-		for (int i = 0; i < fpxxCount; i++)
+		for (int i = 0; i < nCount; i++)
 		{
-			xml.FindElem("fpxx");
-			bbxm.st_nXh = atoi(xml.GetAttrib("xh"));
+			xml.FindElem("bmxx");
+			bmxx.st_nXh = atoi(xml.GetAttrib("xh"));
 			xml.IntoElem();
-			if (xml.FindElem("fpdm")) bbxm.st_sFpdm = xml.GetData();
-			if (xml.FindElem("fpfs"))   bbxm.st_sFpfs = xml.GetData();
-			if (xml.FindElem("fplx"))  bbxm.st_sFplx = xml.GetData();
-			if (xml.FindElem("fpqshm"))  bbxm.st_sFpqshm = xml.GetData();
-			if (xml.FindElem("fpzzhm"))  bbxm.st_sFpzzhm = xml.GetData();
-			if (xml.FindElem("kpxe"))  bbxm.st_sKpxe = xml.GetData();
-			if (xml.FindElem("lgrq"))  bbxm.st_sLgrq = xml.GetData();
-			if (xml.FindElem("syfs"))   bbxm.st_sSyfs = xml.GetData();
+			if (xml.FindElem("clmc")) bmxx.st_sClmc = xml.GetData();
+			if (xml.FindElem("cpxh"))   bmxx.st_sCpxh = xml.GetData();
+			if (xml.FindElem("cd"))   bmxx.st_sCd = xml.GetData();
+			if (xml.FindElem("dj"))   bmxx.st_sDj = xml.GetData();
+			if (xml.FindElem("sccj"))     bmxx.st_sSccj = xml.GetData();
 			xml.OutOfElem();
 
-			bbxx.st_lFpkccx_fpxx.push_back(bbxm);
+			bbxx.st_lJdcbmBmxx.push_back(bmxx);
 		}
 		xml.OutOfElem();
 	}
@@ -270,7 +257,7 @@ FPKCCX_BBXX CFpkcdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 	return bbxx;
 }
 
-CString CFpkcdy::GenerateFpdyXml(FPKCCX_BBXX bbxx, CString dylx, BBDY bbdy)
+CString CJdcbmdy::GenerateFpdyXml(JDCBM_BBXX bbxx, CString dylx, BBDY bbdy)
 {
 	CString xml;
 	xml += "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
@@ -283,92 +270,122 @@ CString CFpkcdy::GenerateFpdyXml(FPKCCX_BBXX bbxx, CString dylx, BBDY bbdy)
 	return xml;
 }
 
-CString CFpkcdy::GenerateItemMXXml(FPKCCX_BBXX bbxx)
+CString CJdcbmdy::GenerateItemMXXml(JDCBM_BBXX bbxx)
 {
+	CMarkup xml;
+
 	int x0 = 0;
-	int x1 = x0 + T1_W;
-	int x2 = x1 + T2_W;
-	int x3 = x2 + T3_W;
-	int x4 = x3 + T4_W;
-	int x5 = x4 + T5_W;
-	int x6 = x5 + T6_W;
-	int x7 = x6 + T7_W;
-	int x8 = x7 + T8_W;
-	int x9 = x8 + T9_W;
+	int x1 = x0 + XU_W;
+	int x2 = x1 + MC_W;
+	int x3 = x2 + XH_W;
+	int x4 = x3 + CD_W;
+	int x5 = x4 + DJ_W;
+	int x6 = x5 + CJ_W;
 
 	int y = 0;
 	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
 	y += 100;
-	xywhsf(bbxx.xmSkpbh, 0, 100, 1990, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmSm, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmDi, 1350, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmP1, 1430, y, 90, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmYe1, 1520, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmGong, 1600, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmP2, 1680, y, 90, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmYe2, 1770, y, 80, 50, LS_10, FS, AM_ZC);
 	y += 50;
 
 	int nW = 70; // 标题项高度
-	xywhsf(bbxx.xmT1, x0, y, T1_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT2, x1, y, T2_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT3, x2, y, T3_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT4, x3, y, T4_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT5, x4, y, T5_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT6, x5, y, T6_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT7, x6, y, T7_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT8, x7, y, T8_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT9, x8, y, T9_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT1, x0, y, XU_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT2, x1, y, MC_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT3, x2, y, XH_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT4, x3, y, CD_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT5, x4, y, DJ_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT6, x5, y, CJ_W, nW, LS_9, FS, AM_ZC);
 	y += nW;
 
-	LTFPKCCX_FPXX::iterator pos;
-	for (pos = bbxx.st_lFpkccx_fpxx.begin(); pos != bbxx.st_lFpkccx_fpxx.end(); pos++)
+	int nLY = 90;// 数据行高度
+
+	m_nLineNum = 0;
+	m_nPageSize = 29;
+	int _y = y;
+	LTJDCBM_BMXX::iterator pos;
+	for (pos = bbxx.st_lJdcbmBmxx.begin(); pos != bbxx.st_lJdcbmBmxx.end(); pos++)
 	{
-		xywhsf(pos->xmXh, x0, y, T1_W, nW, LS_9, FS, AM_ZC);
-		xywhsf(pos->xmFpdm, x1, y, T2_W, nW, LS_9, FS, AM_ZC);
-		xywhsf(pos->xmFplx, x2, y, T3_W, nW, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmKpxe, x3, y, T4_W, nW, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmFpqshm, x4, y, T5_W, nW, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmFpzzhm, x5, y, T6_W, nW, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmFpfs, x6, y, T7_W, nW, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmSyfs, x7, y, T8_W, nW, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmLgrq, x8, y, T9_W, nW, LS_9, FS, AM_ZC_S);
-		y += nW;
+		xywhsf(pos->xmXh, x0, _y, XU_W, nLY, LS_9, FS, AM_ZC);
+		xywhsf(pos->xmClmc, x1, _y, MC_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		xywhsf(pos->xmCpxh, x2, _y, XH_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		xywhsf(pos->xmCd, x3, _y, CD_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		xywhsf(pos->xmDj, x4, _y, DJ_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		xywhsf(pos->xmSccj, x5, _y, CJ_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		_y += nLY;
+
+		m_nLineNum++;
+		if (m_nLineNum%m_nPageSize == 0)
+		{
+			_y = y;
+		}
+
 	}
 
-	CMarkup xml;
-	xml.AddElem("NewPage");
-	xml.AddAttrib("pn", 1);
-	xml.IntoElem();
-
-	xml.AddElem("PageHeader");
-	xml.IntoElem();
-	addxml(bbxx.st_sTitle, bbxx.xmTitle);
-	addxml(bbxx.st_sSkpbh, bbxx.xmSkpbh);
-	xml.OutOfElem();
-
-	xml.AddElem("PageData");
-	xml.IntoElem();
-
-	addxml(bbxx.st_sT1, bbxx.xmT1);
-	addxml(bbxx.st_sT2, bbxx.xmT2);
-	addxml(bbxx.st_sT3, bbxx.xmT3);
-	addxml(bbxx.st_sT4, bbxx.xmT4);
-	addxml(bbxx.st_sT5, bbxx.xmT5);
-	addxml(bbxx.st_sT6, bbxx.xmT6);
-	addxml(bbxx.st_sT7, bbxx.xmT7);
-	addxml(bbxx.st_sT8, bbxx.xmT8);
-	addxml(bbxx.st_sT9, bbxx.xmT9);
-
-	for (pos = bbxx.st_lFpkccx_fpxx.begin(); pos != bbxx.st_lFpkccx_fpxx.end(); pos++)
+	m_nAllPageNum = m_nLineNum / m_nPageSize;
+	if (0 != m_nLineNum % m_nPageSize)
 	{
+		m_nAllPageNum++;
+	}
+
+	int num = 0;
+	BOOL bNewPage = TRUE;
+	int nNewPageNum = 1;
+	for (pos = bbxx.st_lJdcbmBmxx.begin(); pos != bbxx.st_lJdcbmBmxx.end(); pos++)
+	{
+		if (bNewPage)
+		{
+			xml.AddElem("NewPage");
+			xml.AddAttrib("pn", nNewPageNum);
+			xml.IntoElem();
+			xml.AddElem("PageHeader");
+			xml.IntoElem();
+			addxml(bbxx.st_sTitle, bbxx.xmTitle);
+			addxml(bbxx.st_sSm, bbxx.xmSm);
+			addxml(bbxx.st_sDi, bbxx.xmDi);
+			addxml(nNewPageNum++, bbxx.xmP1);
+			addxml(bbxx.st_sYe1, bbxx.xmYe1);
+			addxml(bbxx.st_sGong, bbxx.xmGong);
+			addxml(m_nAllPageNum, bbxx.xmP2);
+			addxml(bbxx.st_sYe2, bbxx.xmYe2);
+			xml.OutOfElem();
+			xml.AddElem("PageData");
+			xml.IntoElem();
+			addxml(bbxx.st_sT1, bbxx.xmT1);
+			addxml(bbxx.st_sT2, bbxx.xmT2);
+			addxml(bbxx.st_sT3, bbxx.xmT3);
+			addxml(bbxx.st_sT4, bbxx.xmT4);
+			addxml(bbxx.st_sT5, bbxx.xmT5);
+			addxml(bbxx.st_sT6, bbxx.xmT6);
+			bNewPage = FALSE;
+		}
 		addxml(pos->st_nXh, pos->xmXh);
-		addxml(pos->st_sFpdm, pos->xmFpdm);
-		addxml(pos->st_sFplx, pos->xmFplx);
-		addxml(pos->st_sKpxe, pos->xmKpxe);
-		addxml(pos->st_sFpqshm, pos->xmFpqshm);
-		addxml(pos->st_sFpzzhm, pos->xmFpzzhm);
-		addxml(pos->st_sFpfs, pos->xmFpfs);
-		addxml(pos->st_sSyfs, pos->xmSyfs);
-		addxml(pos->st_sLgrq, pos->xmLgrq);
+		addxml(pos->st_sClmc, pos->xmClmc);
+		addxml(pos->st_sCpxh, pos->xmCpxh);
+		addxml(pos->st_sCd, pos->xmCd);
+		addxml(pos->st_sDj, pos->xmDj);
+		addxml(pos->st_sSccj, pos->xmSccj);
+
+		num++;
+		if (num % m_nPageSize == 0)
+		{
+			xml.OutOfElem();
+			xml.OutOfElem();
+			bNewPage = TRUE;
+		}
 	}
 
-	// 最后一页增加 页码
-	xml.OutOfElem();
-	xml.OutOfElem();
+	if (!bNewPage)
+	{
+		xml.OutOfElem();
+		xml.OutOfElem();
+		bNewPage = TRUE;
+	}
 
 	return xml.GetDoc();
 }
