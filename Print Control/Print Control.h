@@ -14,7 +14,9 @@
 extern "C" {
 #endif
 
-PRINTCONTROL_API void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv);
+PRINTCONTROL_API void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR* pszRecv);
+
+PRINTCONTROL_API void FreeMem(LPSTR pData);
 
 #ifdef __cplusplus
 }

@@ -68,11 +68,11 @@ int main()
     return nRetCode;
 }
 
-void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
+void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR* pszRecv)
 {
 	DEBUG_TRACELOG_STR("", "enter PostAndRecvEx");
 	DEBUG_TRACELOG_STR("pszPost", pszPost);
-	DEBUG_TRACELOG_STR("pszRecv", pszRecv);
+	//DEBUG_TRACELOG_STR("pszRecv", pszRecv);
 	CMarkup xml;
 	CString sFplxdm;
 	CString sDylx;
@@ -94,7 +94,8 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 			DEBUG_TRACELOG_STR("", "enter zzsfpdy");
 			CZzsfpdy zzsfpdy;
 			CString strResult = zzsfpdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			DEBUG_TRACELOG_STR("", "out zzsfpdy");
 			return;
 		}
@@ -102,21 +103,24 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		{
 			CJdcfpdy jdcfpdy;
 			CString strResult = jdcfpdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (sFplxdm.Compare("025") == 0)
 		{
 			CJsfpdy jsfpdy;
 			CString strResult = jsfpdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (sFplxdm.Compare("006") == 0)
 		{
 			CEscxstyfp escfpdy;
 			CString strResult = escfpdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else
@@ -133,6 +137,8 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		//{
 			CZzsfpdy zzsfpdy;
 			CString strResult = zzsfpdy.Dlfpdy(pszPost);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		//}
 	}
@@ -144,84 +150,96 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 		{
 			CFpzlhz zlhz;
 			CString strResult = zlhz.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("FPKCCX") == 0)
 		{
 			CFpkcdy kcdy;
 			CString strResult = kcdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("YKFPCX") == 0)
 		{
 			CYkfpcxdy ykfpcxdy;
 			CString strResult = ykfpcxdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("HZXXB") == 0)
 		{
 			CHzxxbdy hzxxbdy;
 			CString strResult = hzxxbdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("KHBM") == 0)
 		{
 			CKhbmdy khbmdy;
 			CString strResult = khbmdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("SPBM") == 0)
 		{
 			CSpbmdy spbmdy;
 			CString strResult = spbmdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("SMBM") == 0)
 		{
 			CSmbmdy smbmdy;
 			CString strResult = smbmdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("JDCBM") == 0)
 		{
 			CJdcbmdy jdcbmdy;
 			CString strResult = jdcbmdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("FPZLQD") == 0)
 		{
 			CFpzlqddy fpzlqddy;
 			CString strResult = fpzlqddy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("SKZLTJ") == 0)
 		{
 			CSkzltjdy skzltjdy;
 			CString strResult = skzltjdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("FPLYC") == 0)
 		{
 			CFplycdy fplycdy;
 			CString strResult = fplycdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 		else if (bblx.Compare("LOGDY") == 0)
 		{
 			CLogdy logdy;
 			CString strResult = logdy.Dlfpdy(pszPost);
-			strcpy(pszRecv, strResult);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
 			return;
 		}
 	}
@@ -229,4 +247,9 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR pszRecv)
 	{
 
 	}
+}
+
+void FreeMem(LPSTR pData)
+{
+	free((void*)pData);
 }

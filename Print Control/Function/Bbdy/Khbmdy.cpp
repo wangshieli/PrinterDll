@@ -9,13 +9,13 @@
 #define LINEFEED_L (16) //换行数，标识 横向
 
 #define XU_W	100
-#define MC_W	400
+#define MC_W	350
 #define JM_W	250
 #define SH_W	300
 #define ZJ_W	250
 #define DZ_W	250
-#define YH_W	250
-#define YJ_W	250
+#define YH_W	225
+#define YJ_W	225
 
 CKhbmdy::CKhbmdy():m_nPageSize(LINEFEED_P)
 {
@@ -75,6 +75,9 @@ CString CKhbmdy::Dlfpdy(LPCTSTR sInputInfo)
 	bbxx = ParseFpmxFromXML(sInputInfo, bbdy);
 
 	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
+
+	if (bbdy.sDyfs.Compare("100") == 0)
+		return printXml;
 
 	rtn = PrintQD(printXml, bbdy.sFplxdm);
 

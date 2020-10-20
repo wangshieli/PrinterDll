@@ -82,6 +82,9 @@ CString CYkfpcxdy::Dlfpdy(LPCTSTR sInputInfo)
 
 	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
 
+	if (bbdy.sDyfs.Compare("100") == 0)
+		return printXml;
+
 	rtn = PrintQD(printXml, bbdy.sFplxdm);
 
 	return GenerateXMLFpdy(bbdy, rtn);

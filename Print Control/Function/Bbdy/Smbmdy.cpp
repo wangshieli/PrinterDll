@@ -69,6 +69,9 @@ CString CSmbmdy::Dlfpdy(LPCTSTR sInputInfo)
 
 	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
 
+	if (bbdy.sDyfs.Compare("100") == 0)
+		return printXml;
+
 	rtn = PrintQD(printXml, bbdy.sFplxdm);
 
 	return GenerateXMLFpdy(bbdy, rtn);
@@ -296,7 +299,7 @@ CString CSmbmdy::GenerateItemMXXml(SMBM_BBXX bbxx)
 	int nLY = 90;// 数据行高度
 
 	m_nLineNum = 0;
-	m_nPageSize = 29;
+	m_nPageSize = 27;
 	int _y = y;
 	LTSMBM_BMXX::iterator pos;
 	for (pos = bbxx.st_lSmbmBmxx.begin(); pos != bbxx.st_lSmbmBmxx.end(); pos++)

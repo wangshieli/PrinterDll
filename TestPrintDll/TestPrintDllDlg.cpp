@@ -84,6 +84,7 @@ BEGIN_MESSAGE_MAP(CTestPrintDllDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON7, &CTestPrintDllDlg::OnBnClickedButton7)
 	ON_BN_CLICKED(IDC_BUTTON8, &CTestPrintDllDlg::OnBnClickedButton8)
 	ON_BN_CLICKED(IDC_BUTTON9, &CTestPrintDllDlg::OnBnClickedButton9)
+	ON_BN_CLICKED(IDC_BUTTON10, &CTestPrintDllDlg::OnBnClickedButton10)
 END_MESSAGE_MAP()
 
 
@@ -189,7 +190,7 @@ void CTestPrintDllDlg::OnBnClickedButton004qd()
 	OutputDebugString(qdXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(qdXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(qdXmlData.GetBuffer(0), zc);
 }
 
 
@@ -208,7 +209,7 @@ void CTestPrintDllDlg::OnClickedButton004()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -227,7 +228,7 @@ void CTestPrintDllDlg::OnBnClickedButton025fp()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -246,7 +247,7 @@ void CTestPrintDllDlg::OnBnClickedButton005fp()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -265,7 +266,7 @@ void CTestPrintDllDlg::OnBnClickedButton006fp()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -284,7 +285,7 @@ void CTestPrintDllDlg::OnBnClickedButton1()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -303,7 +304,7 @@ void CTestPrintDllDlg::OnBnClickedButton2()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -322,7 +323,7 @@ void CTestPrintDllDlg::OnBnClickedButton3()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -341,7 +342,7 @@ void CTestPrintDllDlg::OnBnClickedButton4()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 int  newlineStr(const char *lpszData, int nLineMaxLen)
@@ -437,7 +438,7 @@ void CTestPrintDllDlg::OnBnClickedButton6()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -457,7 +458,7 @@ void CTestPrintDllDlg::OnBnClickedButton7()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
 }
 
 
@@ -510,5 +511,27 @@ void CTestPrintDllDlg::OnBnClickedButton9()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+}
+
+
+void CTestPrintDllDlg::OnBnClickedButton10()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	TRACE(_T("开始打印006FP!\r\n"));
+	CMarkup xml006fp;
+	if (!xml006fp.Load("rz.xml"))
+	{
+		TRACE(_T("打开006FP.xml失败!\r\n"));
+		return;
+	}
+
+	CString fpXmlData = xml006fp.GetDoc();
+	OutputDebugString(fpXmlData);
+
+	char zc[1024] = { 0 };
+	char* pData = NULL;
+	PostAndRecvEx(fpXmlData.GetBuffer(0), &pData);
+	int i = 0;
+	FreeMem(pData);
 }

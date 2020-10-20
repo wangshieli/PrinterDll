@@ -69,6 +69,9 @@ CString CLogdy::Dlfpdy(LPCTSTR sInputInfo)
 
 	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
 
+	if (bbdy.sDyfs.Compare("100") == 0)
+		return printXml;
+
 	rtn = PrintQD(printXml, bbdy.sFplxdm);
 
 	return GenerateXMLFpdy(bbdy, rtn);
@@ -279,6 +282,12 @@ CString CLogdy::GenerateItemMXXml(LOG_BBXX bbxx)
 	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
 	y += 100;
 	xywhsf(bbxx.xmZbr, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmDi, 1350, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmP1, 1430, y, 90, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmYe1, 1520, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmGong, 1600, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmP2, 1680, y, 90, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmYe2, 1770, y, 80, 50, LS_10, FS, AM_ZC);
 	y += 50;
 
 	int nW = 70; // 标题项高度

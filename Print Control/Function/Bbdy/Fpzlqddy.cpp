@@ -6,13 +6,13 @@
 #include "../../Helper/ZLib/ZLib.h"
 
 #define XU_W	100
-#define ZL_W	400
+#define ZL_W	350
 #define DM_W	250
 #define HM_W	250
-#define RQ_W	250
-#define SH_W	300
-#define JE_W	250
-#define SE_W	250
+#define RQ_W	225
+#define SH_W	275
+#define JE_W	225
+#define SE_W	225
 
 CFpzlqddy::CFpzlqddy()
 {
@@ -72,6 +72,9 @@ CString CFpzlqddy::Dlfpdy(LPCTSTR sInputInfo)
 	bbxx = ParseFpmxFromXML(sInputInfo, bbdy);
 
 	printXml = GenerateFpdyXml(bbxx, bbdy.sDylx, bbdy);
+
+	if (bbdy.sDyfs.Compare("100") == 0)
+		return printXml;
 
 	rtn = PrintQD(printXml, bbdy.sFplxdm);
 
