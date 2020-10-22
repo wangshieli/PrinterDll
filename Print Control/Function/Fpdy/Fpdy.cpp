@@ -116,7 +116,7 @@ void CFpdyBase::setSysDefprinter(CString& printer)
 // nType = 1机动车  2二手车  3转普票
 void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 {
-	//return;
+	return;
 	CString _sPrinter = m_sPrinterName;
 	_sPrinter.MakeUpper();
 
