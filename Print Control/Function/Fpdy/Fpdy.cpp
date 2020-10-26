@@ -43,12 +43,12 @@ void CFpdyBase::InitXYoff()
 	nYoff = atoi(_sTop);
 	nQRCodeSize = atoi(_sQRSize);
 
-	int _nXoff = 0;
-	int _nYoff = 0;
-	setBuiltInOffset(2, _nXoff, _nYoff);
+	//int _nXoff = 0;
+	//int _nYoff = 0;
+	//setBuiltInOffset(2, _nXoff, _nYoff);
 
-	nXoff += _nXoff;
-	nYoff += _nYoff;
+	//nXoff += _nXoff;
+	//nYoff += _nYoff;
 }
 
 bool CFpdyBase::CheckDyjOnline()
