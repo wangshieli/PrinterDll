@@ -3,7 +3,6 @@
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
-#include "../../Helper/ZLib/ZLib.h"
 #include "../../Helper/QRGenerator/QRGenerator.h"
 #include "../../Helper/QRGenerator/Base64.h"
 
@@ -71,7 +70,7 @@ CString CJsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 		return GenerateXMLFpdy(fpdy);
 	}
 
-	//m_sTempFplxdm = fpdy.sFplxdm;
+	m_sTempFplxdm = fpdy.sFplxdm;
 
 	fpmx = ParseFpmxFromXML(sInputInfo, fpdy);
 
@@ -139,7 +138,7 @@ CString CJsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 		return GenerateXMLFpdy(fpdy);
 	}
 
-	rtn = Print(printXml, fpdy.sFplxdm);
+	rtn = Print(printXml);
 
 	return GenerateXMLFpdy(fpdy, rtn);
 }
@@ -388,7 +387,7 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 	char strDxje[100];
 	char strsc[100];
 	strcpy(strsc, fpxx.sJshj.GetBuffer(0));
-	ZLib_ChineseFee(strDxje, 100, strsc);//小写金额转换为大写金额
+	PCLib_ChineseFee(strDxje, 100, strsc);//小写金额转换为大写金额
 	fpxx.sJshjDx.Format("%s", strDxje);
 	if (fpxx.sJshjDx.Mid(fpxx.sJshjDx.GetLength() - 2, 2).CompareNoCase("角") == 0)
 	{
@@ -1315,23 +1314,13 @@ CString CJsfpdy::GenerateItemXmlH(JSFP_FPXX fpmx, FPDY fpdy)
 	return xml.GetDoc();
 }
 
-LONG CJsfpdy::Print(LPCTSTR billXml, CString strFplxdm)
+LONG CJsfpdy::Print(LPCTSTR billXml)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	int nrt = 0;
-	int nXoff = 0;
-	int nYoff = 0;
-	int nQRCodeSize = 0;
 
-	// 添加读取配置文件功能
-	CString _sTop = "";
-	CString _sLeft = "";
-	CString _sQRSize = "";
-	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft);
-	nYoff = atoi(_sTop);
-	nQRCodeSize = atoi(_sQRSize) * 10;
+	InitXYoff();
 
 	do
 	{

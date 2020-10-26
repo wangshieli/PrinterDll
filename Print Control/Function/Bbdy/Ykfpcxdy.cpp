@@ -3,7 +3,6 @@
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
-#include "../../Helper/ZLib/ZLib.h"
 
 #define FPLX_W	300
 #define FPZT_W	160
@@ -72,6 +71,7 @@ CString CYkfpcxdy::Dlfpdy(LPCTSTR sInputInfo)
 	}
 
 	if (xml.FindElem("dylx"))   bbdy.sDylx = xml.GetData();
+	if (xml.FindElem("bblx"))	bbdy.sFplxdm = xml.GetData();
 	if (xml.FindElem("dyfs"))   bbdy.sDyfs = xml.GetData();
 	if (xml.FindElem("printername"))	m_sPrinterName = xml.GetData();
 	m_iPldy = atoi(bbdy.sDyfs.GetBuffer(0));
@@ -85,28 +85,18 @@ CString CYkfpcxdy::Dlfpdy(LPCTSTR sInputInfo)
 	if (bbdy.sDyfs.Compare("100") == 0)
 		return printXml;
 
-	rtn = PrintQD(printXml, bbdy.sFplxdm);
+	rtn = PrintQD(printXml);
 
 	return GenerateXMLFpdy(bbdy, rtn);
 }
 
-LONG CYkfpcxdy::PrintQD(LPCSTR billxml, CString bblx)
+LONG CYkfpcxdy::PrintQD(LPCSTR billxml)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	int nrt = 0;
 
-	int nXoff = 0;
-	int nYoff = 0;
-
-	// 添加读取配置文件功能
-	CString _sTop = "";
-	CString _sLeft = "";
-	CString _sQRSize = "";
-	CString _sItem = bblx;
-	ZLib_GetIniYbjValue(_sItem, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft);
-	nYoff = atoi(_sTop);
+	InitXYoff();
 
 	do
 	{

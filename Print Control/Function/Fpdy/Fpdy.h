@@ -138,8 +138,13 @@ public:
 	virtual ~CFpdyBase();
 
 public:
+	void InitXYoff();
+	bool CheckDyjOnline();
 	int InitPrinter(short pwidth, short plength);
 	CString GenerateXMLFpdy(FPDY fpdy, int rtn = 0);
+
+protected:
+	char* PCLib_ChineseFee(char* dest, size_t destsize, char* src);
 
 protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
@@ -167,4 +172,8 @@ protected:
 	CString m_sPrintTaskName;
 	CString m_sPrintTaskNameFlag;
 	BOOL m_bStatus;
+
+	int nXoff;
+	int nYoff;
+	int nQRCodeSize;
 };

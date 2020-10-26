@@ -259,7 +259,6 @@ void GetDllPath(CString& dllpath)
 
 int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CString& strQRCodeSize)
 {
-	CMarkup xml;
 	CString strTempTop, strTempLeft;
 	int rtn[5];
 
@@ -273,6 +272,23 @@ int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CS
 
 	strTop.Format("%s", cstr1);
 	strLeft.Format("%s", cstr2);
+
+	return 0;
+}
+
+int ZLib_SetIniDyjName(CString strFplxdm, CString dyjName)
+{
+	CString strTempTop, strTempLeft;
+
+	CString ini;
+	GetDllPath(ini);
+	DEBUG_TRACELOG_STR("dllpath", strFplxdm);
+
+	BOOL brtn = WritePrivateProfileString(strFplxdm.GetBuffer(0), "dyj", dyjName.GetBuffer(0), ini);
+	if (brtn != TRUE)
+	{
+		return -1;
+	}
 
 	return 0;
 }

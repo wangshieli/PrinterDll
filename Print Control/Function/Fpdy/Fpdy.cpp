@@ -3,6 +3,7 @@
 #include <winspool.h>
 
 #include "../../Helper/XML/Markup.h"
+#include "../../Helper/ZLib/ZLib.h"
 
 #pragma comment(lib, "Helper/QRGenerator/QRGenerator.lib")
 
@@ -13,7 +14,10 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 	m_sFpzt("0"),
 	m_sPrintTaskName(""),
 	m_sPrintTaskNameFlag(""),
-	m_bStatus(FALSE)
+	m_bStatus(FALSE),
+	nXoff(0),
+	nYoff(0),
+	nQRCodeSize(0)
 {
 	ZeroMemory(m_cQRcodePath, MAX_PATH);
 	GetQRcodePath();
@@ -29,13 +33,59 @@ CFpdyBase::~CFpdyBase()
 		delete m_pDlg;
 }
 
+void CFpdyBase::InitXYoff()
+{
+	CString _sTop = "";
+	CString _sLeft = "";
+	CString _sQRSize = "";
+	ZLib_GetIniYbjValue(m_sTempFplxdm, _sTop, _sLeft, _sQRSize);
+	nXoff = atoi(_sLeft);
+	nYoff = atoi(_sTop);
+	nQRCodeSize = atoi(_sQRSize);
+
+	int _nXoff = 0;
+	int _nYoff = 0;
+	setBuiltInOffset(2, _nXoff, _nYoff);
+
+	nXoff += _nXoff;
+	nYoff += _nYoff;
+}
+
+bool CFpdyBase::CheckDyjOnline()
+{
+	DWORD _dwSize = 0;
+	HANDLE _hPrinter = NULL;
+	PRINTER_INFO_2* _pInfo = NULL;
+
+	if (!OpenPrinter(m_sPrinterName.GetBuffer(0), &_hPrinter, NULL))
+		return false;
+
+	if (!GetPrinter(_hPrinter, 2, NULL, 0, &_dwSize))
+	{
+		_pInfo = (PRINTER_INFO_2*)malloc(_dwSize);
+		GetPrinter(_hPrinter, 2, (LPBYTE)_pInfo, _dwSize, &_dwSize);
+	}
+
+	ClosePrinter(_hPrinter);
+
+	DWORD _dwStatus = _pInfo->Attributes;
+	free(_pInfo);
+
+	if (_dwStatus & PRINTER_ATTRIBUTE_WORK_OFFLINE)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 int CFpdyBase::InitPrinter(short pwidth, short plength)
 {
 	//if (!dlg.GetDefaults()) 不弹界面，使用默认打印机直接打印
 	if (NULL == m_pDlg)
 		return -10;
 
-	if (0 == m_iPldy)
+	if (0 == m_iPldy || m_sPrinterName.IsEmpty() || !CheckDyjOnline())
 	{
 		CString defPrinter = ""; 
 		getSysDefPrinter(defPrinter);
@@ -44,13 +94,17 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 		{
 			return -1;// 用户取消了打印操作
 		}
+		m_sPrinterName = m_pDlg->GetDeviceName();
 		setSysDefprinter(defPrinter);
+
+		// 更新配置文件
+		ZLib_SetIniDyjName(m_sTempFplxdm, m_sPrinterName);
 	}
 	else if (1 == m_iPldy)
 	{
 		HGLOBAL hDevMode = NULL;
 		HGLOBAL hDevNames = NULL;
-		if (m_sPrinterName.IsEmpty() || !GetPrinterDevice(m_sPrinterName.GetBuffer(0), &hDevNames, &hDevMode)) //使用指定的打印机
+		if (!GetPrinterDevice(m_sPrinterName.GetBuffer(0), &hDevNames, &hDevMode)) //使用指定的打印机
 		{
 			return -7;// 找不到打印机
 		}
@@ -565,4 +619,11 @@ CString CFpdyBase::GenerateXMLFpdy(FPDY fpdy, int rtn)
 	xml.OutOfElem();
 
 	return xml.GetDoc();
+}
+
+char* CFpdyBase::PCLib_ChineseFee(char * dest, size_t destsize, char * src)
+{
+	ZLib_ChineseFee(dest, destsize, src);
+
+	return dest;
 }

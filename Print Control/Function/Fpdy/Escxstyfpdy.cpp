@@ -3,7 +3,6 @@
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
-#include "../../Helper/ZLib/ZLib.h"
 #include "../../Helper/QRGenerator/QRGenerator.h"
 #include "../../Helper/QRGenerator/Base64.h"
 
@@ -64,6 +63,8 @@ CString CEscxstyfp::Dlfpdy(LPCTSTR sInputInfo)
 	//if (xml.FindElem("orientation")) m_nOrientation = atoi(xml.GetData());
 	m_iPldy = atoi(fpdy.sDyfs.GetBuffer(0));
 
+	m_sTempFplxdm = fpdy.sFplxdm;
+
 	fpmx = ParseFpmxFromXML(sInputInfo, fpdy);
 
 	if (fpdy.sDylx.CompareNoCase("1") == 0)
@@ -86,35 +87,19 @@ CString CEscxstyfp::Dlfpdy(LPCTSTR sInputInfo)
 
 	if (fpdy.sDylx.CompareNoCase("0") == 0)
 	{
-		rtn = Print(printXml, fpdy.sFplxdm);
+		rtn = Print(printXml);
 	}
 
 	return GenerateXMLFpdy(fpdy, rtn);
 }
 
-LONG CEscxstyfp::Print(LPCTSTR billXml, CString strFplxdm)
+LONG CEscxstyfp::Print(LPCTSTR billXml)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	int nrt = 0;
-	int nXoff = 0;
-	int _nXoff = 0;
-	int nYoff = 0;
-	int _nYoff = 0;
-	int nQRCodeSize = 0;
 
-	// 添加读取配置文件功能
-	CString _sTop = "";
-	CString _sLeft = "";
-	CString _sQRSize = "";
-	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
-	setBuiltInOffset(2, _nXoff, _nYoff);
-	nXoff = atoi(_sLeft);
-	nYoff = atoi(_sTop);
-	nQRCodeSize = atoi(_sQRSize);
-
-	nXoff += _nXoff;
-	nYoff += _nYoff;
+	InitXYoff();
 
 	do
 	{
@@ -304,7 +289,7 @@ ESCFP_FPXX CEscxstyfp::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 	char strsc[100];
 
 	strcpy(strsc, fpxx.sCjhj.GetBuffer(0));
-	ZLib_ChineseFee(strDxje, 100, strsc);//小写金额转换为大写金额
+	PCLib_ChineseFee(strDxje, 100, strsc);//小写金额转换为大写金额
 	fpxx.sCjhjDx.Format("%s", strDxje);
 	if (fpxx.sCjhjDx.Mid(fpxx.sCjhjDx.GetLength() - 2, 2).CompareNoCase("角") == 0)
 	{

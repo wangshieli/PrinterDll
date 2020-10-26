@@ -254,8 +254,8 @@ public:
 	CString Dlfpdy(LPCTSTR sInputInfo);
 
 private:
-	LONG Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString hjse);
-	LONG PrintQD(LPCSTR billxml, CString strFplxdm);
+	LONG Print(LPCTSTR billXml, CString hjje, CString hjse);
+	LONG PrintQD(LPCSTR billxml);
 
 private:
 	ZZSFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);

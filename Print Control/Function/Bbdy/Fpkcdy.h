@@ -83,7 +83,7 @@ public:
 	CString Dlfpdy(LPCTSTR sInputInfo);
 
 public:
-	LONG PrintQD(LPCSTR billxml, CString bblx);
+	LONG PrintQD(LPCSTR billxml);
 
 private:
 	FPKCCX_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);

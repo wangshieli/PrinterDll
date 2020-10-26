@@ -108,7 +108,7 @@ public:
 	CString Dlfpdy(LPCTSTR sInputInfo);
 
 public:
-	LONG PrintQD(LPCSTR billxml, CString strFplxdm);
+	LONG PrintQD(LPCSTR billxml);
 
 private:
 	KHBM_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);

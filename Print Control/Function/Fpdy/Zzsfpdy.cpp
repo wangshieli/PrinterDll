@@ -3,7 +3,6 @@
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
-#include "../../Helper/ZLib/ZLib.h"
 #include "../../Helper/QRGenerator/QRGenerator.h"
 #include "../../Helper/QRGenerator/Base64.h"
 
@@ -106,39 +105,23 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 
 	if (fpdy.sDylx.CompareNoCase("0") == 0)
 	{
-		rtn = Print(printXml, fpdy.sFplxdm, fpmx.sHjje, fpmx.sHjse);
+		rtn = Print(printXml, fpmx.sHjje, fpmx.sHjse);
 	}
 	else
 	{
-		rtn = PrintQD(printXml, fpdy.sFplxdm);
+		rtn = PrintQD(printXml);
 	}
 
 	return GenerateXMLFpdy(fpdy, rtn);
 }
 
-LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString hjse)
+LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	int nrt = 0;
-	int nXoff = 0;
-	int _nXoff = 0;
-	int nYoff = 0;
-	int _nYoff = 0;
-	int nQRCodeSize = 0;
 
-	// 添加读取配置文件功能
-	CString _sTop = "";
-	CString _sLeft = "";
-	CString _sQRSize = "";
-	ZLib_GetIniYbjValue(strFplxdm, _sTop, _sLeft, _sQRSize);
-	setBuiltInOffset(3, _nXoff, _nYoff);
-	nXoff = atoi(_sLeft);
-	nYoff = atoi(_sTop);
-	nQRCodeSize = atoi(_sQRSize) * 10;
-
-	nXoff += _nXoff;
-	nYoff += _nYoff;
+	InitXYoff();
 
 	int _nHjjeLen = strlen(hjje);
 	int _nHjseLen = strlen(hjse);
@@ -338,24 +321,13 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString strFplxdm, CString hjje, CString h
 	return nrt;
 }
 
-LONG CZzsfpdy::PrintQD(LPCSTR billxml, CString strFplxdm)
+LONG CZzsfpdy::PrintQD(LPCSTR billxml)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	int nrt = 0;
 
-	int nXoff = 0;
-	int nYoff = 0;
-
-	// 添加读取配置文件功能
-	CString _sTop = "";
-	CString _sLeft = "";
-	CString _sQRSize = "";
-	//CString _sItem = strFplxdm + "_QD";
-	CString _sItem = "XHQD";
-	ZLib_GetIniYbjValue(_sItem, _sTop, _sLeft, _sQRSize);
-	nXoff = atoi(_sLeft);
-	nYoff = atoi(_sTop);
+	InitXYoff();
 
 	do
 	{
@@ -992,7 +964,7 @@ ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 	char strDxje[100];
 	char strsc[100];
 	strcpy(strsc, fpxx.sJshj.GetBuffer(0));
-	ZLib_ChineseFee(strDxje, 100, strsc);//小写金额转换为大写金额
+	PCLib_ChineseFee(strDxje, 100, strsc);//小写金额转换为大写金额
 	fpxx.sJshjDx.Format("%s", strDxje);
 	if (fpxx.sJshjDx.Mid(fpxx.sJshjDx.GetLength() - 2, 2).CompareNoCase("角") == 0)
 	{
