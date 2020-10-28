@@ -403,6 +403,17 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		rect.top = rect.top - (h - recv_h) / 2;
 	}
 
+	::SelectObject(m_hPrinterDC, pOldFont);
+	fontHeader.DeleteObject();
+
+	CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+	pCDC->LPtoDP(&rect);
+
+	pCDC->SetMapMode(MM_TEXT);
+
+	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+
 	if (rect.right >= trect.right)
 		::DrawText(m_hPrinterDC, data, -1, &rect, flags2);
 	else
@@ -410,6 +421,8 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 
 	::SelectObject(m_hPrinterDC, pOldFont);
 	fontHeader.DeleteObject();
+
+	pCDC->SetMapMode(MM_LOMETRIC);
 }
 
 int CFpdyBase::DataPrintMaxLen(const char * lpszData, int nLineMaxLen)
