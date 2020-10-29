@@ -24,6 +24,7 @@
 #include "Function/Bbdy/Skzltjdy.h"
 #include "Function/Bbdy/Fplycdy.h"
 #include "Function/Bbdy/Logdy.h"
+#include "Function/Bbdy/Xhqddy.h"
 
 #include "Helper/Log/TraceLog.h"
 
@@ -238,6 +239,14 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR* pszRecv)
 		{
 			CLogdy logdy;
 			CString strResult = logdy.Dlfpdy(pszPost);
+			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
+			strcpy(*pszRecv, strResult);
+			return;
+		}
+		else if (bblx.Compare("XHQD") == 0)
+		{
+			CXhqddy xhqddy;
+			CString strResult = xhqddy.Dlfpdy(pszPost);
 			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
 			strcpy(*pszRecv, strResult);
 			return;

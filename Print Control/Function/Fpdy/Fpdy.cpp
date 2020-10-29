@@ -425,6 +425,79 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	pCDC->SetMapMode(MM_LOMETRIC);
 }
 
+void CFpdyBase::PaintLine(RECT rect, int ls)
+{
+	if (ls == LINE_STATE_0)
+	{
+		Line_L(rect);
+		Line_T(rect);
+		Line_R(rect);
+		Line_B(rect);
+	}
+	else if (ls == LINE_STATE_L)
+	{
+		Line_L(rect);
+	}
+	else if (ls == LINE_STATE_T)
+	{
+		Line_T(rect);
+	}
+	else if (ls == LINE_STATE_R)
+	{
+		Line_R(rect);
+	}
+	else if (ls == LINE_STATE_B)
+	{
+		Line_B(rect);
+	}
+	else if (ls == LINE_STATE_LB)
+	{
+		Line_L(rect);
+		Line_B(rect);
+	}
+	else if (ls == LINE_STATE_LR)
+	{
+		Line_L(rect);
+		Line_R(rect);
+	}
+	else if (ls == LINE_STATE_LTB)
+	{
+		Line_L(rect);
+		Line_T(rect);
+		Line_B(rect);
+	}
+	else if (ls == LINE_STATE_LBR)
+	{
+		Line_L(rect);
+		Line_B(rect);
+		Line_R(rect);
+	}
+}
+
+void CFpdyBase::Line_L(RECT rect)
+{
+	MoveToEx(m_hPrinterDC, rect.left, rect.top, NULL);
+	LineTo(m_hPrinterDC, rect.left, rect.bottom);
+}
+
+void CFpdyBase::Line_T(RECT rect)
+{
+	MoveToEx(m_hPrinterDC, rect.left, rect.top, NULL);
+	LineTo(m_hPrinterDC, rect.right, rect.top);
+}
+
+void CFpdyBase::Line_R(RECT rect)
+{
+	MoveToEx(m_hPrinterDC, rect.right, rect.top, NULL);
+	LineTo(m_hPrinterDC, rect.right, rect.bottom);
+}
+
+void CFpdyBase::Line_B(RECT rect)
+{
+	MoveToEx(m_hPrinterDC, rect.left, rect.bottom, NULL);
+	LineTo(m_hPrinterDC, rect.right, rect.bottom);
+}
+
 int CFpdyBase::DataPrintMaxLen(const char * lpszData, int nLineMaxLen)
 {
 	if (NULL == lpszData || 0 >= nLineMaxLen)

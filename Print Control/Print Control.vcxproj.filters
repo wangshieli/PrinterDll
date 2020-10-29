@@ -123,6 +123,9 @@
     <ClInclude Include="Function\Bbdy\Logdy.h">
       <Filter>Function\Bbdy</Filter>
     </ClInclude>
+    <ClInclude Include="Function\Bbdy\Xhqddy.h">
+      <Filter>Function\Bbdy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Print Control.cpp">
@@ -195,6 +198,9 @@
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Logdy.cpp">
+      <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Function\Bbdy\Xhqddy.cpp">
       <Filter>Function\Bbdy</Filter>
     </ClCompile>
   </ItemGroup>

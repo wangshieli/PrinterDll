@@ -173,7 +173,7 @@ LONG CFpzlqddy::PrintQD(LPCSTR billxml)
 					int h = atoi(xml.GetAttrib("h"));
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
-					int z = atoi(xml.GetAttrib("z"));
+					int z1 = atoi(xml.GetAttrib("z"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -181,7 +181,10 @@ LONG CFpzlqddy::PrintQD(LPCSTR billxml)
 					itemRect.right = x + nXoff + 10 + w;
 					itemRect.bottom = (-y - 10 - h - nYoff);
 
-					Rectangle(m_hPrinterDC, itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
+					int z = z1 & 0x000000ff;
+					int ls = z1 & 0x0000ff00;
+
+					PaintLine(itemRect, ls);
 
 					PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 0, 2);
 				}
@@ -322,14 +325,14 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 	y += 50;
 
 	int nW = 70; // 标题项高度
-	xywhsf(bbxx.xmT1, x0, y, XU_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT2, x1, y, ZL_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT3, x2, y, DM_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT4, x3, y, HM_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT5, x4, y, RQ_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT6, x5, y, SH_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT7, x6, y, JE_W, nW, LS_9, FS, AM_ZC);
-	xywhsf(bbxx.xmT8, x7, y, SE_W, nW, LS_9, FS, AM_ZC);
+	xywhsf(bbxx.xmT1, x0, y, XU_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT2, x1, y, ZL_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT3, x2, y, DM_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT4, x3, y, HM_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT5, x4, y, RQ_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT6, x5, y, SH_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT7, x6, y, JE_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(bbxx.xmT8, x7, y, SE_W, nW, LS_9, FS, AM_ZC | LINE_STATE_0);
 	y += nW;
 
 	int nLY = 90;// 数据行高度
@@ -341,13 +344,13 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 	for (pos = bbxx.st_lFpzlqdBbxx.begin(); pos != bbxx.st_lFpzlqdBbxx.end(); pos++)
 	{
 		xywhsf(pos->xmXh, x0, _y, XU_W, nLY, LS_9, FS, AM_ZC);
-		xywhsf(pos->xmFpzl, x1, _y, ZL_W, nLY, LS_9, FS, AM_ZC_CHEKC);
-		xywhsf(pos->xmFpdm, x2, _y, DM_W, nLY, LS_9, FS, AM_ZC_CHEKC);
-		xywhsf(pos->xmFphm, x3, _y, HM_W, nLY, LS_9, FS, AM_ZC_CHEKC);
-		xywhsf(pos->xmKprq, x4, _y, RQ_W, nLY, LS_9, FS, AM_ZC_CHEKC);
-		xywhsf(pos->xmGfsh, x5, _y, SH_W, nLY, LS_9, FS, AM_ZC_S);
-		xywhsf(pos->xmHjje, x6, _y, JE_W, nLY, LS_9, FS, AM_ZC_CHEKC);
-		xywhsf(pos->xmHjse, x7, _y, SE_W, nLY, LS_9, FS, AM_ZC_CHEKC);
+		xywhsf(pos->xmFpzl, x1, _y, ZL_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LB);
+		xywhsf(pos->xmFpdm, x2, _y, DM_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LB);
+		xywhsf(pos->xmFphm, x3, _y, HM_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LB);
+		xywhsf(pos->xmKprq, x4, _y, RQ_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LB);
+		xywhsf(pos->xmGfsh, x5, _y, SH_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmHjje, x6, _y, JE_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LB);
+		xywhsf(pos->xmHjse, x7, _y, SE_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LBR);
 		_y += nLY;
 
 		m_nLineNum++;

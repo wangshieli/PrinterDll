@@ -53,6 +53,16 @@
 
 #define AM_ZC_CHEKC 9 // 绘画区域过大时，普通水平垂直居中不能自动调整左对齐，主要用在发票查询打印客户名称商品名称
 
+#define LINE_STATE_0	0x00000000	// 默认自动画矩形
+#define LINE_STATE_L	0x00000100  // 画左边竖线
+#define LINE_STATE_T	0x00000200	// 画上面横线
+#define LINE_STATE_R	0x00000300	// 画右边竖向
+#define LINE_STATE_B	0x00000400	// 画下面横线
+#define LINE_STATE_LB	0x00000500	// 画左竖线和下横线
+#define LINE_STATE_LR	0x00000600	// 画左竖向和右竖线
+#define LINE_STATE_LTB	0x00000700	// 画左竖向和上横线和右竖线
+#define LINE_STATE_LBR	0x00000800	// 画左竖向和下横线和右竖线
+
 #define A4_W	2100
 #define A4_H	2970
 
@@ -152,6 +162,13 @@ protected:
 
 	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+
+	void PaintLine(RECT rect, int ls);
+
+	void Line_L(RECT rect);
+	void Line_T(RECT rect);
+	void Line_R(RECT rect);
+	void Line_B(RECT rect);
 
 	int DataPrintMaxLen(const char *lpszData, int nLineMaxLen);
 

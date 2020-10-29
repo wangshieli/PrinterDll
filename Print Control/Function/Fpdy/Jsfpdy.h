@@ -62,14 +62,6 @@ typedef struct _jsfp_kprq
 	XM Day;
 }JSFP_KPRQ;
 
-typedef struct _jsfp_fyxmje
-{
-	CString sFYXM;
-	CString sJE;
-	XM fyxm;
-	XM je;
-}JSFP_FYXMJE;
-
 typedef struct _jsfp_fpxx { //发票明细信息
 	CString sFppy;
 	CString sBlxx;
@@ -187,25 +179,11 @@ typedef struct _jsfp_fpxx { //发票明细信息
 	XM fhr;
 	XM kpr;
 
-	//		XM skm1;//税控码第一行
-	//		XM skm2;//税控码第二行
-	//		XM skm3;//税控码第三行
-	// 		XM skm4;//税控码第四行
-
-	JSFP_FYXMJE fyxmje[3];
-
 	_jsfp_fpxx() {
 		iFyxmCount = 0;
 
 		kprq.sYear = _T("-");
 		kprq.sMouth = _T("-");
-
-		fyxmje[0].sFYXM = _T("费用项目");
-		fyxmje[1].sFYXM = _T("费用项目");
-		fyxmje[2].sFYXM = _T("费用项目");
-		fyxmje[0].sJE = _T("金额");
-		fyxmje[1].sJE = _T("金额");
-		fyxmje[2].sJE = _T("金额");
 	}
 	~_jsfp_fpxx() {}
 }JSFP_FPXX;

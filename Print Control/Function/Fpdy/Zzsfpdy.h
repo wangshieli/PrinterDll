@@ -5,38 +5,6 @@
 
 using namespace std;
 
-typedef struct _zzsfp_fyqdxx
-{
-	CString sFphxz;
-	CString sSpmc;		// 商品名称
-	CString sSpsm;		// 商品税目
-	CString sGgxh;		// 规格型号
-	CString sDw;		// 单位
-	CString sSpsl;		// 商品数量
-	CString sDj;		// 单价
-	CString sJe;		// 金额
-	CString sSl;		// 税率
-	CString sSe;		// 税额
-	CString sHsbz;		// 
-	CString sLslbs;		// 零税率报税
-
-	XM ssFphxz;			// 
-	XM ssSpmc;			// 商品名称
-	XM ssSpsm;			// 商品税目
-	XM ssGgxh;			// 规格型号
-	XM ssDw;			// 单位
-	XM ssSpsl;			// 商品数量
-	XM ssDj;			// 单价
-	XM ssJe;			// 金额
-	XM ssSl;			// 税率
-	XM ssSe;			// 税额
-	XM ssHsbz;			// 
-
-	XM sequenceNum;		// 序列号
-}ZZSFP_FYQDXX;
-
-typedef list<ZZSFP_FYQDXX> LTFPQDXX_ZZSFP;
-
 typedef struct _zzsfp_fyxmxx
 {
 	CString sFphxz;
@@ -65,13 +33,6 @@ typedef struct _zzsfp_fyxmxx
 	XM ssHsbz;
 }ZZSFP_FYXMXX;
 
-typedef struct _zzsfp_fyqtxx
-{
-	CString sSl;
-	CString sJe;
-	CString sSe;
-}ZZSFP_FYQTXX;
-
 typedef struct _zzsfp_kprq
 {
 	CString syear;
@@ -80,22 +41,7 @@ typedef struct _zzsfp_kprq
 	CString sMouth;
 	CString sday;
 	CString sDay;
-
-	XM year;
-	XM Year;
-	XM mouth;
-	XM Mouth;
-	XM day;
-	XM Day;
 }ZZSFP_KPRQ;
-
-typedef struct _zzsfp_fyxmje
-{
-	CString sFYXM;
-	CString sJE;
-	XM fyxm;
-	XM je;
-}ZZSFP_FYXMJE;
 
 typedef struct _zzsfp_fpxx
 {
@@ -151,12 +97,6 @@ typedef struct _zzsfp_fpxx
 
 	int iFyxmCount;
 	ZZSFP_FYXMXX fyxmxx[10];
-
-	int iFyqdCount;
-	LTFPQDXX_ZZSFP fpqdxx;
-
-	int iFyqtCount;
-	ZZSFP_FYQTXX fyqtxx[1000];
 
 	CString sZKJETemp;
 	CString sZKSETemp;
@@ -224,8 +164,6 @@ typedef struct _zzsfp_fpxx
 	XM skm3;//税控码第三行
 	XM skm4;//税控码第四行
 
-	ZZSFP_FYXMJE fyxmje[3];
-
 	_zzsfp_fpxx()
 	{
 		iFyxmCount = 0;
@@ -233,13 +171,6 @@ typedef struct _zzsfp_fpxx
 		kprq.sYear = _T("年");
 		kprq.sMouth = _T("月");
 		kprq.sDay = _T("日");
-
-		fyxmje[0].sFYXM = _T("费用项目");
-		fyxmje[1].sFYXM = _T("费用项目");
-		fyxmje[2].sFYXM = _T("费用项目");
-		fyxmje[0].sJE = _T("金额");
-		fyxmje[1].sJE = _T("金额");
-		fyxmje[2].sJE = _T("金额");
 	}
 	~_zzsfp_fpxx() {}
 }ZZSFP_FPXX;
@@ -255,13 +186,11 @@ public:
 
 private:
 	LONG Print(LPCTSTR billXml, CString hjje, CString hjse);
-	LONG PrintQD(LPCSTR billxml);
 
 private:
 	ZZSFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);
 	CString GenerateFpdyXml(ZZSFP_FPXX fpmx, CString dylx, FPDY fpdy);
 	CString GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy);
-	CString GenerateItemMXXml(ZZSFP_FPXX fpmx);
 
 private:
 	int m_nLineNum;
