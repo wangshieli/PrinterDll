@@ -130,19 +130,6 @@ void PostAndRecvEx(IN LPCTSTR pszPost, OUT LPSTR* pszRecv)
 		}
 		DEBUG_TRACELOG_STR("", "out fpdy");
 	}
-	else if (sDylx.Compare("1") == 0) // 增值发票清单打印
-	{
-		CString sFplxdm;
-		if (xml.FindChildElem("fplxdm")) sFplxdm = xml.GetData();
-		//if(sFplxdm.Compare("004") == 0 || sFplxdm.Compare("007") == 0)
-		//{
-			CZzsfpdy zzsfpdy;
-			CString strResult = zzsfpdy.Dlfpdy(pszPost);
-			*pszRecv = (char*)malloc(strResult.GetLength() + 1);
-			strcpy(*pszRecv, strResult);
-			return;
-		//}
-	}
 	else if (sDylx.Compare("2") == 0) //报表打印
 	{
 		CString bblx;
