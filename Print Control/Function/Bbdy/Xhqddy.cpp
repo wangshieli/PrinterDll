@@ -445,7 +445,7 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 	int nLY = 70;// 数据行高度
 
 	m_nLineNum = 0;
-	m_nPageSize = 28;
+	m_nPageSize = 26;
 	int _y = y;
 	BOOL bNewPage = TRUE;
 	int nNewPageNum = 1;
