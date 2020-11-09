@@ -344,7 +344,7 @@ CString CSpbmdy::GenerateItemMXXml(SPBM_BBXX bbxx)
 	}
 
 	m_nAllPageNum = m_nLineNum / m_nPageSize;
-	if (0 != m_nLineNum % m_nPageSize)
+	if (0 != m_nLineNum % m_nPageSize || m_nAllPageNum == 0)
 	{
 		m_nAllPageNum++;
 	}
