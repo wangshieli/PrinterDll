@@ -63,6 +63,9 @@
 #define LINE_STATE_LTB	0x00000700	// 画左竖向和上横线和右竖线
 #define LINE_STATE_LBR	0x00000800	// 画左竖向和下横线和右竖线
 
+#define COIN_Y			0x01000000	// 钱币符号 Y
+#define COIN_O			0X02000000	// 钱币符号 O
+
 #define A4_W	2100
 #define A4_H	2970
 

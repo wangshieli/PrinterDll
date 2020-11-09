@@ -203,9 +203,30 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 					itemRect.bottom = (-y - 10 - h - nYoff);
 
 					int z = z1 & 0x000000ff;
-					int ls = z1 & 0x0000ff00;
+					int ls = z1 & 0xff00ff00;
 
-					if (w != 0) // 宽度为0 ，画竖线， 高度为零， 画横线
+
+					if (COIN_Y == (ls & 0xff000000))
+					{
+						LONG r = PaintTile2(nFontSize, strFontName, itemRect, strText, z);
+						int n_x_RMB1 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB1 = itemRect.top - 20;
+
+						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1, NULL);
+						LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
+						MoveToEx(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1, NULL);
+						LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
+						MoveToEx(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13, NULL);
+						LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 31);
+						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 13, NULL);
+						LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 13);
+						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 22, NULL);
+						LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 22);
+
+						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+						itemRect.left -= 30; // 钱币符号预留 30，需要补回去
+						PaintLine(itemRect, ls & 0x0000ff00);						
+					}
+					else if (w != 0) // 宽度为0 ，画竖线， 高度为零， 画横线
 					{
 						PaintLine(itemRect, ls);
 						PaintTile(nFontSize, strFontName, itemRect, strText, z);
@@ -423,11 +444,11 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	addxml("", _xm);
 	xywhsf(_xm, x2, _y, DJ_W, hj_w, LS_9, FS, AM_ZC | LINE_STATE_LB);
 	addxml("", _xm);
-	xywhsf(_xm, x3, _y, JE_W, hj_w, LS_9, FS, AM_VCR_S | LINE_STATE_LB);
+	xywhsf(_xm, x3 + 30, _y, JE_W - 30, hj_w, LS_9, FS, AM_VCR_S | LINE_STATE_LB | COIN_Y);
 	addxml(bbxx.st_sHjje, _xm);
 	xywhsf(_xm, x4, _y, SLV_W, hj_w, LS_9, FS, AM_ZC | LINE_STATE_LB);
 	addxml("", _xm);
-	xywhsf(_xm, x5, _y, SE_W, hj_w, LS_9, FS, AM_VCR_S | LINE_STATE_LBR);
+	xywhsf(_xm, x5 + 30, _y, SE_W - 30, hj_w, LS_9, FS, AM_VCR_S | LINE_STATE_LBR | COIN_Y);
 	addxml(bbxx.st_sHjse, _xm);
 	_y += hj_w;
 
