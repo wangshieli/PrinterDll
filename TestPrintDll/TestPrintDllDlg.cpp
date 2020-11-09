@@ -228,7 +228,10 @@ void CTestPrintDllDlg::OnBnClickedButton025fp()
 	OutputDebugString(fpXmlData);
 
 	char zc[1024] = { 0 };
-	//PostAndRecvEx(fpXmlData.GetBuffer(0), zc);
+	char* pData = NULL;
+	PostAndRecvEx(fpXmlData.GetBuffer(0), &pData);
+	int i = 0;
+	FreeMem(pData);
 }
 
 
