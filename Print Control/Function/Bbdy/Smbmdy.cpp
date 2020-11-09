@@ -320,7 +320,11 @@ CString CSmbmdy::GenerateItemMXXml(SMBM_BBXX bbxx)
 	int num = 0;
 	BOOL bNewPage = TRUE;
 	int nNewPageNum = 1;
-	for (pos = bbxx.st_lSmbmBmxx.begin(); pos != bbxx.st_lSmbmBmxx.end(); pos++)
+
+	LTSMBM_BMXX::iterator posb = bbxx.st_lSmbmBmxx.begin();
+	LTSMBM_BMXX::iterator pose = bbxx.st_lSmbmBmxx.end();
+
+	do
 	{
 		if (bNewPage)
 		{
@@ -346,19 +350,65 @@ CString CSmbmdy::GenerateItemMXXml(SMBM_BBXX bbxx)
 			addxml(bbxx.st_sT4, bbxx.xmT4);
 			bNewPage = FALSE;
 		}
-		addxml(pos->st_nXh, pos->xmXh);
-		addxml(pos->st_sBm, pos->xmBm);
-		addxml(pos->st_sMc, pos->xmMc);
-		addxml(pos->st_sSlv, pos->xmSlv);
 
-		num++;
-		if (num % m_nPageSize == 0)
+		for (; posb != pose; )
 		{
-			xml.OutOfElem();
-			xml.OutOfElem();
-			bNewPage = TRUE;
+			addxml(posb->st_nXh, posb->xmXh);
+			addxml(posb->st_sBm, posb->xmBm);
+			addxml(posb->st_sMc, posb->xmMc);
+			addxml(posb->st_sSlv, posb->xmSlv);
+			posb++;
+
+			num++;
+			if (num % m_nPageSize == 0)
+			{
+				xml.OutOfElem();
+				xml.OutOfElem();
+				bNewPage = TRUE;
+				break;
+			}
 		}
-	}
+	} while (posb != pose);
+
+	//for (pos = bbxx.st_lSmbmBmxx.begin(); pos != bbxx.st_lSmbmBmxx.end(); pos++)
+	//{
+	//	if (bNewPage)
+	//	{
+	//		xml.AddElem("NewPage");
+	//		xml.AddAttrib("pn", nNewPageNum);
+	//		xml.IntoElem();
+	//		xml.AddElem("PageHeader");
+	//		xml.IntoElem();
+	//		addxml(bbxx.st_sTitle, bbxx.xmTitle);
+	//		addxml(bbxx.st_sSm, bbxx.xmSm);
+	//		addxml(bbxx.st_sDi, bbxx.xmDi);
+	//		addxml(nNewPageNum++, bbxx.xmP1);
+	//		addxml(bbxx.st_sYe1, bbxx.xmYe1);
+	//		addxml(bbxx.st_sGong, bbxx.xmGong);
+	//		addxml(m_nAllPageNum, bbxx.xmP2);
+	//		addxml(bbxx.st_sYe2, bbxx.xmYe2);
+	//		xml.OutOfElem();
+	//		xml.AddElem("PageData");
+	//		xml.IntoElem();
+	//		addxml(bbxx.st_sT1, bbxx.xmT1);
+	//		addxml(bbxx.st_sT2, bbxx.xmT2);
+	//		addxml(bbxx.st_sT3, bbxx.xmT3);
+	//		addxml(bbxx.st_sT4, bbxx.xmT4);
+	//		bNewPage = FALSE;
+	//	}
+	//	addxml(pos->st_nXh, pos->xmXh);
+	//	addxml(pos->st_sBm, pos->xmBm);
+	//	addxml(pos->st_sMc, pos->xmMc);
+	//	addxml(pos->st_sSlv, pos->xmSlv);
+
+	//	num++;
+	//	if (num % m_nPageSize == 0)
+	//	{
+	//		xml.OutOfElem();
+	//		xml.OutOfElem();
+	//		bNewPage = TRUE;
+	//	}
+	//}
 
 	if (!bNewPage)
 	{
