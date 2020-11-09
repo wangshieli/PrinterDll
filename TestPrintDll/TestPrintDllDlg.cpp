@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CTestPrintDllDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON8, &CTestPrintDllDlg::OnBnClickedButton8)
 	ON_BN_CLICKED(IDC_BUTTON9, &CTestPrintDllDlg::OnBnClickedButton9)
 	ON_BN_CLICKED(IDC_BUTTON10, &CTestPrintDllDlg::OnBnClickedButton10)
+	ON_BN_CLICKED(IDC_BUTTON11, &CTestPrintDllDlg::OnBnClickedButton11)
 END_MESSAGE_MAP()
 
 
@@ -540,4 +541,12 @@ void CTestPrintDllDlg::OnBnClickedButton10()
 	PostAndRecvEx(fpXmlData.GetBuffer(0), &pData);
 	int i = 0;
 	FreeMem(pData);
+}
+
+
+void CTestPrintDllDlg::OnBnClickedButton11()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString str = "￥￥&*&*（&……%￥#@$";
+	int l = str.GetLength();
 }
