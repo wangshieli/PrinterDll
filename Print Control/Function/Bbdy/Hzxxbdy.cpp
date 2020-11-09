@@ -337,24 +337,24 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	int x6 = x5 + XGFMCSH_W1;
 	xywhsf(_xm, x0, y, XGF_W, 200, LS_16, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("销售方", _xm);
-	xywhsf(_xm, x1, y, XGFMCSH_W, 110, LS_16, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x1, y, XGFMCSH_W, 110, LS_12, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("名称", _xm);
-	xywhsf(_xm, x1, y + 110, XGFMCSH_W, 90, LS_16, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x1, y + 110, XGFMCSH_W, 90, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("纳税人识别号", _xm);
-	xywhsf(_xm, x2, y, XGFMCSH_W1, 110, LS_16, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x2, y, XGFMCSH_W1, 110, LS_11, FS, AM_ZC | LINE_STATE_LTB);
 	addxml(bbxx.st_sXfmc, _xm);
-	xywhsf(_xm, x2, y + 110, XGFMCSH_W1, 90, LS_16, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x2, y + 110, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml(bbxx.st_sXfsh, _xm);
 
 	xywhsf(_xm, x3, y, XGF_W, 200, LS_16, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("购买方", _xm);
-	xywhsf(_xm, x4, y, XGFMCSH_W, 110, LS_16, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x4, y, XGFMCSH_W, 110, LS_12, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("名称", _xm);
-	xywhsf(_xm, x4, y + 110, XGFMCSH_W, 90, LS_16, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x4, y + 110, XGFMCSH_W, 90, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("纳税人识别号", _xm);
-	xywhsf(_xm, x5, y, XGFMCSH_W1, 110, LS_16, FS, AM_ZC | LINE_STATE_0);
+	xywhsf(_xm, x5, y, XGFMCSH_W1, 110, LS_11, FS, AM_ZC | LINE_STATE_0);
 	addxml(bbxx.st_sGfmc, _xm);
-	xywhsf(_xm, x5, y + 110, XGFMCSH_W1, 90, LS_16, FS, AM_ZC | LINE_STATE_LBR);
+	xywhsf(_xm, x5, y + 110, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_LBR);
 	addxml(bbxx.st_sGfsh, _xm);
 	y += 200;
 
@@ -370,17 +370,17 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 
 	int _y = y;
 
-	xywhsf(_xm, x0, y, MC_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x0, y, MC_W, nW, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml("货物（劳务服务）名称", _xm);
-	xywhsf(_xm, x1, y, SL_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x1, y, SL_W, nW, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml("数量", _xm);
-	xywhsf(_xm, x2, y, DJ_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x2, y, DJ_W, nW, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml("单价", _xm);
-	xywhsf(_xm, x3, y, JE_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x3, y, JE_W, nW, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml("金额", _xm);
-	xywhsf(_xm, x4, y, SLV_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x4, y, SLV_W, nW, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml("税率", _xm);
-	xywhsf(_xm, x5, y, SE_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LBR);
+	xywhsf(_xm, x5, y, SE_W, nW, LS_11, FS, AM_ZC | LINE_STATE_LBR);
 	addxml("税额", _xm);
 	_y += nW;
 
