@@ -413,10 +413,10 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
 	y += 100;
 
-	xywhsf(bbxx.xmGhdwmc, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmGhdwmc, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;
 
-	xywhsf(bbxx.xmXhdwmc, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmXhdwmc, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;
 
 	xywhsf(bbxx.xmFpdm, x0, y, 700, 50, LS_10, FS, AM_VCL);
