@@ -396,11 +396,15 @@ CString CJsfp5776dy::GenerateItemXmlG_57(JSFP_FPXX_5776 fpmx)
 	int x3 = x2 + SL57_W;
 	int x4 = x3 + JE57_W;
 
+	int b = -500;
+	if (!fpmx.st_sBz.IsEmpty())
+		b = -400;
+
 	RECT rect;
 	rect.left = 0;
 	rect.top = 0;
 	rect.right = SP57_W;
-	rect.bottom = -400;// 商品名称最高限制50
+	rect.bottom = b;// 商品名称最高限制50
 
 	LTJSFP_FYXM_5776::iterator pos;
 	CString mc = "";
@@ -441,17 +445,24 @@ CString CJsfp5776dy::GenerateItemXmlG_57(JSFP_FPXX_5776 fpmx)
 		h += 35;
 	}
 
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = 470;
-	rect.bottom = -65;
-	LONG l = PaintTile2(2, LS_9, FS, rect, fpmx.st_sBz, AM_ZL_L);
-	h += (65 - l);
-	xywhsf(fpmx.xmBz, 0, h, 470, l, LS_8, FS, AM_ZL_L);
-	h += l;
-	if (fpmx.st_sFpzt.CompareNoCase("01") == 0)
+	if (!fpmx.st_sBz.IsEmpty())
 	{
-		h += 35;
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = 470;
+		rect.bottom = -65;
+		LONG l = PaintTile2(2, LS_9, FS, rect, fpmx.st_sBz, AM_ZL_L);
+		h += (65 - l);
+		xywhsf(fpmx.xmBz, 0, h, 470, l, LS_8, FS, AM_ZL_L);
+		h += l;
+		if (fpmx.st_sFpzt.CompareNoCase("01") == 0)
+		{
+			h += 35;
+		}
+	}
+	else
+	{
+		h += 65;
 	}
 
 	xywhsf(fpmx.xmJshj, 130, h, 300, 40, LS_8, FS, AM_VCL_S);   //小写价税合计
