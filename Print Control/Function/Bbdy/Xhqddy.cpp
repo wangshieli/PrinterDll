@@ -646,6 +646,12 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 			_y = y;
 			xml.OutOfElem();
 			xml.OutOfElem();
+			nJE = 0.00;
+			nSE = 0.00;
+			nHjje = 0.00;
+			nHjse = 0.00;
+			dZKJE = 0.00;
+			dZKSE = 0.00;
 			bNewPage = TRUE;
 		}
 
@@ -772,6 +778,12 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 		_y = y;
 		xml.OutOfElem();
 		xml.OutOfElem();
+		nJE = 0.00;
+		nSE = 0.00;
+		nHjje = 0.00;
+		nHjse = 0.00;
+		dZKJE = 0.00;
+		dZKSE = 0.00;
 		bNewPage = TRUE;
 	}
 
