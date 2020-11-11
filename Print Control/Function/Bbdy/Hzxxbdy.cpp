@@ -208,7 +208,7 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 
 					if (COIN_Y == (ls & 0xff000000))
 					{
-						LONG r = PaintTile2(nFontSize, strFontName, itemRect, strText, z);
+						LONG r = PaintTile2(1, nFontSize, strFontName, itemRect, strText, z);
 						int n_x_RMB1 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB1 = itemRect.top - 20;
 
 						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1, NULL);

@@ -230,7 +230,7 @@ void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 	}
 }
 
-LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
+LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
 {
 	rect.left += _l;
 	rect.right -= _r;
@@ -256,7 +256,7 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		flags2 = DT_SINGLELINE | DT_VCENTER;
 		flags3 = DT_SINGLELINE | DT_VCENTER;
 	}
-	else if (z == AM_ZL || z == AM_ZL_EX)
+	else if (z == AM_ZL || z == AM_ZL_EX || z == AM_ZL_L)
 	{
 		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
@@ -273,6 +273,12 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
 		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
 		flags3 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+	}
+	else if (z == AM_ZR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_RIGHT;
 	}
 
 	CFont *pOldFont;
@@ -294,7 +300,7 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	LONG r = trect.right;
 	if (((h >= recv_h - _s
 		|| (r > recv_r
-			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S
+			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
@@ -312,19 +318,37 @@ LONG CFpdyBase::PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 			r = trect.right;
 		} while (((h >= recv_h - _s
 			|| (r > recv_r
-				&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S
+				&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 					|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 						&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 						&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1)));
 	}
 
 	pCDC->SetMapMode(MM_LOMETRIC);
-	pCDC->DPtoLP(&trect);
+
+	LONG lData = 0;
+	if (iType == 1)
+	{
+		pCDC->DPtoLP(&trect);
+		lData = trect.right;
+	}
+	else if (iType == 2)
+	{
+		SIZE s;
+		s.cx = 0;
+		s.cy = h;
+		pCDC->DPtoLP(&s);
+		lData = s.cy;
+	}
+	else if (iType == 3)
+	{
+		lData = fontSize;
+	}
 
 	::SelectObject(m_hPrinterDC, pOldFont);
 	fontHeader.DeleteObject();
 
-	return trect.right;
+	return lData;
 }
 
 void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
@@ -353,7 +377,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		flags2 = DT_SINGLELINE | DT_VCENTER;
 		flags3 = DT_SINGLELINE | DT_VCENTER;
 	}
-	else if (z == AM_ZL || z == AM_ZL_EX)
+	else if (z == AM_ZL || z == AM_ZL_EX || z == AM_ZL_L)
 	{
 		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
 		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
@@ -370,6 +394,12 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
 		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
 		flags3 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+	}
+	else if (z == AM_ZR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_RIGHT;
 	}
 
 	CFont *pOldFont;
@@ -391,7 +421,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	LONG r = trect.right;
 	if ((z != AM_ZL_EX) && (((h >= recv_h - _s
 		|| (r > recv_r
-			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S
+			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
@@ -409,7 +439,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 			r = trect.right;
 		} while (((h >= recv_h - _s
 			|| (r > recv_r
-				&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S
+				&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 					|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 						&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 						&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1)));
@@ -682,6 +712,9 @@ CString CFpdyBase::GenerateXMLFpdy(FPDY fpdy, int rtn)
 			break;
 		case -11:
 			fpdy.sErrorInfo = "找不到默认打印机";
+			break;
+		case -100:
+			fpdy.sErrorCode = "不支持此种票样";
 			break;
 		default:
 			rtn = 0; // StartPage成功返回的是页码

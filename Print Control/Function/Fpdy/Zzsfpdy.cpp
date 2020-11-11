@@ -215,7 +215,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff - 300);
 
-			LONG r = PaintTile2(nFontSize, strFontName, itemRect, strText, z);
+			LONG r = PaintTile2(1, nFontSize, strFontName, itemRect, strText, z);
 			int n_x_RMB1 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB1 = itemRect.top - 5;
 			
 			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1, NULL);
@@ -245,7 +245,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 				itemRect.right = x + nXoff + 190 + w;
 				itemRect.bottom = (-y - h - nYoff - 300);
 
-				r = PaintTile2(nFontSize, strFontName, itemRect, strText, z);
+				r = PaintTile2(1, nFontSize, strFontName, itemRect, strText, z);
 				int n_x_RMB2 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB2 = itemRect.top - 5;
 
 				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2, NULL);

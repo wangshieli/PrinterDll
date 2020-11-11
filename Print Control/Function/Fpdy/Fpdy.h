@@ -53,6 +53,9 @@
 
 #define AM_ZC_CHEKC 9 // 绘画区域过大时，普通水平垂直居中不能自动调整左对齐，主要用在发票查询打印客户名称商品名称
 
+#define AM_ZL_L		10
+#define AM_ZR_S		11	// 单行靠右，不居中
+
 #define LINE_STATE_0	0x00000000	// 默认自动画矩形
 #define LINE_STATE_L	0x00000100  // 画左边竖线
 #define LINE_STATE_T	0x00000200	// 画上面横线
@@ -163,7 +166,7 @@ protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
 	void setBuiltInOffset(IN int nType, OUT int &_x, OUT int &_y);
 
-	LONG PaintTile2(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+	LONG PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 
 	void PaintLine(RECT rect, int ls);
