@@ -8,6 +8,19 @@ using namespace std;
 
 typedef struct _jsfp_fyxm_5776
 {
+	_jsfp_fyxm_5776()
+	{
+		clear();
+	}
+
+	void clear()
+	{
+		st_sSpmc = "";
+		st_sSpsl = "";
+		st_sHsdj = "";
+		st_sHsje = "";
+	}
+
 	CString st_sSpmc;
 	CString st_sSpsl;
 	CString st_sHsdj;
@@ -23,6 +36,34 @@ typedef list<JSFP_FYXM_5776> LTJSFP_FYXM_5776;
 
 typedef struct _jsfp_fpxx_5776
 {
+	_jsfp_fpxx_5776()
+	{
+		clear();
+	}
+
+	void clear()
+	{
+		st_sFpdm = "";
+		st_sFphm = "";
+		st_sFpzt = "";
+		st_sKprq = "";
+		st_sJqbh = "";
+		st_sSkm = "";
+		st_sXhdwsbh = "";
+		st_sXhdwmc = "";
+		st_sGhdwsbh = "";
+		st_sGhdwmc = "";
+		st_sFppy = "";
+		st_sJshj = "";
+		st_sBz = "";
+		st_sSkr = "";
+		st_sYfpdm = "";
+		st_sYfphm = "";
+		st_sJshjDx = "";
+
+		st_lJsfp_fyxm.clear();
+	}
+
 	CString st_sFpdm;
 	CString st_sFphm;
 	CString st_sFpzt;
