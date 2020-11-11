@@ -760,7 +760,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.hjje, 1320 + 30, 610, 280 - 30, 50, LS_10, FT, AM_VCR_S);
 	xywhsf(fpmx.hjse, 1730 + 30, 610, 270 - 30, 50, LS_10, FT, AM_VCR_S);
 
-	xywhsf(fpmx.OX, 590, 695, 80, 85, LS_9, FT, ZL);
+	xywhsf(fpmx.OX, 590, 700, 80, 85, LS_9, FT, ZL);
 	xywhsf(fpmx.jshjDx, 610, 660, 790, 85, LS_9, FS, AM_VCL_S);   //大写价税合计
 	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL_S);   //小写价税合计
 
