@@ -369,7 +369,7 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 
 	}
 
-	if (m_nLineNum%m_nPageSize != 0)
+	if (m_nLineNum%m_nPageSize != 0 || m_nAllPageNum == 0)
 	{
 		int _w = 300;
 		BBPAGE_END be;
@@ -382,7 +382,7 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 	}
 
 	m_nAllPageNum = m_nLineNum / m_nPageSize;
-	if (0 != m_nLineNum % m_nPageSize)
+	if (0 != m_nLineNum % m_nPageSize || m_nAllPageNum == 0)
 	{
 		m_nAllPageNum++;
 	}
@@ -390,7 +390,11 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 	int num = 0;
 	BOOL bNewPage = TRUE;
 	int nNewPageNum = 1;
-	for (pos = bbxx.st_lFpzlqdBbxx.begin(); pos != bbxx.st_lFpzlqdBbxx.end(); pos++)
+
+	LTFPZLQD_QDXX::iterator posb = bbxx.st_lFpzlqdBbxx.begin();
+	LTFPZLQD_QDXX::iterator pose = bbxx.st_lFpzlqdBbxx.end();
+
+	do
 	{
 		if (bNewPage)
 		{
@@ -435,23 +439,90 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 			addxml(bbxx.st_sT8, bbxx.xmT8);
 			bNewPage = FALSE;
 		}
-		addxml(pos->st_nXh, pos->xmXh);
-		addxml(pos->st_sFpzl, pos->xmFpzl);
-		addxml(pos->st_sFpdm, pos->xmFpdm);
-		addxml(pos->st_sFphm, pos->xmFphm);
-		addxml(pos->st_sKprq, pos->xmKprq);
-		addxml(pos->st_sGfsh, pos->xmGfsh);
-		addxml(pos->st_sHjje, pos->xmHjje);
-		addxml(pos->st_sHjse, pos->xmHjse);
 
-		num++;
-		if (num % m_nPageSize == 0)
+		for (; posb != pose; )
 		{
-			xml.OutOfElem();
-			xml.OutOfElem();
-			bNewPage = TRUE;
+			addxml(pos->st_nXh, pos->xmXh);
+			addxml(pos->st_sFpzl, pos->xmFpzl);
+			addxml(pos->st_sFpdm, pos->xmFpdm);
+			addxml(pos->st_sFphm, pos->xmFphm);
+			addxml(pos->st_sKprq, pos->xmKprq);
+			addxml(pos->st_sGfsh, pos->xmGfsh);
+			addxml(pos->st_sHjje, pos->xmHjje);
+			addxml(pos->st_sHjse, pos->xmHjse);
+
+			num++;
+			if (num % m_nPageSize == 0)
+			{
+				xml.OutOfElem();
+				xml.OutOfElem();
+				bNewPage = TRUE;
+			}
 		}
-	}
+	} while (posb != pose);
+
+	//for (pos = bbxx.st_lFpzlqdBbxx.begin(); pos != bbxx.st_lFpzlqdBbxx.end(); pos++)
+	//{
+	//	if (bNewPage)
+	//	{
+	//		xml.AddElem("NewPage");
+	//		xml.AddAttrib("pn", nNewPageNum);
+	//		xml.IntoElem();
+	//		xml.AddElem("PageHeader");
+	//		xml.IntoElem();
+	//		addxml(bbxx.st_sTitle, bbxx.xmTitle);
+	//		addxml(bbxx.st_sZbrq, bbxx.xmZbrq);
+	//		addxml(bbxx.st_sDi, bbxx.xmDi);
+	//		addxml(nNewPageNum++, bbxx.xmP1);
+	//		addxml(bbxx.st_sYe1, bbxx.xmYe1);
+	//		addxml(bbxx.st_sGong, bbxx.xmGong);
+	//		addxml(m_nAllPageNum, bbxx.xmP2);
+	//		addxml(bbxx.st_sYe2, bbxx.xmYe2);
+	//		addxml(bbxx.st_sName, bbxx.xmName);
+	//		addxml(bbxx.st_sSsq, bbxx.xmSsq);
+	//		addxml(bbxx.st_sNsrsbh, bbxx.xmNsrsbh);
+	//		addxml(bbxx.st_sQymc, bbxx.xmQymc);
+	//		addxml(bbxx.st_sDzdh, bbxx.xmDzdh);
+	//		addxml(bbxx.st_sDw, bbxx.xmDw);
+
+	//		BBPAGE_END be = bbxx.st_lBbpage_end.front();
+	//		addxml(bbxx.st_sTbr, be.xmTbr);
+	//		addxml(bbxx.st_sCyr, be.xmCyr);
+	//		addxml(bbxx.st_sLrr, be.xmLrr);
+	//		addxml(bbxx.st_sFhr, be.xmFhr);
+	//		addxml(bbxx.st_sSjr, be.xmSjr);
+	//		bbxx.st_lBbpage_end.pop_front();
+
+	//		xml.OutOfElem();
+	//		xml.AddElem("PageData");
+	//		xml.IntoElem();
+	//		addxml(bbxx.st_sT1, bbxx.xmT1);
+	//		addxml(bbxx.st_sT2, bbxx.xmT2);
+	//		addxml(bbxx.st_sT3, bbxx.xmT3);
+	//		addxml(bbxx.st_sT4, bbxx.xmT4);
+	//		addxml(bbxx.st_sT5, bbxx.xmT5);
+	//		addxml(bbxx.st_sT6, bbxx.xmT6);
+	//		addxml(bbxx.st_sT7, bbxx.xmT7);
+	//		addxml(bbxx.st_sT8, bbxx.xmT8);
+	//		bNewPage = FALSE;
+	//	}
+	//	addxml(pos->st_nXh, pos->xmXh);
+	//	addxml(pos->st_sFpzl, pos->xmFpzl);
+	//	addxml(pos->st_sFpdm, pos->xmFpdm);
+	//	addxml(pos->st_sFphm, pos->xmFphm);
+	//	addxml(pos->st_sKprq, pos->xmKprq);
+	//	addxml(pos->st_sGfsh, pos->xmGfsh);
+	//	addxml(pos->st_sHjje, pos->xmHjje);
+	//	addxml(pos->st_sHjse, pos->xmHjse);
+
+	//	num++;
+	//	if (num % m_nPageSize == 0)
+	//	{
+	//		xml.OutOfElem();
+	//		xml.OutOfElem();
+	//		bNewPage = TRUE;
+	//	}
+	//}
 
 	if (!bNewPage)
 	{
