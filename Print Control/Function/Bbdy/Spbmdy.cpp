@@ -254,9 +254,9 @@ SPBM_BBXX CSpbmdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 			if (xml.FindElem("hsbz"))     bmxx.st_sHsbz = xml.GetData();
 
 			if (bmxx.st_sHsbz.Compare("0") == 0)
-				bmxx.st_sHsbz = "不含税";
+				bmxx.st_sHsbz = "否";
 			else if (bmxx.st_sHsbz.Compare("1") == 0)
-				bmxx.st_sHsbz = "含税";
+				bmxx.st_sHsbz = "是";
 			xml.OutOfElem();
 
 			bbxx.st_lSpbmBmxx.push_back(bmxx);

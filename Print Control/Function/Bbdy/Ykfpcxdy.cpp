@@ -195,7 +195,7 @@ LONG CYkfpcxdy::PrintQD(LPCSTR billxml)
 
 					PaintLine(itemRect, ls);
 
-					PaintTile(nFontSize, strFontName, itemRect, strText, z);
+					PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 0, 10);
 				}
 				xml.OutOfElem();
 			}

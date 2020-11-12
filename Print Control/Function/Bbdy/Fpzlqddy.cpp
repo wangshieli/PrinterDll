@@ -315,11 +315,11 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 	y += 50;
 	xywhsf(bbxx.xmSsq, x0, y, 500, 50, LS_10, FS, AM_VCL);
 	y += 50;
-	xywhsf(bbxx.xmNsrsbh, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmNsrsbh, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;
-	xywhsf(bbxx.xmQymc, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmQymc, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;
-	xywhsf(bbxx.xmDzdh, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmDzdh, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;
 	xywhsf(bbxx.xmDw, x0, y, 500, 50, LS_10, FS, AM_VCL);
 	y += 50;

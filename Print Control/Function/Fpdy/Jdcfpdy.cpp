@@ -168,8 +168,8 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString zzzse)
 			::DeleteObject(hBitmap);
 
 			int n_x_RMB1 = 1590 + 190, n_y_RMB1 = -745 - 330;
-			int n_x_RMB2 = 700 + 190, n_y_RMB2 = -1125 - 330 - 5;
-			int n_x_RMB3 = 390 + 190, n_y_RMB3 = -1230 - 330 - 5;
+			int n_x_RMB2 = 700 + 190, n_y_RMB2 = -1125 - 330 - 7;
+			int n_x_RMB3 = 390 + 190, n_y_RMB3 = -1230 - 330 - 7;
 
 			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - nYoff, NULL);
 			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
