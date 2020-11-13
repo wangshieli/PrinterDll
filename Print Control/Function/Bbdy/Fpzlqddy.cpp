@@ -338,7 +338,7 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 	int nLY = 90;// 数据行高度
 
 	m_nLineNum = 0;
-	m_nPageSize = 25;
+	m_nPageSize = 22;
 	int _y = y;
 	LTFPZLQD_QDXX::iterator pos;
 	for (pos = bbxx.st_lFpzlqdBbxx.begin(); pos != bbxx.st_lFpzlqdBbxx.end(); pos++)
