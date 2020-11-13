@@ -230,6 +230,83 @@ void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 	}
 }
 
+int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, int width)
+{
+	int length = 0, chCount = 0;
+	int chineseCount = 0;
+	BOOL chineseFlag = FALSE;
+	int i = s;
+	CString str = m_szText.Mid(s);
+	for (; i < m_szText.GetLength(); ++i) {	
+		CSize size;
+		chineseFlag = FALSE;
+		char c = m_szText.GetAt(i);
+
+		if ( c == '\n')
+		{
+			s = i + 1;
+			return DealData(pDC, m_szText, s, width);
+		}
+
+		if (c < 0 || c>255)//如果是中文字符就
+		{
+			chineseCount += 1;
+			i += 1;
+			chineseFlag = TRUE;
+		}
+		size = pDC->GetTextExtent(str.Right(i + 1 - s));
+		if ((size.cx) / width) {
+			if (chineseFlag == TRUE) {
+				if (m_szText.GetAt(i - 1) < 0) {//遇到中文字符中间超越DES DC边界需回退
+					chineseCount -= 1;
+					m_szText.Insert(i - 1, '\n');
+					/*i-=1;*/
+
+				}
+			}
+			else {
+				m_szText.Insert(i, '\n');
+				i += 1;//将当前索引定位到‘\N’之后的第一个字节
+			}
+			chCount += 1;
+			//i -= 1;//因为I要自增1，如果插入\N后，减1以抵消循环增1
+
+			s = i;
+			return DealData(pDC, m_szText, s, width);
+		}
+	}
+	return chCount + 1;
+}
+
+int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect)
+{
+	fontNew->CreatePointFont(f, FontType, pDC);
+	fontOld = (CFont *)(::SelectObject(m_hPrinterDC, *fontNew));
+
+	CString data1 = data;
+
+	DealData(pDC, data1, 0, rect.right - rect.left);
+
+	RECT trect = rect;
+
+	int recv_h = rect.bottom - rect.top;
+	int recv_r = rect.right;
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags);
+	LONG r = trect.right;
+	if (((h >= recv_h
+		|| (r > recv_r)) && ((f -= 1) || 1)))
+	{
+		::SelectObject(m_hPrinterDC, fontOld);
+		fontNew->DeleteObject();
+
+		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect);
+	}
+
+	_trect = trect;
+
+	return h;
+}
+
 LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
 {
 	rect.left += _l;
@@ -292,6 +369,10 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+	CString data1 = data;
+	CString data2 = data;
+	DealData(pCDC, data1, 0, rect.right - rect.left);
+
 	RECT trect = rect;
 
 	int recv_h = rect.bottom - rect.top;
@@ -303,25 +384,11 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
-		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((rect.top = rect.top + (recv_h - h) / 2) && 0))) //如果多行，居中左对齐
+					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))) //如果多行，居中左对齐
 	{
-		do
-		{
-			::SelectObject(m_hPrinterDC, pOldFont);
-			fontHeader.DeleteObject();
-
-			fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
-			trect = rect;
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-			h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
-			r = trect.right;
-		} while (((h >= recv_h - _s
-			|| (r > recv_r
-				&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
-					|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
-						&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-						&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1)));
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
 	}
 
 	pCDC->SetMapMode(MM_LOMETRIC);
@@ -413,11 +480,15 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	fontHeader.CreatePointFont(fontSize, FontType, pCDC);
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+	CString data1 = data;
+	CString data2 = data;
+	DealData(pCDC, data1, 0, rect.right - rect.left);
+
 	RECT trect = rect;
 
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
-	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 	LONG r = trect.right;
 	if ((z != AM_ZL_EX) && (((h >= recv_h - _s
 		|| (r > recv_r
@@ -426,30 +497,21 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
 		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((rect.top = rect.top + (recv_h - h) / 2) && 0)))) //如果多行，居中左对齐
-	{
-		do
-		{
-			::SelectObject(m_hPrinterDC, pOldFont);
-			fontHeader.DeleteObject();
+	{		
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
 
-			fontHeader.CreatePointFont(fontSize, FontType, pCDC);
-			trect = rect;
-			pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-			h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
-			r = trect.right;
-		} while (((h >= recv_h - _s
-			|| (r > recv_r
-				&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
-					|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
-						&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
-						&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1)));
-		rect.top = rect.top + (recv_h - h) / 2;
+		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
+			rect.top = rect.top + (recv_h - h) / 2;
 	}
 
+	DealData(pCDC, data2, 0, rect.right - rect.left);
+
 	if (rect.right >= trect.right)
-		::DrawText(m_hPrinterDC, data, -1, &rect, flags2);
+		::DrawText(m_hPrinterDC, data2, -1, &rect, flags2);
 	else
-		::DrawText(m_hPrinterDC, data, -1, &rect, flags3);
+		::DrawText(m_hPrinterDC, data2, -1, &rect, flags3);
 
 	::SelectObject(m_hPrinterDC, pOldFont);
 	fontHeader.DeleteObject();

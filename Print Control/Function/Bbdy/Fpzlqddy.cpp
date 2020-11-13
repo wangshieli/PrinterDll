@@ -442,14 +442,15 @@ CString CFpzlqddy::GenerateItemMXXml(FPZLQD_BBXX bbxx)
 
 		for (; posb != pose; )
 		{
-			addxml(pos->st_nXh, pos->xmXh);
-			addxml(pos->st_sFpzl, pos->xmFpzl);
-			addxml(pos->st_sFpdm, pos->xmFpdm);
-			addxml(pos->st_sFphm, pos->xmFphm);
-			addxml(pos->st_sKprq, pos->xmKprq);
-			addxml(pos->st_sGfsh, pos->xmGfsh);
-			addxml(pos->st_sHjje, pos->xmHjje);
-			addxml(pos->st_sHjse, pos->xmHjse);
+			addxml(posb->st_nXh, posb->xmXh);
+			addxml(posb->st_sFpzl, posb->xmFpzl);
+			addxml(posb->st_sFpdm, posb->xmFpdm);
+			addxml(posb->st_sFphm, posb->xmFphm);
+			addxml(posb->st_sKprq, posb->xmKprq);
+			addxml(posb->st_sGfsh, posb->xmGfsh);
+			addxml(posb->st_sHjje, posb->xmHjje);
+			addxml(posb->st_sHjse, posb->xmHjse);
+			posb++;
 
 			num++;
 			if (num % m_nPageSize == 0)

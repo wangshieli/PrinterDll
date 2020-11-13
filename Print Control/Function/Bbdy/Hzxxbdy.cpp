@@ -465,7 +465,7 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 
 	x0 = 0;
 	xywhsf(_xm, x0, y, XGF_W, _y - y, LS_16, FS, AM_ZC | LINE_STATE_LB);
-	addxml("开具\r\n红字\r\n专用\r\n发票\r\n内容", _xm);
+	addxml("开具\n红字\n专用\n发票\n内容", _xm);
 	y = _y;
 
 	int w = x6 - XGF_W;
