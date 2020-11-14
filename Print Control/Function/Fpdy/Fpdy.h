@@ -167,7 +167,7 @@ protected:
 	void setBuiltInOffset(IN int nType, OUT int &_x, OUT int &_y);
 
 	int DealData(CDC *pDC, CString& m_szText, int s, int width);
-	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect);
+	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s);
 
 	LONG PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);

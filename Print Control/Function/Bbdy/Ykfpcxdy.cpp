@@ -4,24 +4,6 @@
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
 
-#define FPLX_W	300
-#define FPZT_W	160
-#define FPDM_W	210
-#define FPHM_W	210
-#define SCZT_W	200
-#define KHMC_W	790
-#define ZYSPMC_W	790
-#define SE_W	290
-#define HJJE_W	290
-#define JSHJ_W	290
-#define YFPDM_W	290
-#define YFPHM_W	290
-#define TZDBH_W	400
-#define KPR_W	270
-#define KPRQ_W	270
-#define ZFR_W	270
-#define ZFRQ_W	270
-
 CYkfpcxdy::CYkfpcxdy()
 {
 }
@@ -215,7 +197,6 @@ YKFPCX_BBXX CYkfpcxdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 	CMarkup xml;
 	YKFPCX_BBXX bbxx;
 	bbxx.clear();
-	YKFPCX_FPXX bbxm;
 	int booltrue = false;
 	CString sl = "";
 
@@ -233,23 +214,21 @@ YKFPCX_BBXX CYkfpcxdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 
 	if (xml.FindElem("title")) bbxx.st_sTitle = xml.GetData();
 	if (xml.FindElem("sm")) bbxx.st_sSm = xml.GetData();
-	if (xml.FindElem("t1")) bbxx.st_sT1 = xml.GetData();
-	if (xml.FindElem("t2")) bbxx.st_sT2 = xml.GetData();
-	if (xml.FindElem("t3")) bbxx.st_sT3 = xml.GetData();
-	if (xml.FindElem("t4")) bbxx.st_sT4 = xml.GetData();
-	if (xml.FindElem("t5")) bbxx.st_sT5 = xml.GetData();
-	if (xml.FindElem("t6")) bbxx.st_sT6 = xml.GetData();
-	if (xml.FindElem("t7")) bbxx.st_sT7 = xml.GetData();
-	if (xml.FindElem("t8")) bbxx.st_sT8 = xml.GetData();
-	if (xml.FindElem("t9")) bbxx.st_sT9 = xml.GetData();
-	if (xml.FindElem("t10")) bbxx.st_sT10 = xml.GetData();
-	if (xml.FindElem("t11")) bbxx.st_sT11 = xml.GetData();
-	if (xml.FindElem("t12")) bbxx.st_sT12 = xml.GetData();
-	if (xml.FindElem("t13")) bbxx.st_sT13 = xml.GetData();
-	if (xml.FindElem("t14")) bbxx.st_sT14 = xml.GetData();
-	if (xml.FindElem("t15")) bbxx.st_sT15 = xml.GetData();
-	if (xml.FindElem("t16")) bbxx.st_sT16 = xml.GetData();
-	if (xml.FindElem("t17")) bbxx.st_sT17 = xml.GetData();
+	int tc = 0;
+	if (xml.FindElem("tc")) bbxx.st_nTc = atoi(xml.GetData());
+	for (int i = 0; i < bbxx.st_nTc; i++)
+	{
+		YKFPCX_ITEM im;
+		CString key = "";
+		key.Format("t%d", i + 1);
+		if (xml.FindElem(key))
+		{
+			im.st_sName = xml.GetData();
+			im.st_sKey = getChineseSpell(im.st_sName);
+			im.st_nWide = GetWideByItemName(im.st_sKey);
+			bbxx.st_lItem.push_back(im);
+		}
+	}
 
 	if (xml.FindElem("fpxxs"))
 	{
@@ -259,26 +238,21 @@ YKFPCX_BBXX CYkfpcxdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 		{
 			xml.FindElem("fpxx");
 			xml.IntoElem();
-			if (xml.FindElem("fplx")) bbxm.st_sFplx = xml.GetData();
-			if (xml.FindElem("fpzt"))   bbxm.st_sFpzt = xml.GetData();
-			if (xml.FindElem("fpdm"))  bbxm.st_sFpdm = xml.GetData();
-			if (xml.FindElem("fphm"))  bbxm.st_sFphm = xml.GetData();
-			if (xml.FindElem("sczt"))  bbxm.st_sSczt = xml.GetData();
-			if (xml.FindElem("khmc"))  bbxm.st_sKhmc = xml.GetData();
-			if (xml.FindElem("zyspmc"))  bbxm.st_sZyspmc = xml.GetData();
-			if (xml.FindElem("se"))   bbxm.st_sSe = xml.GetData();
-			if (xml.FindElem("hjje"))   bbxm.st_sHjje = xml.GetData();
-			if (xml.FindElem("jshj"))   bbxm.st_sJshj = xml.GetData();
-			if (xml.FindElem("yfpdm"))   bbxm.st_sYfpdm = xml.GetData();
-			if (xml.FindElem("yfphm"))   bbxm.st_sYfphm = xml.GetData();
-			if (xml.FindElem("tzdbh"))   bbxm.st_sTzdbh = xml.GetData();
-			if (xml.FindElem("kpr"))   bbxm.st_sKpr = xml.GetData();
-			if (xml.FindElem("kprq"))   bbxm.st_sKprq = xml.GetData();
-			if (xml.FindElem("zfr"))   bbxm.st_sZfr = xml.GetData();
-			if (xml.FindElem("zfrq"))   bbxm.st_sZfrq = xml.GetData();
+			vector<YKFPCX_ITEM_DATA_XX> v_ix;
+			YKFPCX_ITEM_DATA_XX ix;
+			LTYKFPCX_ITEM::iterator pos;
+			for (pos = bbxx.st_lItem.begin(); pos != bbxx.st_lItem.end(); pos++)
+			{
+				if (xml.FindElem(pos->st_sKey))
+				{
+					ix.item_data = xml.GetData();
+					ix.nItemWide = pos->st_nWide;
+					ix.nItemFlags = GetFlagsByName(pos->st_sKey);
+					v_ix.push_back(ix);
+				}
+			}
+			bbxx.st_vData.push_back(v_ix);
 			xml.OutOfElem();
-
-			bbxx.st_lYkfpcx_fpxx.push_back(bbxm);
 		}
 		xml.OutOfElem();
 	}
@@ -302,22 +276,45 @@ CString CYkfpcxdy::GenerateFpdyXml(YKFPCX_BBXX bbxx, CString dylx, BBDY bbdy)
 CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 {
 	CMarkup xml;
-	//m_nPageSize = LINEFEED_L;
 	m_nPageSize = 19;
 
-	// 处理第一部分
-	int x0 = 0;
-	int x1 = x0 + FPLX_W;
-	int x2 = x1 + FPZT_W;
-	int x3 = x2 + FPDM_W;
-	int x4 = x3 + FPHM_W;
-	int x5 = x4 + SCZT_W;
-	int x6 = x5 + KHMC_W;
+	int _nItemPageCount = 0; // 标题需要的分页数
+	int _nPageWide = 0; // 当前页的宽度（记录）
+	int _nPageItemNums = 0; // 每一页的标题数量
+	int _nItemNums = 0; // 当前页的标题数量（记录）
+	LTYKFPCX_ITEM::iterator pos_item;
+	for (pos_item = bbxx.st_lItem.begin(); pos_item != bbxx.st_lItem.end(); pos_item++)
+	{	
+		_nItemNums++;
+		_nPageWide += pos_item->st_nWide;
+		if (_nPageWide > 2000)
+		{
+			_nPageItemNums = (((--_nItemNums) << (_nItemPageCount) * 8) | _nPageItemNums);
+			_nItemPageCount++;
+			_nPageWide = pos_item->st_nWide;
+			_nItemNums = 1;
+		}
+	}
+
+	if (_nPageWide <= 2000)
+	{
+		_nPageItemNums = ((_nItemNums << (_nItemPageCount) * 8) | _nPageItemNums);
+		_nItemPageCount++;
+	}
+
+	m_nAllPageNum = bbxx.st_vData.size() / m_nPageSize;
+	if (0 != bbxx.st_vData.size() % m_nPageSize)
+	{
+		m_nAllPageNum++;
+	}
+
+	m_nAllPageNum *= _nItemPageCount;
+
 
 	int y = 0;
-	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
+	xywhsf(bbxx.xmTitle, 0, y, 1990, 100, LS_16, FS, AM_ZC);
 	y += 100;
-	xywhsf(bbxx.xmSm, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmSm, 0, y, 500, 50, LS_10, FS, AM_VCL);
 	xywhsf(bbxx.xmDi, 1350, y, 80, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmP1, 1430, y, 90, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmYe1, 1520, y, 80, 50, LS_10, FS, AM_ZC);
@@ -326,274 +323,276 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 	xywhsf(bbxx.xmYe2, 1770, y, 80, 50, LS_10, FS, AM_ZC);
 	y += 50;
 
-	int nW = 70; // 标题项高度
-	xywhsf(bbxx.xmT1, x0, y, FPLX_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT2, x1, y, FPZT_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT3, x2, y, FPDM_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT4, x3, y, FPHM_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT5, x4, y, SCZT_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT6, x5, y, KHMC_W, nW, LS_9, FS, AM_ZC | LINE_STATE_0);
-	y += nW;
-
-	int nLY = 140; // 数据行高度
-	m_nLineNum = 0;
-	LTYKFPCX_FPXX::iterator pos;
-	int _y = y;
-	for (pos = bbxx.st_lYkfpcx_fpxx.begin(); pos != bbxx.st_lYkfpcx_fpxx.end(); pos++)
-	{
-		xywhsf(pos->xmFplx, x0, _y, FPLX_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmFpzt, x1, _y, FPZT_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmFpdm, x2, _y, FPDM_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmFphm, x3, _y, FPHM_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmSczt, x4, _y, SCZT_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmKhmc, x5, _y, KHMC_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LBR);
-		_y += nLY;
-
-		m_nLineNum++;
-		if (m_nLineNum%m_nPageSize == 0)
-		{
-			_y = y;
-		}
-	}
-
-	m_nAllPageNum = m_nLineNum / m_nPageSize;
-	if (0 != m_nLineNum % m_nPageSize)
-	{
-		m_nAllPageNum++;
-	}
-
-	m_nAllPageNum *= 3;
-
-	int num = 0;
-	BOOL bNewPage = TRUE;
 	int nNewPageNum = 1;
-	for (pos = bbxx.st_lYkfpcx_fpxx.begin(); pos != bbxx.st_lYkfpcx_fpxx.end(); pos++)
-	{
-		if (bNewPage)
+	int _nTemp = 0;
+	int _nIndexOfItem = 0;
+	int _nPageSize = 0;
+	while (_nTemp < 4 && (_nPageSize = ((_nPageItemNums >> (8 * _nTemp++)) & 0x000000ff)))
+	{	
+		int nW = 70; // 标题项高度
+		int _TempSize = _nPageSize;
+		int _nPostion = 0;
+		pos_item = bbxx.st_lItem.begin();
+		for (int i = 0; i < _nIndexOfItem; i++)
 		{
-			xml.AddElem("NewPage");
-			xml.AddAttrib("pn", nNewPageNum);
-			xml.IntoElem();
-			xml.AddElem("PageHeader");
-			xml.IntoElem();
-			addxml(bbxx.st_sTitle, bbxx.xmTitle);
-			addxml(bbxx.st_sSm, bbxx.xmSm);			
-			addxml(bbxx.st_sDi, bbxx.xmDi);
-			addxml(nNewPageNum++, bbxx.xmP1);
-			addxml(bbxx.st_sYe1, bbxx.xmYe1);
-			addxml(bbxx.st_sGong, bbxx.xmGong);
-			addxml(m_nAllPageNum, bbxx.xmP2);
-			addxml(bbxx.st_sYe2, bbxx.xmYe2);
-			xml.OutOfElem();
-			xml.AddElem("PageData");
-			xml.IntoElem();
-			addxml(bbxx.st_sT1, bbxx.xmT1);
-			addxml(bbxx.st_sT2, bbxx.xmT2);
-			addxml(bbxx.st_sT3, bbxx.xmT3);
-			addxml(bbxx.st_sT4, bbxx.xmT4);
-			addxml(bbxx.st_sT5, bbxx.xmT5);
-			addxml(bbxx.st_sT6, bbxx.xmT6);
-			bNewPage = FALSE;
+			pos_item++;
 		}
-		addxml(pos->st_sFplx, pos->xmFplx);
-		addxml(pos->st_sFpzt, pos->xmFpzt);
-		addxml(pos->st_sFpdm, pos->xmFpdm);
-		addxml(pos->st_sFphm, pos->xmFphm);
-		addxml(pos->st_sSczt, pos->xmSczt);
-		addxml(pos->st_sKhmc, pos->xmKhmc);
+		for (; pos_item != bbxx.st_lItem.end() && _TempSize-- > 0; pos_item++)
+		{
+			UINT flags = (_TempSize == 0 ? AM_ZC | LINE_STATE_0 : AM_ZC | LINE_STATE_LTB);
+			xywhsf(pos_item->st_xmName, _nPostion, y, pos_item->st_nWide, nW, LS_9, FS, flags);
+			_nPostion += pos_item->st_nWide;
+		}
 
-		num++;
-		if (num % m_nPageSize == 0)
+		BOOL bNewPage = TRUE;
+		int _y = y;		
+
+		int nLY = 140; // 数据行高度
+		m_nLineNum = 0;
+		vector<vector<YKFPCX_ITEM_DATA_XX>>::iterator pos;
+		_TempSize = _nPageSize;
+		for (pos = bbxx.st_vData.begin(); pos != bbxx.st_vData.end(); pos++)
+		{
+			_nPostion = 0;
+			if (bNewPage)
+			{
+				_y += nW;
+				xml.AddElem("NewPage");
+				xml.AddAttrib("pn", nNewPageNum);
+				xml.IntoElem();
+				xml.AddElem("PageHeader");
+				xml.IntoElem();
+				addxml(bbxx.st_sTitle, bbxx.xmTitle);
+				addxml(bbxx.st_sDi, bbxx.xmDi);
+				addxml(nNewPageNum++, bbxx.xmP1);
+				addxml(bbxx.st_sYe1, bbxx.xmYe1);
+				addxml(bbxx.st_sGong, bbxx.xmGong);
+				addxml(m_nAllPageNum, bbxx.xmP2);
+				addxml(bbxx.st_sYe2, bbxx.xmYe2);
+
+				xml.OutOfElem();
+				xml.AddElem("PageData");
+				xml.IntoElem();
+				_TempSize = _nPageSize;
+				pos_item = bbxx.st_lItem.begin();
+				for (int i = 0; i < _nIndexOfItem; i++)
+				{
+					pos_item++;
+				}
+				for (; pos_item != bbxx.st_lItem.end() && _TempSize-- > 0; pos_item++)
+				{
+					addxml(pos_item->st_sName, pos_item->st_xmName);
+				}
+				bNewPage = FALSE;
+			}
+
+			_TempSize = _nPageSize;
+			for (vector<YKFPCX_ITEM_DATA_XX>::iterator v_pos = pos->begin() + _nIndexOfItem; v_pos != pos->end() && _TempSize-- > 0; v_pos++)
+			{
+				UINT flags = v_pos->nItemFlags;
+				flags = (_TempSize == 0 ? flags | LINE_STATE_LBR : flags | LINE_STATE_LTB);
+				xywhsf(v_pos->xmItem_data, _nPostion, _y, v_pos->nItemWide, nLY, LS_9, FS, flags);
+				addxml(v_pos->item_data, v_pos->xmItem_data);
+				_nPostion += v_pos->nItemWide;
+			}
+			_y += nLY;
+
+			m_nLineNum++;
+			if (m_nLineNum%m_nPageSize == 0)
+			{
+				xml.OutOfElem();
+				xml.OutOfElem();
+				bNewPage = TRUE;
+				_y = y;
+			}
+		}
+
+		if (!bNewPage)
 		{
 			xml.OutOfElem();
 			xml.OutOfElem();
 			bNewPage = TRUE;
-		}
-	}
-
-	if (!bNewPage)
-	{
-		xml.OutOfElem();
-		xml.OutOfElem();
-		bNewPage = TRUE;
-	}
-
-	// 处理第二部分
-
-	x0 = 0;
-	x1 = x0 + ZYSPMC_W;
-	x2 = x1 + SE_W;
-	x3 = x2 + HJJE_W;
-	x4 = x3 + JSHJ_W;
-	x5 = x4 + YFPDM_W;
-
-	y -= nW;
-	xywhsf(bbxx.xmT7, x0, y, ZYSPMC_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT8, x1, y, SE_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT9, x2, y, HJJE_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT10, x3, y, JSHJ_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT11, x4, y, YFPDM_W, nW, LS_9, FS, AM_ZC | LINE_STATE_0);
-	y += nW;
-
-	m_nLineNum = 0;
-	_y = y;
-	for (pos = bbxx.st_lYkfpcx_fpxx.begin(); pos != bbxx.st_lYkfpcx_fpxx.end(); pos++)
-	{
-		xywhsf(pos->xmZyspmc, x0, _y, ZYSPMC_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_LB);
-		xywhsf(pos->xmSe, x1, _y, SE_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmHjje, x2, _y, HJJE_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmJshj, x3, _y, JSHJ_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmYfpdm, x4, _y, YFPDM_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LBR);
-		_y += nLY;
-
-		m_nLineNum++;
-		if (m_nLineNum%m_nPageSize == 0)
-		{
 			_y = y;
 		}
-	}
 
-	num = 0;
-	bNewPage = TRUE;
-	for (pos = bbxx.st_lYkfpcx_fpxx.begin(); pos != bbxx.st_lYkfpcx_fpxx.end(); pos++)
-	{
-		if (bNewPage)
-		{
-			xml.AddElem("NewPage");
-			xml.AddAttrib("pn", nNewPageNum);
-			xml.IntoElem();
-			xml.AddElem("PageHeader");
-			xml.IntoElem();
-			addxml(bbxx.st_sTitle, bbxx.xmTitle);
-			addxml(bbxx.st_sSm, bbxx.xmSm);
-			addxml(bbxx.st_sDi, bbxx.xmDi);
-			addxml(nNewPageNum++, bbxx.xmP1);
-			addxml(bbxx.st_sYe1, bbxx.xmYe1);
-			addxml(bbxx.st_sGong, bbxx.xmGong);
-			addxml(m_nAllPageNum, bbxx.xmP2);
-			addxml(bbxx.st_sYe2, bbxx.xmYe2);
-			xml.OutOfElem();
-			xml.AddElem("PageData");
-			xml.IntoElem();
-			addxml(bbxx.st_sT7, bbxx.xmT7);
-			addxml(bbxx.st_sT8, bbxx.xmT8);
-			addxml(bbxx.st_sT9, bbxx.xmT9);
-			addxml(bbxx.st_sT10, bbxx.xmT10);
-			addxml(bbxx.st_sT11, bbxx.xmT11);			
-			bNewPage = FALSE;
-		}
-		addxml(pos->st_sZyspmc, pos->xmZyspmc);
-		addxml(pos->st_sSe, pos->xmSe);
-		addxml(pos->st_sHjje, pos->xmHjje);
-		addxml(pos->st_sJshj, pos->xmJshj);
-		addxml(pos->st_sYfpdm, pos->xmYfpdm);
-
-		num++;
-		if (num % m_nPageSize == 0)
-		{
-			xml.OutOfElem();
-			xml.OutOfElem();
-			bNewPage = TRUE;
-		}
-	}
-
-	if (!bNewPage)
-	{
-		xml.OutOfElem();
-		xml.OutOfElem();
-		bNewPage = TRUE;
-	}
-
-	// 处理第三部分
-
-	x0 = 0;
-	x1 = x0 + YFPHM_W;
-	x2 = x1 + TZDBH_W;
-	x3 = x2 + KPR_W;
-	x4 = x3 + KPRQ_W;
-	x5 = x4 + ZFR_W;
-	x6 = x5 + ZFRQ_W;
-
-	y -= nW;
-	xywhsf(bbxx.xmT12, x0, y, YFPHM_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT13, x1, y, TZDBH_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT14, x2, y, KPR_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT15, x3, y, KPRQ_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT16, x4, y, ZFR_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LTB);
-	xywhsf(bbxx.xmT17, x5, y, ZFRQ_W, nW, LS_9, FS, AM_ZC | LINE_STATE_0);
-	y += nW;
-
-	m_nLineNum = 0;
-	_y = y;
-	for (pos = bbxx.st_lYkfpcx_fpxx.begin(); pos != bbxx.st_lYkfpcx_fpxx.end(); pos++)
-	{
-		xywhsf(pos->xmYfphm, x0, _y, YFPHM_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmTzdbh, x1, _y, TZDBH_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmKpr, x2, _y, KPR_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmKprq, x3, _y, KPRQ_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmZfr, x4, _y, ZFR_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmZfrq, x5, _y, ZFRQ_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LBR);
-		_y += nLY;
-
-		m_nLineNum++;
-		if (m_nLineNum%m_nPageSize == 0)
-		{
-			_y = y;
-		}
-	}
-
-	num = 0;
-	bNewPage = TRUE;
-	for (pos = bbxx.st_lYkfpcx_fpxx.begin(); pos != bbxx.st_lYkfpcx_fpxx.end(); pos++)
-	{
-		if (bNewPage)
-		{
-			xml.AddElem("NewPage");
-			xml.AddAttrib("pn", nNewPageNum);
-			xml.IntoElem();
-			xml.AddElem("PageHeader");
-			xml.IntoElem();
-			addxml(bbxx.st_sTitle, bbxx.xmTitle);
-			addxml(bbxx.st_sSm, bbxx.xmSm);
-			addxml(bbxx.st_sDi, bbxx.xmDi);
-			addxml(nNewPageNum++, bbxx.xmP1);
-			addxml(bbxx.st_sYe1, bbxx.xmYe1);
-			addxml(bbxx.st_sGong, bbxx.xmGong);
-			addxml(m_nAllPageNum, bbxx.xmP2);
-			addxml(bbxx.st_sYe2, bbxx.xmYe2);
-			xml.OutOfElem();
-			xml.AddElem("PageData");
-			xml.IntoElem();
-			addxml(bbxx.st_sT12, bbxx.xmT12);
-			addxml(bbxx.st_sT13, bbxx.xmT13);
-			addxml(bbxx.st_sT14, bbxx.xmT14);
-			addxml(bbxx.st_sT15, bbxx.xmT15);
-			addxml(bbxx.st_sT16, bbxx.xmT16);
-			addxml(bbxx.st_sT17, bbxx.xmT17);			
-			bNewPage = FALSE;
-		}
-		addxml(pos->st_sYfphm, pos->xmYfphm);
-		addxml(pos->st_sTzdbh, pos->xmTzdbh);
-		addxml(pos->st_sKpr, pos->xmKpr);
-		addxml(pos->st_sKprq, pos->xmKprq);
-		addxml(pos->st_sZfr, pos->xmZfr);
-		addxml(pos->st_sZfrq, pos->xmZfrq);
-
-		num++;
-		if (num % m_nPageSize == 0)
-		{
-			xml.OutOfElem();
-			xml.OutOfElem();
-			bNewPage = TRUE;
-		}
-	}
-
-	if (!bNewPage)
-	{
-		xml.OutOfElem();
-		xml.OutOfElem();
-		bNewPage = TRUE;
+		_nIndexOfItem += _nPageSize;
 	}
 
 	return xml.GetDoc();
+}
+
+int CYkfpcxdy::GetWideByItemName(CString & itemName)
+{
+	if (getChineseSpell("发票类型").Compare(itemName) == 0) { return 290; }
+	if (getChineseSpell("发票状态").Compare(itemName) == 0) { return 160; }
+	if (getChineseSpell("发票代码").Compare(itemName) == 0) { return 210; }
+	if (getChineseSpell("发票号码").Compare(itemName) == 0) { return 180; }
+	if (getChineseSpell("上传状态").Compare(itemName) == 0) { return 160; }
+	{ // 004
+		if (getChineseSpell("客户名称").Compare(itemName) == 0) { return 490; }
+		if (getChineseSpell("主要商品名称").Compare(itemName) == 0) { return 490; }
+		if (getChineseSpell("税额").Compare(itemName) == 0) { return 200; }
+		if (getChineseSpell("合计金额").Compare(itemName) == 0) { return 200; }
+	}
+
+	{ // 005 006
+		if (getChineseSpell("车辆类型").Compare(itemName) == 0) { return 160; }
+		if (getChineseSpell("厂牌型号").Compare(itemName) == 0) { return 300; }
+	}
+
+	{ // 005
+		if (getChineseSpell("产地").Compare(itemName) == 0) { return 300; }
+		if (getChineseSpell("车架号码").Compare(itemName) == 0) { return 300; }
+		if (getChineseSpell("购货单位").Compare(itemName) == 0) { return 490; }
+		if (getChineseSpell("销货单位").Compare(itemName) == 0) { return 490; }
+		if (getChineseSpell("不含税价").Compare(itemName) == 0) { return 200; }
+	}
+
+	{ // 006
+		if (getChineseSpell("车牌照号").Compare(itemName) == 0) { return 160; }
+		if (getChineseSpell("车架号").Compare(itemName) == 0) { return 300; }
+		if (getChineseSpell("买方单位").Compare(itemName) == 0) { return 490; }
+		if (getChineseSpell("卖方单位").Compare(itemName) == 0) { return 490; }
+		if (getChineseSpell("车价合计").Compare(itemName) == 0) { return 200; }
+	}
+
+	{ // 004 005
+		if (getChineseSpell("价税合计").Compare(itemName) == 0) { return 200; }
+	}
+	if (getChineseSpell("原发票代码").Compare(itemName) == 0) { return 210; }
+	if (getChineseSpell("原发票号码").Compare(itemName) == 0) { return 180; }
+	{ // 004
+		if (getChineseSpell("信息表编号").Compare(itemName) == 0) { return 300; }
+	}
+	if (getChineseSpell("开票人").Compare(itemName) == 0) { return 150; }
+	if (getChineseSpell("开票日期").Compare(itemName) == 0) { return 210; }
+	if (getChineseSpell("作废人").Compare(itemName) == 0) { return 150; }
+	if (getChineseSpell("作废日期").Compare(itemName) == 0) { return 210; }
+	{ // 004
+		if (getChineseSpell("客户识别号").Compare(itemName) == 0) { return 300; }
+		if (getChineseSpell("清单标识").Compare(itemName) == 0) { return 160; }
+	}
+
+	return 200;
+}
+
+UINT CYkfpcxdy::GetFlagsByName(CString & itemName)
+{
+	if (getChineseSpell("发票类型").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("发票状态").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("发票代码").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("发票号码").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("上传状态").Compare(itemName) == 0) { return AM_ZC; }
+	{ // 004
+		if (getChineseSpell("客户名称").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("主要商品名称").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("税额").Compare(itemName) == 0) { return AM_ZC_S; }
+		if (getChineseSpell("合计金额").Compare(itemName) == 0) { return AM_ZC_S; }
+	}
+
+	{ // 005 006
+		if (getChineseSpell("车辆类型").Compare(itemName) == 0) { return AM_ZC; }
+		if (getChineseSpell("厂牌型号").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+	}
+
+	{ // 005
+		if (getChineseSpell("产地").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("车架号码").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("购货单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("销货单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("不含税价").Compare(itemName) == 0) { return AM_ZC_S; }
+	}
+
+	{ // 006
+		if (getChineseSpell("车牌照号").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("车架号").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("买方单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("卖方单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
+		if (getChineseSpell("车价合计").Compare(itemName) == 0) { return AM_ZC_S; }
+	}
+
+	{ // 004 005
+		if (getChineseSpell("价税合计").Compare(itemName) == 0) { return AM_ZC_S; }
+	}
+	if (getChineseSpell("原发票代码").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("原发票号码").Compare(itemName) == 0) { return AM_ZC; }
+	{ // 004
+		if (getChineseSpell("信息表编号").Compare(itemName) == 0) { return AM_ZC; }
+	}
+	if (getChineseSpell("开票人").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("开票日期").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("作废人").Compare(itemName) == 0) { return AM_ZC; }
+	if (getChineseSpell("作废日期").Compare(itemName) == 0) { return AM_ZC; }
+	{ // 004
+		if (getChineseSpell("客户识别号").Compare(itemName) == 0) { return AM_ZC_S; }
+		if (getChineseSpell("清单标识").Compare(itemName) == 0) { return AM_ZC; }
+	}
+
+	return 200;
+}
+
+bool CYkfpcxdy::In(wchar_t start, wchar_t end, wchar_t code)
+{
+	if (code >= start && code <= end)
+	{
+		return   true;
+	}
+	return   false;
+}
+
+char CYkfpcxdy::convert(wchar_t n)
+{
+	if (In(0xB0A1, 0xB0C4, n))   return   'a';
+	if (In(0XB0C5, 0XB2C0, n))   return   'b';
+	if (In(0xB2C1, 0xB4ED, n))   return   'c';
+	if (In(0xB4EE, 0xB6E9, n))   return   'd';
+	if (In(0xB6EA, 0xB7A1, n))   return   'e';
+	if (In(0xB7A2, 0xB8c0, n))   return   'f';
+	if (In(0xB8C1, 0xB9FD, n))   return   'g';
+	if (In(0xB9FE, 0xBBF6, n))   return   'h';
+	if (In(0xBBF7, 0xBFA5, n))   return   'j';
+	if (In(0xBFA6, 0xC0AB, n))   return   'k';
+	if (In(0xC0AC, 0xC2E7, n))   return   'l';
+	if (In(0xC2E8, 0xC4C2, n))   return   'm';
+	if (In(0xC4C3, 0xC5B5, n))   return   'n';
+	if (In(0xC5B6, 0xC5BD, n))   return   'o';
+	if (In(0xC5BE, 0xC6D9, n))   return   'p';
+	if (In(0xC6DA, 0xC8BA, n))   return   'q';
+	if (In(0xC8BB, 0xC8F5, n))   return   'r';
+	if (In(0xC8F6, 0xCBF0, n))   return   's';
+	if (In(0xCBFA, 0xCDD9, n))   return   't';
+	if (In(0xCDDA, 0xCEF3, n))   return   'w';
+	if (In(0xCEF4, 0xD188, n))   return   'x';
+	if (In(0xD1B9, 0xD4D0, n))   return   'y';
+	if (In(0xD4D1, 0xD7F9, n))   return   'z';
+	return   '\0';
+}
+
+CString CYkfpcxdy::getChineseSpell(CString src)
+{
+	string   sChinese = src.GetBuffer(0); 
+	char   chr[3];
+	wchar_t   wchr = 0;
+	int len = sChinese.length() / 2;
+	char*   buff = new   char[len + 1];
+	memset(buff, 0x00, sizeof(char)*sChinese.length() / 2 + 1);
+
+	for (size_t i = 0, j = 0; i < (sChinese.length() / 2); ++i)
+	{
+		memset(chr, 0x00, sizeof(chr));
+		chr[0] = sChinese[j++];
+		chr[1] = sChinese[j++];
+		chr[2] = '\0';
+
+		wchr = 0;
+		wchr = (chr[0] & 0xff) << 8;
+		wchr |= (chr[1] & 0xff);
+		buff[i] = convert(wchr);
+	}
+
+	CString rdata(buff);
+	if (buff != NULL)
+		delete buff;
+
+	return  rdata;
 }

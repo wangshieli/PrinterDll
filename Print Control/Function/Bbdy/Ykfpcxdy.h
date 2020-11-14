@@ -1,75 +1,38 @@
 #pragma once
 #include "../Fpdy/Fpdy.h"
 #include <list>
+#include <vector>
 
 using namespace std;
 
-typedef struct _ykfpcx_fpxx
+typedef struct _ykpfcx_item
 {
-	_ykfpcx_fpxx()
+	_ykpfcx_item()
 	{
 		clear();
 	}
 
 	void clear()
 	{
-		st_sFplx = "";
-		st_sFpzt = "";
-		st_sFpdm = "";
-		st_sFphm = "";
-		st_sSczt = "";
-		st_sKhmc = "";
-		st_sZyspmc = "";
-		st_sSe = "";
-		st_sHjje = "";
-		st_sJshj = "";
-		st_sYfpdm = "";
-		st_sYfphm = "";
-		st_sTzdbh = "";
-		st_sKpr = "";
-		st_sKprq = "";
-		st_sZfr = "";
-		st_sZfrq = "";
+		st_sName = "";
+		st_sKey = "";
+		st_nWide = 0;
 	}
+	CString st_sName;
+	XM st_xmName;
+	CString st_sKey;
+	int st_nWide;
+}YKFPCX_ITEM;
 
-	CString st_sFplx;
-	CString st_sFpzt;
-	CString st_sFpdm;
-	CString st_sFphm;
-	CString st_sSczt;
-	CString st_sKhmc;
-	CString st_sZyspmc;
-	CString st_sSe;
-	CString st_sHjje;
-	CString st_sJshj;
-	CString st_sYfpdm;
-	CString st_sYfphm;
-	CString st_sTzdbh;
-	CString st_sKpr;
-	CString st_sKprq;
-	CString st_sZfr;
-	CString st_sZfrq;
+typedef std::list<YKFPCX_ITEM> LTYKFPCX_ITEM;
 
-	XM xmFplx;
-	XM xmFpzt;
-	XM xmFpdm;
-	XM xmFphm;
-	XM xmSczt;
-	XM xmKhmc;
-	XM xmZyspmc;
-	XM xmSe;
-	XM xmHjje;
-	XM xmJshj;
-	XM xmYfpdm;
-	XM xmYfphm;
-	XM xmTzdbh;
-	XM xmKpr;
-	XM xmKprq;
-	XM xmZfr;
-	XM xmZfrq;
-}YKFPCX_FPXX;
-
-typedef std::list<YKFPCX_FPXX> LTYKFPCX_FPXX;
+typedef struct _ykfpcx_item_data_xx
+{
+	CString item_data;
+	UINT nItemFlags;
+	XM xmItem_data;
+	int nItemWide;
+}YKFPCX_ITEM_DATA_XX;
 
 typedef struct _ykfpcx_bbxx
 {
@@ -101,12 +64,16 @@ typedef struct _ykfpcx_bbxx
 		st_sTitle = "";
 		st_sSm = "";
 
+		st_nTc = 0;
+
+		st_lItem.clear();
+
+		st_vData.clear();
+
 		st_sDi = "第";
 		st_sYe1 = "页";
 		st_sGong = "共";
 		st_sYe2 = "页";
-
-		st_lYkfpcx_fpxx.clear();
 	}
 
 	CString st_sT1;
@@ -151,6 +118,12 @@ typedef struct _ykfpcx_bbxx
 	CString st_sSm;
 	XM xmSm;
 
+	int st_nTc;
+
+	LTYKFPCX_ITEM st_lItem;
+
+	vector<vector<YKFPCX_ITEM_DATA_XX>> st_vData;
+
 	CString st_sDi;
 	CString st_sYe1;
 	CString st_sGong;
@@ -162,8 +135,6 @@ typedef struct _ykfpcx_bbxx
 
 	XM xmP1;
 	XM xmP2;
-
-	LTYKFPCX_FPXX st_lYkfpcx_fpxx;
 }YKFPCX_BBXX;
 
 class CYkfpcxdy :public CFpdyBase
@@ -182,6 +153,13 @@ private:
 	YKFPCX_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
 	CString GenerateFpdyXml(YKFPCX_BBXX bbxx, CString dylx, BBDY bbdy);
 	CString GenerateItemMXXml(YKFPCX_BBXX bbxx);
+
+	int GetWideByItemName(CString& itemName);// 根据发票类型，和具体表头名称设置宽度
+	UINT GetFlagsByName(CString& name);
+
+	bool In(wchar_t start, wchar_t end, wchar_t code);
+	char convert(wchar_t n);
+	CString getChineseSpell(CString src);
 
 private:
 	int m_nLineNum;

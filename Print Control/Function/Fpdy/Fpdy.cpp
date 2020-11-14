@@ -278,7 +278,7 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, int width)
 	return chCount + 1;
 }
 
-int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect)
+int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s)
 {
 	fontNew->CreatePointFont(f, FontType, pDC);
 	fontOld = (CFont *)(::SelectObject(m_hPrinterDC, *fontNew));
@@ -293,13 +293,13 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags);
 	LONG r = trect.right;
-	if (((h >= recv_h
+	if (((h >= recv_h - _s
 		|| (r > recv_r)) && ((f -= 1) || 1)))
 	{
 		::SelectObject(m_hPrinterDC, fontOld);
 		fontNew->DeleteObject();
 
-		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect);
+		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect, _s);
 	}
 
 	_trect = trect;
@@ -388,7 +388,7 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
-		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, _s);
 	}
 
 	pCDC->SetMapMode(MM_LOMETRIC);
@@ -500,7 +500,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	{		
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
-		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, _s);
 
 		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
 			rect.top = rect.top + (recv_h - h) / 2;
