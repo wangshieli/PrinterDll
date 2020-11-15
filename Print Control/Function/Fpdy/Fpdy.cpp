@@ -79,6 +79,45 @@ bool CFpdyBase::CheckDyjOnline()
 	return true;
 }
 
+int CFpdyBase::InitPrinter1(short pwidth, short plength)
+{
+	//if (!dlg.GetDefaults()) 不弹界面，使用默认打印机直接打印
+	if (NULL == m_pDlg)
+		return -10;
+
+
+	HGLOBAL hDevMode = NULL;
+	HGLOBAL hDevNames = NULL;
+	if (GetPrinterDevice(m_sPrinterName.GetBuffer(0), &hDevNames, &hDevMode)) //使用指定的打印机
+	{
+		m_pDlg->m_pd.hDevNames = hDevNames;
+		m_pDlg->m_pd.hDevMode = hDevMode;  // 为dlg设置参数，达到不弹框打印
+	}
+	else
+	{
+		if (!m_pDlg->GetDefaults())
+		{
+			return -11;// 找不到打印机
+		}
+	}
+
+	DEVMODE *lpDevMode = m_pDlg->GetDevMode();
+	lpDevMode->dmFields |= DM_PAPERSIZE | DM_PAPERWIDTH | DM_PAPERLENGTH;
+	lpDevMode->dmPaperSize = DMPAPER_USER;
+	lpDevMode->dmPaperWidth = pwidth;       // 指定发票实物宽高
+	lpDevMode->dmPaperLength = plength;
+	m_hPrinterDC = m_pDlg->CreatePrinterDC();
+
+	if (NULL == m_hPrinterDC)
+	{
+		return -2;// 打印设备未就绪
+	}
+
+	::SetMapMode(m_hPrinterDC, MM_LOMETRIC);
+
+	return 0;
+}
+
 int CFpdyBase::InitPrinter(short pwidth, short plength)
 {
 	//if (!dlg.GetDefaults()) 不弹界面，使用默认打印机直接打印
@@ -305,6 +344,100 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 	_trect = trect;
 
 	return h;
+}
+
+LONG CFpdyBase::PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
+{
+	rect.left += _l;
+	rect.right -= _r;
+
+	UINT flags1 = 0;
+	UINT flags2 = 0;
+	UINT flags3 = 0;
+	if (z == AM_ZC)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_ZC_S || z == AM_ZC_CHEKC)
+	{
+		flags1 = DT_SINGLELINE | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_SINGLELINE | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_VC)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER;
+		flags2 = DT_SINGLELINE | DT_VCENTER;
+		flags3 = DT_SINGLELINE | DT_VCENTER;
+	}
+	else if (z == AM_ZL || z == AM_ZL_EX || z == AM_ZL_L)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+	}
+	else if (z == AM_VCL || z == AM_VCL_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
+	}
+	else if (z == AM_VCR || z == AM_VCR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+	}
+	else if (z == AM_ZR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_RIGHT;
+	}
+
+	if (AM_ZC_S == z)
+		return YKFP_LINE_H_MIN;
+
+	CFont *pOldFont;
+	CFont fontHeader;
+	int fontSize = FontSize;
+
+	CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+	pCDC->LPtoDP(&rect);
+	pCDC->SetMapMode(MM_TEXT);
+
+	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+
+	CString data1 = data;
+	CString data2 = data;
+	DealData(pCDC, data1, 0, rect.right - rect.left);
+
+	RECT trect = rect;
+
+	flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX;
+
+	int recv_h = rect.bottom - rect.top;
+	int recv_r = rect.right;
+	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+
+	pCDC->SetMapMode(MM_LOMETRIC);
+
+	LONG lData = 0;
+
+	SIZE s;
+	s.cx = 0;
+	s.cy = h;
+	pCDC->DPtoLP(&s);
+	lData = s.cy;
+
+
+	::SelectObject(m_hPrinterDC, pOldFont);
+	fontHeader.DeleteObject();
+
+	return lData > YKFP_LINE_H_MAX ? YKFP_LINE_H_MAX : lData;
 }
 
 LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)

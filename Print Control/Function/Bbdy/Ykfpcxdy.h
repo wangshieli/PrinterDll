@@ -28,10 +28,18 @@ typedef std::list<YKFPCX_ITEM> LTYKFPCX_ITEM;
 
 typedef struct _ykfpcx_item_data_xx
 {
+	_ykfpcx_item_data_xx()
+	{
+		clear();
+	}
+	void clear()
+	{
+		item_data = "";
+		xmItem_data.h = YKFP_LINE_H_MAX;// 最大高度210
+
+	}
 	CString item_data;
-	UINT nItemFlags;
 	XM xmItem_data;
-	int nItemWide;
 }YKFPCX_ITEM_DATA_XX;
 
 typedef struct _ykfpcx_bbxx
@@ -155,7 +163,7 @@ private:
 	CString GenerateItemMXXml(YKFPCX_BBXX bbxx);
 
 	int GetWideByItemName(CString& itemName);// 根据发票类型，和具体表头名称设置宽度
-	UINT GetFlagsByName(CString& name);
+	void GetFlagsByName(CString& name, XM& _xm);
 
 	bool In(wchar_t start, wchar_t end, wchar_t code);
 	char convert(wchar_t n);

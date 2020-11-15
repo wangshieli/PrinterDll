@@ -69,6 +69,9 @@
 #define COIN_Y			0x01000000	// Ç®±Ò·ûºÅ Y
 #define COIN_O			0X02000000	// Ç®±Ò·ûºÅ O
 
+#define YKFP_LINE_H_MIN	55
+#define YKFP_LINE_H_MAX	150
+
 #define A4_W	2100
 #define A4_H	2970
 
@@ -156,6 +159,7 @@ public:
 public:
 	void InitXYoff();
 	bool CheckDyjOnline();
+	int InitPrinter1(short pwidth, short plength);
 	int InitPrinter(short pwidth, short plength);
 	CString GenerateXMLFpdy(FPDY fpdy, int rtn = 0);
 
@@ -169,6 +173,7 @@ protected:
 	int DealData(CDC *pDC, CString& m_szText, int s, int width);
 	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s);
 
+	LONG PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 	LONG PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 

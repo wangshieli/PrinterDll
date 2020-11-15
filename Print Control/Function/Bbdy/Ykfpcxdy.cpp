@@ -246,8 +246,8 @@ YKFPCX_BBXX CYkfpcxdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 				if (xml.FindElem(pos->st_sKey))
 				{
 					ix.item_data = xml.GetData();
-					ix.nItemWide = pos->st_nWide;
-					ix.nItemFlags = GetFlagsByName(pos->st_sKey);
+					ix.xmItem_data.w = pos->st_nWide;
+					GetFlagsByName(pos->st_sKey, ix.xmItem_data);
 					v_ix.push_back(ix);
 				}
 			}
@@ -256,6 +256,51 @@ YKFPCX_BBXX CYkfpcxdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 		}
 		xml.OutOfElem();
 	}
+
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	int nrt = 0;
+	do
+	{
+		nrt = InitPrinter1(A4_W, A4_H);
+		if (0 != nrt)
+			break;// 如果打印机选择失败所有行使用默认高度
+
+		DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+
+		vector<vector<YKFPCX_ITEM_DATA_XX>>::iterator pos;
+		for (pos = bbxx.st_vData.begin(); pos != bbxx.st_vData.end(); pos++)
+		{
+			int _Line_h = YKFP_LINE_H_MIN;
+			int _h = 0;
+			for (vector<YKFPCX_ITEM_DATA_XX>::iterator v_pos = pos->begin(); v_pos != pos->end(); v_pos++)
+			{
+				RECT rect;
+				rect.left = 0;
+				rect.top = 0;
+				rect.right = v_pos->xmItem_data.w;
+				rect.bottom = -210;
+				_h = PaintTile3(v_pos->xmItem_data.s, v_pos->xmItem_data.f, rect, v_pos->item_data, v_pos->xmItem_data.z);
+				_Line_h = _h > _Line_h ? _h : _Line_h;
+			}
+
+			for (vector<YKFPCX_ITEM_DATA_XX>::iterator v_pos = pos->begin(); v_pos != pos->end(); v_pos++)
+			{
+				v_pos->xmItem_data.h = _Line_h;
+			}
+		}
+	} while (false);
+
+	if (NULL != m_hPrinterDC)
+	{
+		::DeleteDC(m_hPrinterDC);
+		m_hPrinterDC = NULL;
+
+		if (NULL != m_pDlg)
+			delete m_pDlg;
+
+		m_pDlg = new CPrintDialog(FALSE, PD_ALLPAGES);
+	}		
 
 	return bbxx;
 }
@@ -347,12 +392,18 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 		BOOL bNewPage = TRUE;
 		int _y = y;		
 
-		int nLY = 140; // 数据行高度
-		m_nLineNum = 0;
 		vector<vector<YKFPCX_ITEM_DATA_XX>>::iterator pos;
 		_TempSize = _nPageSize;
 		for (pos = bbxx.st_vData.begin(); pos != bbxx.st_vData.end(); pos++)
 		{
+			vector<YKFPCX_ITEM_DATA_XX>::iterator v_pos = pos->begin() + _nIndexOfItem;
+			if (_y + v_pos->xmItem_data.h - y > 2550)
+			{
+				xml.OutOfElem();
+				xml.OutOfElem();
+				bNewPage = TRUE;
+				_y = y;
+			}
 			_nPostion = 0;
 			if (bNewPage)
 			{
@@ -387,23 +438,14 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 			}
 
 			_TempSize = _nPageSize;
-			for (vector<YKFPCX_ITEM_DATA_XX>::iterator v_pos = pos->begin() + _nIndexOfItem; v_pos != pos->end() && _TempSize-- > 0; v_pos++)
+			int yTemp = _y;
+			for (; v_pos != pos->end() && _TempSize != 0; v_pos++)
 			{
-				UINT flags = v_pos->nItemFlags;
-				flags = (_TempSize == 0 ? flags | LINE_STATE_LBR : flags | LINE_STATE_LTB);
-				xywhsf(v_pos->xmItem_data, _nPostion, _y, v_pos->nItemWide, nLY, LS_9, FS, flags);
+				UINT flags = v_pos->xmItem_data.z;
+				flags = (--_TempSize == 0 ? (_y += v_pos->xmItem_data.h, (flags | LINE_STATE_LBR)) : flags | LINE_STATE_LB);
+				xywhsf(v_pos->xmItem_data, _nPostion, yTemp, v_pos->xmItem_data.w, v_pos->xmItem_data.h, v_pos->xmItem_data.s, v_pos->xmItem_data.f, flags);
 				addxml(v_pos->item_data, v_pos->xmItem_data);
-				_nPostion += v_pos->nItemWide;
-			}
-			_y += nLY;
-
-			m_nLineNum++;
-			if (m_nLineNum%m_nPageSize == 0)
-			{
-				xml.OutOfElem();
-				xml.OutOfElem();
-				bNewPage = TRUE;
-				_y = y;
+				_nPostion += v_pos->xmItem_data.w;
 			}
 		}
 
@@ -424,111 +466,115 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 int CYkfpcxdy::GetWideByItemName(CString & itemName)
 {
 	if (getChineseSpell("发票类型").Compare(itemName) == 0) { return 290; }
-	if (getChineseSpell("发票状态").Compare(itemName) == 0) { return 160; }
-	if (getChineseSpell("发票代码").Compare(itemName) == 0) { return 210; }
-	if (getChineseSpell("发票号码").Compare(itemName) == 0) { return 180; }
-	if (getChineseSpell("上传状态").Compare(itemName) == 0) { return 160; }
-	{ // 004
-		if (getChineseSpell("客户名称").Compare(itemName) == 0) { return 490; }
-		if (getChineseSpell("主要商品名称").Compare(itemName) == 0) { return 490; }
-		if (getChineseSpell("税额").Compare(itemName) == 0) { return 200; }
-		if (getChineseSpell("合计金额").Compare(itemName) == 0) { return 200; }
-	}
+	else if (getChineseSpell("发票状态").Compare(itemName) == 0) { return 160; }
+	else if (getChineseSpell("发票代码").Compare(itemName) == 0) { return 210; }
+	else if (getChineseSpell("发票号码").Compare(itemName) == 0) { return 180; }
+	else if (getChineseSpell("上传状态").Compare(itemName) == 0) { return 160; }
+	 // 004
+		else if (getChineseSpell("客户名称").Compare(itemName) == 0) { return 490; }
+		else if (getChineseSpell("主要商品名称").Compare(itemName) == 0) { return 490; }
+		else if (getChineseSpell("税额").Compare(itemName) == 0) { return 200; }
+		else if (getChineseSpell("合计金额").Compare(itemName) == 0) { return 200; }
+	
 
-	{ // 005 006
-		if (getChineseSpell("车辆类型").Compare(itemName) == 0) { return 160; }
-		if (getChineseSpell("厂牌型号").Compare(itemName) == 0) { return 300; }
-	}
+	 // 005 006
+		else if (getChineseSpell("车辆类型").Compare(itemName) == 0) { return 160; }
+		else if (getChineseSpell("厂牌型号").Compare(itemName) == 0) { return 300; }
+	
 
-	{ // 005
-		if (getChineseSpell("产地").Compare(itemName) == 0) { return 300; }
-		if (getChineseSpell("车架号码").Compare(itemName) == 0) { return 300; }
-		if (getChineseSpell("购货单位").Compare(itemName) == 0) { return 490; }
-		if (getChineseSpell("销货单位").Compare(itemName) == 0) { return 490; }
-		if (getChineseSpell("不含税价").Compare(itemName) == 0) { return 200; }
-	}
+	 // 005
+		else if (getChineseSpell("产地").Compare(itemName) == 0) { return 300; }
+		else if (getChineseSpell("车架号码").Compare(itemName) == 0) { return 300; }
+		else if (getChineseSpell("购货单位").Compare(itemName) == 0) { return 490; }
+		else if (getChineseSpell("销货单位").Compare(itemName) == 0) { return 490; }
+		else if (getChineseSpell("不含税价").Compare(itemName) == 0) { return 200; }
+	
 
-	{ // 006
-		if (getChineseSpell("车牌照号").Compare(itemName) == 0) { return 160; }
-		if (getChineseSpell("车架号").Compare(itemName) == 0) { return 300; }
-		if (getChineseSpell("买方单位").Compare(itemName) == 0) { return 490; }
-		if (getChineseSpell("卖方单位").Compare(itemName) == 0) { return 490; }
-		if (getChineseSpell("车价合计").Compare(itemName) == 0) { return 200; }
-	}
+	 // 006
+		else if (getChineseSpell("车牌照号").Compare(itemName) == 0) { return 160; }
+		else if (getChineseSpell("车架号").Compare(itemName) == 0) { return 300; }
+		else if (getChineseSpell("买方单位").Compare(itemName) == 0) { return 490; }
+		else if (getChineseSpell("卖方单位").Compare(itemName) == 0) { return 490; }
+		else if (getChineseSpell("车价合计").Compare(itemName) == 0) { return 200; }
+	
 
-	{ // 004 005
-		if (getChineseSpell("价税合计").Compare(itemName) == 0) { return 200; }
-	}
-	if (getChineseSpell("原发票代码").Compare(itemName) == 0) { return 210; }
-	if (getChineseSpell("原发票号码").Compare(itemName) == 0) { return 180; }
-	{ // 004
-		if (getChineseSpell("信息表编号").Compare(itemName) == 0) { return 300; }
-	}
-	if (getChineseSpell("开票人").Compare(itemName) == 0) { return 150; }
-	if (getChineseSpell("开票日期").Compare(itemName) == 0) { return 210; }
-	if (getChineseSpell("作废人").Compare(itemName) == 0) { return 150; }
-	if (getChineseSpell("作废日期").Compare(itemName) == 0) { return 210; }
-	{ // 004
-		if (getChineseSpell("客户识别号").Compare(itemName) == 0) { return 300; }
-		if (getChineseSpell("清单标识").Compare(itemName) == 0) { return 160; }
-	}
+	 // 004 005
+		else if (getChineseSpell("价税合计").Compare(itemName) == 0) { return 200; }
+	
+	else if (getChineseSpell("原发票代码").Compare(itemName) == 0) { return 210; }
+	else if (getChineseSpell("原发票号码").Compare(itemName) == 0) { return 180; }
+	 // 004
+		else if (getChineseSpell("信息表编号").Compare(itemName) == 0) { return 300; }
+	
+	else if (getChineseSpell("开票人").Compare(itemName) == 0) { return 150; }
+	else if (getChineseSpell("开票日期").Compare(itemName) == 0) { return 210; }
+	else if (getChineseSpell("作废人").Compare(itemName) == 0) { return 150; }
+	else if (getChineseSpell("作废日期").Compare(itemName) == 0) { return 210; }
+	 // 004
+		else if (getChineseSpell("客户识别号").Compare(itemName) == 0) { return 300; }
+		else if (getChineseSpell("清单标识").Compare(itemName) == 0) { return 160; }
+	
 
 	return 200;
 }
 
-UINT CYkfpcxdy::GetFlagsByName(CString & itemName)
+void CYkfpcxdy::GetFlagsByName(CString & itemName, XM& _xm)
 {
-	if (getChineseSpell("发票类型").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("发票状态").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("发票代码").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("发票号码").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("上传状态").Compare(itemName) == 0) { return AM_ZC; }
-	{ // 004
-		if (getChineseSpell("客户名称").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("主要商品名称").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("税额").Compare(itemName) == 0) { return AM_ZC_S; }
-		if (getChineseSpell("合计金额").Compare(itemName) == 0) { return AM_ZC_S; }
-	}
+	int s = 0;
+	CString f = "";
+	UINT z = 0;
+	if (getChineseSpell("发票类型").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("发票状态").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("发票代码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("发票号码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("上传状态").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	 // 004
+	else if (getChineseSpell("客户名称").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+	else if (getChineseSpell("主要商品名称").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+	else if (getChineseSpell("税额").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("合计金额").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	
 
-	{ // 005 006
-		if (getChineseSpell("车辆类型").Compare(itemName) == 0) { return AM_ZC; }
-		if (getChineseSpell("厂牌型号").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-	}
+	 // 005 006
+		else if (getChineseSpell("车辆类型").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
+		else if (getChineseSpell("厂牌型号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+	
 
-	{ // 005
-		if (getChineseSpell("产地").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("车架号码").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("购货单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("销货单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("不含税价").Compare(itemName) == 0) { return AM_ZC_S; }
-	}
+	 // 005
+		else if (getChineseSpell("产地").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("车架号码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("购货单位").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("销货单位").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("不含税价").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	
 
-	{ // 006
-		if (getChineseSpell("车牌照号").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("车架号").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("买方单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("卖方单位").Compare(itemName) == 0) { return AM_ZC_CHEKC; }
-		if (getChineseSpell("车价合计").Compare(itemName) == 0) { return AM_ZC_S; }
-	}
+	 // 006
+		else if (getChineseSpell("车牌照号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("车架号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("买方单位").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("卖方单位").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_CHEKC; }
+		else if (getChineseSpell("车价合计").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	
 
-	{ // 004 005
-		if (getChineseSpell("价税合计").Compare(itemName) == 0) { return AM_ZC_S; }
-	}
-	if (getChineseSpell("原发票代码").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("原发票号码").Compare(itemName) == 0) { return AM_ZC; }
-	{ // 004
-		if (getChineseSpell("信息表编号").Compare(itemName) == 0) { return AM_ZC; }
-	}
-	if (getChineseSpell("开票人").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("开票日期").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("作废人").Compare(itemName) == 0) { return AM_ZC; }
-	if (getChineseSpell("作废日期").Compare(itemName) == 0) { return AM_ZC; }
-	{ // 004
-		if (getChineseSpell("客户识别号").Compare(itemName) == 0) { return AM_ZC_S; }
-		if (getChineseSpell("清单标识").Compare(itemName) == 0) { return AM_ZC; }
-	}
+	 // 004 005
+		else if (getChineseSpell("价税合计").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	
+	else if (getChineseSpell("原发票代码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("原发票号码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	 // 004
+		else if (getChineseSpell("信息表编号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
+	
+	else if (getChineseSpell("开票人").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
+	else if (getChineseSpell("开票日期").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	else if (getChineseSpell("作废人").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
+	else if (getChineseSpell("作废日期").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	 // 004
+		else if (getChineseSpell("客户识别号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+		else if (getChineseSpell("清单标识").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
 
-	return 200;
+	_xm.s = s;
+	_xm.f = f;
+	_xm.z = z;
 }
 
 bool CYkfpcxdy::In(wchar_t start, wchar_t end, wchar_t code)
