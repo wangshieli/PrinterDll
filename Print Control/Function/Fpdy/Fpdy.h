@@ -159,7 +159,11 @@ public:
 public:
 	void InitXYoff();
 	bool CheckDyjOnline();
+
+	// InitPrinter1(YKFPCXDY), 获取指定或默认打印机HDC,用于计算预览页码数据项高度使用
 	int InitPrinter1(short pwidth, short plength);
+
+	// InitPrinter， 常规打印机初始化
 	int InitPrinter(short pwidth, short plength);
 	CString GenerateXMLFpdy(FPDY fpdy, int rtn = 0);
 
@@ -173,8 +177,13 @@ protected:
 	int DealData(CDC *pDC, CString& m_szText, int s, int width);
 	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s);
 
+	// PaintTile3 （YKFPCXDY），计算指定字号数据项换行打印高度
 	LONG PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+
+	// PaintTile2， 计算数据项适应打印区域之后的右边距、行高、字号
 	LONG PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+
+	// PaintTile， 正常的打印
 	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 
 	void PaintLine(RECT rect, int ls);
