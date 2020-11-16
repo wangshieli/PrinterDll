@@ -195,6 +195,7 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
 					int z1 = atoi(xml.GetAttrib("z"));
+					int fc = atoi(xml.GetAttrib("fc"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -207,20 +208,8 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 
 
 					if (COIN_Y == (ls & 0xff000000))
-					{
-						LONG r = PaintTile2(1, nFontSize, strFontName, itemRect, strText, z);
-						int n_x_RMB1 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB1 = itemRect.top - 20;
-
-						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1, NULL);
-						LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
-						MoveToEx(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1, NULL);
-						LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
-						MoveToEx(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13, NULL);
-						LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 31);
-						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 13, NULL);
-						LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 13);
-						MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 22, NULL);
-						LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 22);
+					{	
+						PaintTile4(nFontSize, strFontName, itemRect, strText, z1, fc);
 
 						PaintTile(nFontSize, strFontName, itemRect, strText, z);
 						itemRect.left -= 30; // Ç®±Ò·ûºÅÔ¤Áô 30£¬ÐèÒª²¹»ØÈ¥

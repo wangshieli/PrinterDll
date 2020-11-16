@@ -198,79 +198,6 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
-
-			RECT itemRect;
-
-			int x = 1320 + 30;
-			int y = 610;
-			int w = 280 - 30;
-			int h = 50;
-			int nFontSize = LS_10;
-			CString strFontName = FT;
-			int z = AM_VCR;
-			CString strText = hjje;
-
-			itemRect.left = x + nXoff + 190;
-			itemRect.top = (-y - nYoff - 300);
-			itemRect.right = x + nXoff + 190 + w;
-			itemRect.bottom = (-y - h - nYoff - 300);
-
-			LONG r = PaintTile2(1, nFontSize, strFontName, itemRect, strText, z);
-			int n_x_RMB1 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB1 = itemRect.top - 5;
-			
-			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1, NULL);
-			LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
-			MoveToEx(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1, NULL);
-			LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13);
-			MoveToEx(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 13, NULL);
-			LineTo(m_hPrinterDC, n_x_RMB1 + 10, n_y_RMB1 - 31);
-			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 13, NULL);
-			LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 13);
-			MoveToEx(m_hPrinterDC, n_x_RMB1, n_y_RMB1 - 22, NULL);
-			LineTo(m_hPrinterDC, n_x_RMB1 + 20, n_y_RMB1 - 22);
-			if (hjse.CompareNoCase("***") != 0)
-			{
-				//xywhsf(fpmx.hjse, 1730, 610, 270, 50, LS_10, FT, AM_VCR);
-				x = 1730 + 30;
-				y = 610;
-				w = 270 - 30;
-				h = 50;
-				nFontSize = LS_10;
-				strFontName = FT;
-				z = AM_VCR;
-				strText = hjse;
-
-				itemRect.left = x + nXoff + 190;
-				itemRect.top = (-y - nYoff - 300);
-				itemRect.right = x + nXoff + 190 + w;
-				itemRect.bottom = (-y - h - nYoff - 300);
-
-				r = PaintTile2(1, nFontSize, strFontName, itemRect, strText, z);
-				int n_x_RMB2 = itemRect.right - (r - itemRect.left) - 30, n_y_RMB2 = itemRect.top - 5;
-
-				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2, NULL);
-				LineTo(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 13);
-				MoveToEx(m_hPrinterDC, n_x_RMB2 + 20, n_y_RMB2, NULL);
-				LineTo(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 13);
-				MoveToEx(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 13, NULL);
-				LineTo(m_hPrinterDC, n_x_RMB2 + 10, n_y_RMB2 - 31);
-				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2 - 13, NULL);
-				LineTo(m_hPrinterDC, n_x_RMB2 + 20, n_y_RMB2 - 13);
-				MoveToEx(m_hPrinterDC, n_x_RMB2, n_y_RMB2 - 22, NULL);
-				LineTo(m_hPrinterDC, n_x_RMB2 + 20, n_y_RMB2 - 22);
-			}
-
-			int n_x_RMB3 = 1600 + 190, n_y_RMB3 = -685 - 300;
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3, n_y_RMB3 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3 + 20, n_y_RMB3 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 13 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 10, n_y_RMB3 - 31 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3, n_y_RMB3 - 13 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 20, n_y_RMB3 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB3, n_y_RMB3 - 22 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB3 + 20, n_y_RMB3 - 22 - nYoff);
 		}
 
 		while (xml.FindElem("Item"))
@@ -283,7 +210,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 			int h = atoi(xml.GetAttrib("h"));
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
-			int z = atoi(xml.GetAttrib("z"));
+			int z1 = atoi(xml.GetAttrib("z"));
 			int fc = atoi(xml.GetAttrib("fc"));
 			CString strText = xml.GetData();
 
@@ -292,24 +219,18 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff - 300);
 
+			int z = z1 & 0x000000ff;
+			int ls = z1 & 0xff00ff00;
+
+			if (COIN_Y == (ls & 0xff000000) || COIN_O == (ls & 0xff000000))
+			{
+				if (strText.Compare("***") != 0)
+					PaintTile4(nFontSize, strFontName, itemRect, strText, z1, fc);
+			}
+
 			PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
 		}
 
-		// 输出大写金额开头圈叉符号
-		int x, y, tx, ty;
-		if (xml.FindElem("OX"))
-		{
-			x = atoi(xml.GetAttrib("x"));
-			y = atoi(xml.GetAttrib("y"));
-			tx = x + nXoff + 190;
-			ty = -(y + nYoff) - 300;
-
-			::Ellipse(m_hPrinterDC, tx - 20, ty + 10, tx + 30 - 20, ty - 30 + 10);
-			::MoveToEx(m_hPrinterDC, tx + 4 - 20, ty - 4 + 10, NULL);
-			::LineTo(m_hPrinterDC, tx + 25 - 20, ty - 25 + 10);
-			::MoveToEx(m_hPrinterDC, tx + 24 - 20, ty - 4 + 10, NULL);
-			::LineTo(m_hPrinterDC, tx + 4 - 20, ty - 24 + 10);
-		}
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
 	} while (false);
@@ -757,12 +678,12 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		xywhsf(fpmx.fyxmxx[i].ssSl, 1610, 260 + 45 * i, 95, 45, LS_9, FS, AM_ZC);
 		xywhsf(fpmx.fyxmxx[i].ssSe, 1730, 260 + 45 * i, 270, 45, LS_9, FT, AM_VCR);
 	}
-	xywhsf(fpmx.hjje, 1320 + 30, 610, 280 - 30, 50, LS_10, FT, AM_VCR_S);
-	xywhsf(fpmx.hjse, 1730 + 30, 610, 270 - 30, 50, LS_10, FT, AM_VCR_S);
+	xywhsf(fpmx.hjje, 1320 + 30, 610, 280 - 30, 50, LS_10, FT, AM_VCR_S | COIN_Y);
+	xywhsf(fpmx.hjse, 1730 + 30, 610, 270 - 30, 50, LS_10, FT, AM_VCR_S | COIN_Y);
 
-	xywhsf(fpmx.OX, 590, 700, 80, 85, LS_9, FT, ZL);
-	xywhsf(fpmx.jshjDx, 610, 660, 850, 85, LS_9, FS, AM_VCL_S);   //大写价税合计
-	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL_S);   //小写价税合计
+	//xywhsf(fpmx.OX, 590, 700, 80, 85, LS_9, FT, ZL);
+	xywhsf(fpmx.jshjDx, 610, 660, 850, 85, LS_9, FS, AM_VCL_S | COIN_O);   //大写价税合计
+	xywhsf(fpmx.jshj, 1630, 660, 710, 85, LS_11, FT, AM_VCL_S | COIN_Y);   //小写价税合计
 
 	if (fpdy.sFplxdm.CompareNoCase("007") == 0 && m_sHx.IsEmpty())
 	{
@@ -831,6 +752,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 
 	addxml(fpmx.sHjje, fpmx.hjje);
 	addxml(fpmx.sHjse, fpmx.hjse);
+	//addxml("OX", fpmx.OX);
 	addxml(fpmx.sJshj, fpmx.jshj);
 	addxml(fpmx.sJshjDx, fpmx.jshjDx);
 
@@ -844,14 +766,6 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sFhr, fpmx.fhr);
 	addxml(fpmx.sKpr, fpmx.kpr);
 
-	xml.AddElem("OX", "1");
-	xml.AddAttrib("x", fpmx.OX.x);
-	xml.AddAttrib("y", fpmx.OX.y);
-	xml.AddAttrib("w", fpmx.OX.w);
-	xml.AddAttrib("h", fpmx.OX.h);
-	xml.AddAttrib("s", fpmx.OX.s);
-	xml.AddAttrib("f", fpmx.OX.f);
-	xml.AddAttrib("fc", fpmx.OX.fc);
 	xml.IntoElem();
 	xml.OutOfElem();
 

@@ -346,6 +346,188 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 	return h;
 }
 
+void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z1, int FontSizeEC, int _s, int _l, int _r)
+{
+
+	int z = z1 & 0x000000ff;
+	int ls = z1 & 0xff00ff00;
+
+	rect.left += _l;
+	rect.right -= _r;
+
+	UINT flags1 = 0;
+	UINT flags2 = 0;
+	UINT flags3 = 0;
+	if (z == AM_ZC)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_ZC_S || z == AM_ZC_CHEKC)
+	{
+		flags1 = DT_SINGLELINE | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_SINGLELINE | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_VC)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER;
+		flags2 = DT_SINGLELINE | DT_VCENTER;
+		flags3 = DT_SINGLELINE | DT_VCENTER;
+	}
+	else if (z == AM_ZL || z == AM_ZL_EX || z == AM_ZL_L)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+	}
+	else if (z == AM_VCL || z == AM_VCL_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_LEFT;
+	}
+	else if (z == AM_VCR || z == AM_VCR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT;
+	}
+	else if (z == AM_ZR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_RIGHT;
+		flags2 = DT_SINGLELINE | DT_RIGHT;
+		flags3 = DT_SINGLELINE | DT_RIGHT;
+	}
+
+	CFont *pOldFont;
+	CFont fontHeader;
+	int fontSize = FontSize;
+
+	CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+
+	SIZE coin_xy_Y, coin_xy_O;// 调整钱币符号中心坐标
+	coin_xy_Y.cx = 15;
+	coin_xy_Y.cy = 3;
+
+	coin_xy_O.cx = 20;
+	coin_xy_O.cy = 0;
+
+	pCDC->LPtoDP(&coin_xy_Y);
+	pCDC->LPtoDP(&coin_xy_O);
+
+	SIZE coin_top_Y; // 调整钱币符号Y上半部分俩点坐标
+	coin_top_Y.cx = 10;
+	coin_top_Y.cy = 13;
+	pCDC->LPtoDP(&coin_top_Y);
+
+	SIZE coin_mid_Y; // 调整钱币符号Y中间部分坐标
+	coin_mid_Y.cx = 10;
+	coin_mid_Y.cy = 6;
+	pCDC->LPtoDP(&coin_mid_Y);
+
+	SIZE coin_bottom_Y; // 调整钱币符号Y下半部分坐标
+	coin_bottom_Y.cx = 0;
+	coin_bottom_Y.cy = 15;
+	pCDC->LPtoDP(&coin_bottom_Y);
+
+	SIZE coin_ep_ltrb_O; // 调整钱币符号XO左上右下坐标
+	coin_ep_ltrb_O.cx = 15;
+	coin_ep_ltrb_O.cy = 15;
+	pCDC->LPtoDP(&coin_ep_ltrb_O);
+
+	SIZE coin_ep_x1_O; // 调整钱币符号XO起始位置坐标
+	coin_ep_x1_O.cx = 12;
+	coin_ep_x1_O.cy = 11;
+	pCDC->LPtoDP(&coin_ep_x1_O);
+
+	SIZE coin_ep_x2_O; // 调整钱币符号XO斜线终止位置坐标
+	coin_ep_x2_O.cx = 11;
+	coin_ep_x2_O.cy = 11;
+	pCDC->LPtoDP(&coin_ep_x2_O);
+
+	pCDC->LPtoDP(&rect);
+
+	pCDC->SetMapMode(MM_TEXT);
+
+	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+
+	CString data1 = data;
+	CString data2 = data;
+	DealData(pCDC, data1, 0, rect.right - rect.left);
+
+	RECT trect = rect;
+
+	int recv_h = rect.bottom - rect.top;
+	int recv_r = rect.right;
+	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	LONG r = trect.right;
+	if (((h >= recv_h - _s
+		|| (r > recv_r
+			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
+				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))) //如果多行，居中左对齐
+	{
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, _s);
+	}
+
+	int x = 0;
+	int y = 0;
+
+	if (COIN_Y == (ls & 0xff000000))
+	{
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+
+		if (z == AM_VCL_S)
+			x = rect.left - coin_xy_Y.cx;
+		else if (z == AM_VCR_S)
+			x = rect.right - (r - rect.left) - coin_xy_Y.cx;
+
+		y = (rect.top + rect.bottom) / 2 - coin_xy_Y.cy;
+
+		MoveToEx(m_hPrinterDC, x, y, NULL);
+		LineTo(m_hPrinterDC, x - coin_top_Y.cx, y - coin_top_Y.cy);
+
+		MoveToEx(m_hPrinterDC, x, y, NULL);
+		LineTo(m_hPrinterDC, x + coin_top_Y.cx, y - coin_top_Y.cy);
+
+		MoveToEx(m_hPrinterDC, x - coin_mid_Y.cx, y, NULL);
+		LineTo(m_hPrinterDC, x + coin_mid_Y.cx, y);
+
+		MoveToEx(m_hPrinterDC, x - coin_mid_Y.cx, y + coin_mid_Y.cy, NULL);
+		LineTo(m_hPrinterDC, x + coin_mid_Y.cx, y + coin_mid_Y.cy);
+
+		MoveToEx(m_hPrinterDC, x, y, NULL);
+		LineTo(m_hPrinterDC, x, y + coin_bottom_Y.cy);
+	}
+	else if (COIN_O == (ls & 0xff000000))
+	{
+		if (z == AM_VCL_S)
+			x = rect.left - coin_xy_O.cx;
+		else if (z == AM_VCR_S)
+			x = rect.right - (r - rect.left) - coin_xy_O.cx;
+
+		y = (rect.top + rect.bottom) / 2;
+
+		::Ellipse(m_hPrinterDC, x - coin_ep_ltrb_O.cx, y - coin_ep_ltrb_O.cy, x + coin_ep_ltrb_O.cx, y + coin_ep_ltrb_O.cy);
+		::MoveToEx(m_hPrinterDC, x - coin_ep_x1_O.cx, y + coin_ep_x1_O.cy, NULL);
+		::LineTo(m_hPrinterDC, x + coin_ep_x2_O.cx, y - coin_ep_x2_O.cy);
+		::MoveToEx(m_hPrinterDC, x - coin_ep_x1_O.cx, y - coin_ep_x1_O.cy, NULL);
+		::LineTo(m_hPrinterDC, x + coin_ep_x2_O.cx, y + coin_ep_x2_O.cy);
+
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+	}
+
+	pCDC->SetMapMode(MM_LOMETRIC);
+}
+
 LONG CFpdyBase::PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
 {
 	rect.left += _l;

@@ -166,19 +166,6 @@ LONG CEscxstyfp::Print(LPCTSTR billXml)
 			::SelectObject(dcMem, hOldBmp);
 			::DeleteDC(dcMem);
 			::DeleteObject(hBitmap);
-
-			int n_x_RMB1 = 1800, n_y_RMB1 = -1030;
-
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 13 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 10, n_y_RMB1 - 31 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - 13 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - 13 - nYoff);
-			MoveToEx(m_hPrinterDC, nXoff + n_x_RMB1, n_y_RMB1 - 22 - nYoff, NULL);
-			LineTo(m_hPrinterDC, nXoff + n_x_RMB1 + 20, n_y_RMB1 - 22 - nYoff);
 		}
 
 		while (xml.FindElem("Item"))
@@ -191,7 +178,7 @@ LONG CEscxstyfp::Print(LPCTSTR billXml)
 			int h = atoi(xml.GetAttrib("h"));
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
-			int z = atoi(xml.GetAttrib("z"));
+			int z1 = atoi(xml.GetAttrib("z"));
 			int fc = atoi(xml.GetAttrib("fc"));
 			CString strText = xml.GetData();
 
@@ -200,24 +187,17 @@ LONG CEscxstyfp::Print(LPCTSTR billXml)
 			itemRect.right = x + nXoff + 200 + w;
 			itemRect.bottom = (-y - h - nYoff - 320);
 
+			int z = z1 & 0x000000ff;
+			int ls = z1 & 0xff00ff00;
+
+			if (COIN_Y == (ls & 0xff000000) || COIN_O == (ls & 0xff000000))
+			{
+				PaintTile4(nFontSize, strFontName, itemRect, strText, z1, fc);
+			}
+
 			PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
 		}
 
-		// 输出大写金额开头圈叉符号
-		int x, y, tx, ty;
-		if (xml.FindElem("OX"))
-		{
-			x = atoi(xml.GetAttrib("x"));
-			y = atoi(xml.GetAttrib("y"));
-			tx = x + nXoff + 200;
-			ty = -(y + nYoff) - 320;
-
-			::Ellipse(m_hPrinterDC, tx - 20, ty + 10, tx + 10, ty - 20);
-			::MoveToEx(m_hPrinterDC, tx - 16, ty + 6, NULL);
-			::LineTo(m_hPrinterDC, tx + 5, ty - 15);
-			::MoveToEx(m_hPrinterDC, tx + 4, ty + 6, NULL);
-			::LineTo(m_hPrinterDC, tx - 16, ty - 14);
-		}
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
 	} while (false);
@@ -389,8 +369,8 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 
 	if (fpmx.sFpzt.Compare("00") == 0)
 	{
-		xywhsf(fpmx.OX, 459, 720, 78, 70, LS_9, FT, ZVC);
-		xywhsf(fpmx.CjhjDx, 480, 690, 940, 70, LS_10, FS, AM_VCL);
+		//xywhsf(fpmx.OX, 459, 720, 78, 70, LS_9, FT, ZVC);
+		xywhsf(fpmx.CjhjDx, 480, 690, 940, 70, LS_10, FS, AM_VCL_S | COIN_O);
 	}
 	else
 	{
@@ -398,7 +378,7 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 	}
 	//xywhsf(fpmx.OX, 459, 720, 78, 70, LS_9, FT, ZVC);
 	//xywhsf(fpmx.CjhjDx, 480, 690, 940, 70, LS_10, FS, AM_VCL);
-	xywhsf(fpmx.Cjhj, 1630, 690, 350, 70, LS_12, FT, AM_VCL);
+	xywhsf(fpmx.Cjhj, 1630, 690, 350, 70, LS_12, FT, AM_VCL_S | COIN_Y);
 
 	xywhsf(fpmx.Jypmdw, 420, 770, 1560, 70, LS_10, FS, AM_VCL);
 	xywhsf_fc(fpmx.Jypmdwdz, 420, 850, 830, 70, LS_10, FS, AM_VCL, 10);
@@ -453,21 +433,6 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sEscscdh, fpmx.Escscdh);
 	addxml(fpmx.sBz, fpmx.Bz);
 	addxml(fpmx.sKpr, fpmx.Kpr);
-
-
-	if (fpmx.sFpzt.Compare("00") == 0)
-	{
-		xml.AddElem("OX", "1");
-		xml.AddAttrib("x", fpmx.OX.x);
-		xml.AddAttrib("y", fpmx.OX.y);
-		xml.AddAttrib("w", fpmx.OX.w);
-		xml.AddAttrib("h", fpmx.OX.h);
-		xml.AddAttrib("s", fpmx.OX.s);
-		xml.AddAttrib("f", fpmx.OX.f);
-		xml.AddAttrib("fc", fpmx.OX.fc);
-		xml.IntoElem();
-		xml.OutOfElem();
-	}
 
 	return xml.GetDoc();
 }
