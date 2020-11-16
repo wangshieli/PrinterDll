@@ -462,7 +462,7 @@ void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
-	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 	LONG r = trect.right;
 	if (((h >= recv_h - _s
 		|| (r > recv_r
@@ -594,7 +594,6 @@ LONG CFpdyBase::PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
 	CString data1 = data;
-	CString data2 = data;
 	DealData(pCDC, data1, 0, rect.right - rect.left);
 
 	RECT trect = rect;
@@ -603,7 +602,7 @@ LONG CFpdyBase::PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
-	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 
 	pCDC->SetMapMode(MM_LOMETRIC);
 
@@ -692,7 +691,7 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
-	int h = ::DrawText(m_hPrinterDC, data, -1, &trect, flags1);
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 	LONG r = trect.right;
 	if (((h >= recv_h - _s
 		|| (r > recv_r

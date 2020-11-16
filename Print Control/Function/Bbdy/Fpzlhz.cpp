@@ -5,14 +5,14 @@
 #include "../../Helper/Log/TraceLog.h"
 
 #define XH_W	100
-#define MC_W	400
-#define XM_1	200
-#define XM_2	200
-#define XM_3	200
-#define XM_4	200
-#define XM_5	200
-#define XM_6	200
-#define XM_7	200
+#define MC_W	235
+#define XM_1	225
+#define XM_2	225
+#define XM_3	225
+#define XM_4	225
+#define XM_5	225
+#define XM_6	225
+#define XM_7	225
 
 CFpzlhz::CFpzlhz()
 {

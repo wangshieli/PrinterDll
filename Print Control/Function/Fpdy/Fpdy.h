@@ -177,7 +177,7 @@ protected:
 	int DealData(CDC *pDC, CString& m_szText, int s, int width);
 	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s);
 
-	// PaintTile4 （YKFPCXDY），计算指定字号数据项换行打印高度
+	// PaintTile4 （钱币符号），用于钱币符号打印
 	void PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
 
 	// PaintTile3 （YKFPCXDY），计算指定字号数据项换行打印高度

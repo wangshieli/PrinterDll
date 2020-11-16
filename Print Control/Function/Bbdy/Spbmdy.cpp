@@ -320,7 +320,7 @@ CString CSpbmdy::GenerateItemMXXml(SPBM_BBXX bbxx)
 	int nLY = 90;// 数据行高度
 
 	m_nLineNum = 0;
-	m_nPageSize = 29;
+	m_nPageSize = 27;
 	int _y = y;
 	LTSPBM_BMXX::iterator pos;
 	for (pos = bbxx.st_lSpbmBmxx.begin(); pos != bbxx.st_lSpbmBmxx.end(); pos++)
