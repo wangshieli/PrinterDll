@@ -290,6 +290,7 @@ HZXXB_BBXX CHzxxbdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 			if (xml.FindElem("je"))   bbxm.st_sJe = xml.GetData();
 			if (xml.FindElem("slv"))     bbxm.st_sSlv = xml.GetData();
 			if (xml.FindElem("se"))   bbxm.st_sSe = xml.GetData();
+			xml.OutOfElem();
 
 			bbxx.st_lHzxxbBbxm.push_back(bbxm);
 		}
@@ -345,28 +346,28 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	int x4 = x3 + XGF_W;
 	int x5 = x4 + XGFMCSH_W;
 	int x6 = x5 + XGFMCSH_W1;
-	xywhsf(_xm, x0, y, XGF_W, 200, LS_16, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x0, y, XGF_W, 160, LS_12, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("销售方", _xm);
-	xywhsf(_xm, x1, y, XGFMCSH_W, 110, LS_12, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x1, y, XGFMCSH_W, 90, LS_12, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("名称", _xm);
-	xywhsf(_xm, x1, y + 110, XGFMCSH_W, 90, LS_12, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x1, y + 90, XGFMCSH_W, 70, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("纳税人识别号", _xm);
-	xywhsf(_xm, x2, y, XGFMCSH_W1, 110, LS_11, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x2, y, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_LTB);
 	addxml(bbxx.st_sXfmc, _xm);
-	xywhsf(_xm, x2, y + 110, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x2, y + 90, XGFMCSH_W1, 70, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml(bbxx.st_sXfsh, _xm);
 
-	xywhsf(_xm, x3, y, XGF_W, 200, LS_16, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x3, y, XGF_W, 160, LS_12, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("购买方", _xm);
-	xywhsf(_xm, x4, y, XGFMCSH_W, 110, LS_12, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x4, y, XGFMCSH_W, 90, LS_12, FS, AM_ZC | LINE_STATE_LTB);
 	addxml("名称", _xm);
-	xywhsf(_xm, x4, y + 110, XGFMCSH_W, 90, LS_12, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x4, y + 90, XGFMCSH_W, 70, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("纳税人识别号", _xm);
-	xywhsf(_xm, x5, y, XGFMCSH_W1, 110, LS_11, FS, AM_ZC | LINE_STATE_0);
+	xywhsf(_xm, x5, y, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_0);
 	addxml(bbxx.st_sGfmc, _xm);
-	xywhsf(_xm, x5, y + 110, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_LBR);
+	xywhsf(_xm, x5, y + 90, XGFMCSH_W1, 70, LS_11, FS, AM_ZC | LINE_STATE_LBR);
 	addxml(bbxx.st_sGfsh, _xm);
-	y += 200;
+	y += 160;
 
 	// 处理数据项
 	int nW = 70; // 标题项高度
@@ -394,7 +395,7 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	addxml("税额", _xm);
 	_y += nW;
 
-	int nLY = 140; // 数据行高度
+	int nLY = 130; // 数据行高度
 	m_nLineNum = 0;
 	LTHZXXB_BBXM::iterator pos;
 	for (pos = bbxx.st_lHzxxbBbxm.begin(); pos != bbxx.st_lHzxxbBbxm.end(); pos++)
@@ -453,12 +454,12 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	}
 
 	x0 = 0;
-	xywhsf(_xm, x0, y, XGF_W, _y - y, LS_16, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x0, y, XGF_W, _y - y, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("开具\n红字\n专用\n发票\n内容", _xm);
 	y = _y;
 
 	int w = x6 - XGF_W;
-	xywhsf(_xm, x0, y, XGF_W, 750, LS_16, FS, AM_ZC | LINE_STATE_LBR);
+	xywhsf(_xm, x0, y, XGF_W, 750, LS_12, FS, AM_ZC | LINE_STATE_LBR);
 	addxml("说明", _xm);
 	xywhsf(_xm, x6, y, 0, 750, LS_16, FS, AM_ZC); // 宽度为0 ，画竖线， 高度为零， 画横线
 	addxml("", _xm);
@@ -473,8 +474,8 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	// 这里处理说明中的内容
 	_y = y;
 	_y += 85;
-	xywhsf(_xm, XGF_W + 20, _y, w - 50, 80, LS_16, FH, AM_VCL_S);
-	addxml("一、购买方      □", _xm);
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 80, LS_12, FH, AM_VCL_S);
+	addxml("一、购买方           □", _xm);
 	if (bbxx.st_sSqf.Compare("0") == 0)
 	{
 		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
@@ -500,9 +501,9 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	addxml("2、未抵扣    □", _xm);
 	if (bbxx.st_sSqyy.Compare("1") == 0 && bbxx.st_sSqf.Compare("0") == 0)
 	{
-		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
+		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_12, FH, -5); // -5画√号的俩条线
 		addxml("√", _xm);
-		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_16, FH, -5);
+		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_12, FH, -5);
 		addxml("√", _xm);
 	}
 	_y += 80;
@@ -519,13 +520,13 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	_y += 60;
 
 	_y += 20;
-	xywhsf(_xm, XGF_W + 20, _y, w - 50, 80, LS_16, FH, AM_VCL_S);
-	addxml("一、销售方      □", _xm);
+	xywhsf(_xm, XGF_W + 20, _y, w - 50, 80, LS_12, FH, AM_VCL_S);
+	addxml("一、销售方           □", _xm);
 	if (bbxx.st_sSqf.Compare("1") == 0)
 	{
-		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_16, FH, -5); // -5画√号的俩条线
+		xywhsf(_xm, XGF_W + 20 + 440, _y + 35, 20, 20, LS_12, FH, -5); // -5画√号的俩条线
 		addxml("√", _xm);
-		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_16, FH, -5);
+		xywhsf(_xm, XGF_W + 20 + 440 + 20, _y + 35 + 20, 35, -40, LS_12, FH, -5);
 		addxml("√", _xm);
 	}
 	_y += 80;
@@ -546,7 +547,7 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	xml.FindElem("PageData");
 	xml.IntoElem();// 再次进入pagedata
 	// 红字专\r\n用发票\r\n信息表\r\n编号
-	xywhsf(_xm, x0, y, XGF_W, 250, LS_16, FS, AM_ZC | LINE_STATE_LB);
+	xywhsf(_xm, x0, y, XGF_W, 250, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("红字专\r\n用发票\r\n信息表\r\n编号", _xm);
 
 	xywhsf(_xm, XGF_W, y, w, 250, LS_16, FS, AM_ZC | LINE_STATE_0);
