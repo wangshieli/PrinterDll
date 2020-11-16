@@ -311,7 +311,7 @@ CString CFpkcdy::GenerateItemMXXml(FPKCCX_BBXX bbxx)
 	for (pos = bbxx.st_lFpkccx_fpxx.begin(); pos != bbxx.st_lFpkccx_fpxx.end(); pos++)
 	{
 		xywhsf(pos->xmXh, x0, y, T1_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmFplx, x1, y, T2_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
+		xywhsf(pos->xmFplx, x1, y, T2_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
 		xywhsf(pos->xmFpdm, x2, y, T3_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
 		xywhsf(pos->xmKpxe, x3, y, T4_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
 		xywhsf(pos->xmFpqshm, x4, y, T5_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
