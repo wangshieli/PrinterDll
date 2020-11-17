@@ -676,7 +676,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		xywhsf(fpmx.fyxmxx[i].ssDj, 1120, 260 + 45 * i, 170, 45, LS_9, FS, AM_VCR);
 		xywhsf(fpmx.fyxmxx[i].ssJe, 1320, 260 + 45 * i, 280, 45, LS_9, FS, AM_VCR);
 		xywhsf(fpmx.fyxmxx[i].ssSl, 1610, 260 + 45 * i, 95, 45, LS_9, FS, AM_ZC);
-		xywhsf(fpmx.fyxmxx[i].ssSe, 1730, 260 + 45 * i, 270, 45, LS_9, FT, AM_VCR);
+		xywhsf(fpmx.fyxmxx[i].ssSe, 1730, 260 + 45 * i, 270, 45, LS_9, FS, AM_VCR);
 	}
 	xywhsf(fpmx.hjje, 1320 + 30, 610, 280 - 30, 50, LS_10, FT, AM_VCR_S | COIN_Y);
 	xywhsf(fpmx.hjse, 1730 + 30, 610, 270 - 30, 50, LS_10, FT, AM_VCR_S | COIN_Y);
