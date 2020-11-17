@@ -487,7 +487,7 @@ void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		if (z == AM_VCL_S)
 			x = rect.left - coin_xy_Y.cx;
 		else if (z == AM_VCR_S)
-			x = rect.right - (r - rect.left) - coin_xy_Y.cx;
+			x = rect.right - (trect.right - rect.left) - coin_xy_Y.cx;
 
 		y = (rect.top + rect.bottom) / 2 - coin_xy_Y.cy;
 
@@ -511,7 +511,7 @@ void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 		if (z == AM_VCL_S)
 			x = rect.left - coin_xy_O.cx;
 		else if (z == AM_VCR_S)
-			x = rect.right - (r - rect.left) - coin_xy_O.cx;
+			x = rect.right - (trect.right - rect.left) - coin_xy_O.cx;
 
 		y = (rect.top + rect.bottom) / 2;
 
