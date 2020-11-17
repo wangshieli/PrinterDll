@@ -493,11 +493,11 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 			addxml(bbxx.st_sT9, bbxx.xmT9);
 			bNewPage = FALSE;
 		}
-		xywhsf(pos->xmXh, x0, _y, XU_W, nLY, LS_9, FS, AM_VCL | LINE_STATE_L);
+		xywhsf(pos->xmXh, x0, _y, XU_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_L);
 		xywhsf(pos->xmSpmc, x1, _y, MC_W, nLY, LS_9, FS, AM_VCL | LINE_STATE_L);
 		xywhsf(pos->xmGgxh, x2, _y, XH_W, nLY, LS_9, FS, AM_VCL | LINE_STATE_L);
-		xywhsf(pos->xmDw, x3, _y, DW_W, nLY, LS_9, FS, AM_VCL | LINE_STATE_L);
-		xywhsf(pos->xmSpsl, x4, _y, SL_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
+		xywhsf(pos->xmDw, x3, _y, DW_W, nLY, LS_9, FS, AM_ZC_CHEKC | LINE_STATE_L);
+		xywhsf(pos->xmSpsl, x4, _y, SL_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_L);
 		xywhsf(pos->xmDj, x5, _y, DJ_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
 		xywhsf(pos->xmJe, x6, _y, JE_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
 		xywhsf(pos->xmSlv, x7, _y, SLV_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
