@@ -269,43 +269,134 @@ void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 	}
 }
 
-int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, int width)
+int CFpdyBase::DealData1(CString & m_szText, int s, int width)
 {
 	int length = 0, chCount = 0;
-	int chineseCount = 0;
 	BOOL chineseFlag = FALSE;
 	int i = s;
 	CString str = m_szText.Mid(s);
-	for (; i < m_szText.GetLength(); ++i) {	
+	int nCount = m_szText.GetLength();
+	for (; i < nCount;) {
+		int size;
+		chineseFlag = FALSE;
+		char c = m_szText.GetAt(i);
+
+		if (c == '\n')
+		{
+			s = ++i;
+			return DealData1(m_szText, s, width);
+		}
+
+		if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
+		{
+			chineseFlag = TRUE;
+			i += 2;
+		}
+		else
+		{
+			i++;
+		}
+
+		CString str1 = str.Right(i - s);
+		size = str.Right(i - s).GetLength();
+		if (size / width) {
+			if (chineseFlag == TRUE) {
+				if (size % width != 0)
+				{
+					i -= 2;
+					m_szText.Insert(i, '\n');
+					i += 1;
+				}
+				else
+				{
+					if (i < nCount)
+					{
+						if (m_szText.GetAt(i) != '\n')
+						{
+							m_szText.Insert(i, '\n');
+						}
+						i += 1;
+					}
+				}
+			}
+			else {
+				if (i < nCount)
+				{
+					if (m_szText.GetAt(i) != '\n')
+					{
+						m_szText.Insert(i, '\n');
+					}
+					i += 1;
+				}
+			}
+			chCount += 1;
+			//i -= 1;//因为I要自增1，如果插入\N后，减1以抵消循环增1
+
+			s = i;
+			return DealData1(m_szText, s, width);
+		}
+	}
+	return chCount + 1;
+}
+
+int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, int width)
+{
+	int length = 0, chCount = 0;
+	BOOL chineseFlag = FALSE;
+	int i = s;
+	CString str = m_szText.Mid(s);
+	int nCount = m_szText.GetLength();
+	for (; i < nCount; ) {
 		CSize size;
 		chineseFlag = FALSE;
 		char c = m_szText.GetAt(i);
 
 		if ( c == '\n')
 		{
-			s = i + 1;
+			s = ++i;
 			return DealData(pDC, m_szText, s, width);
 		}
 
-		if (c < 0 || c>255)//如果是中文字符就
+		if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
 		{
-			chineseCount += 1;
-			i += 1;
 			chineseFlag = TRUE;
+			i += 2;
 		}
-		size = pDC->GetTextExtent(str.Right(i + 1 - s));
+		else
+		{
+			i++;
+		}
+
+		size = pDC->GetTextExtent(str.Right(i - s));
 		if ((size.cx) / width) {
 			if (chineseFlag == TRUE) {
-				if (m_szText.GetAt(i - 1) < 0) {//遇到中文字符中间超越DES DC边界需回退
-					chineseCount -= 1;
-					m_szText.Insert(i - 1, '\n');
-					/*i-=1;*/
-
+				if (size.cx % width != 0)
+				{
+					i -= 2;
+					m_szText.Insert(i, '\n');
+					i += 1;
+				}
+				else
+				{
+					if (i < nCount)
+					{
+						if (m_szText.GetAt(i) != '\n')
+						{
+							m_szText.Insert(i, '\n');
+						}
+						i += 1;
+					}
 				}
 			}
 			else {
-				m_szText.Insert(i, '\n');
-				i += 1;//将当前索引定位到‘\N’之后的第一个字节
+				if (i < nCount)
+				{
+					if (m_szText.GetAt(i) != '\n')
+					{
+						m_szText.Insert(i, '\n');
+					}
+					i += 1;
+				}
 			}
 			chCount += 1;
 			//i -= 1;//因为I要自增1，如果插入\N后，减1以抵消循环增1

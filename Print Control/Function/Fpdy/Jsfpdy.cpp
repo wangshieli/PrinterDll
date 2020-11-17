@@ -967,29 +967,31 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 	{
 		if (fpmx.bMxFontSize)
 		{
-			for (int i = 12; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 12)
-			{
-				strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-				strcpy(cstrTemp, strTemp.GetBuffer(0));
-				if (!(cstrTemp[0] & 0x80))
-				{
-					fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-					i += 2;
-				}
-			}
+			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 12);
+			//for (int i = 12; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 12)
+			//{
+			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+			//	if (!(cstrTemp[0] & 0x80))
+			//	{
+			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+			//		i += 2;
+			//	}
+			//}
 		}
 		else
 		{
-			for (int i = 14; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 14)
-			{
-				strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-				strcpy(cstrTemp, strTemp.GetBuffer(0));
-				if (!(cstrTemp[0] & 0x80))
-				{
-					fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-					i += 2;
-				}
-			}
+			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 14);
+			//for (int i = 14; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 14)
+			//{
+			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+			//	if (!(cstrTemp[0] & 0x80))
+			//	{
+			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+			//		i += 2;
+			//	}
+			//}
 		}
 		addxml(fpmx.fyxmxx[j].sSpmc, fpmx.fyxmxx[j].ssSpmc);
 		addxml(fpmx.fyxmxx[j].sSpsl, fpmx.fyxmxx[j].ssSpsl);
@@ -1161,29 +1163,31 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 	{
 		if (fpmx.bMxFontSize)
 		{
-			for (int i = 8; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 8)
-			{
-				strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-				strcpy(cstrTemp, strTemp.GetBuffer(0));
-				if (!(cstrTemp[0] & 0x80))
-				{
-					fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-					i += 2;
-				}
-			}
+			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 8);
+			//for (int i = 8; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 8)
+			//{
+			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+			//	if (!(cstrTemp[0] & 0x80))
+			//	{
+			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+			//		i += 2;
+			//	}
+			//}
 		}
 		else
 		{
-			for (int i = 10; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 10)
-			{
-				strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-				strcpy(cstrTemp, strTemp.GetBuffer(0));
-				if (!(cstrTemp[0] & 0x80))
-				{
-					fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-					i += 2;
-				}
-			}
+			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 10);
+			//for (int i = 10; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 10)
+			//{
+			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+			//	if (!(cstrTemp[0] & 0x80))
+			//	{
+			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+			//		i += 2;
+			//	}
+			//}
 		}
 		addxml(fpmx.fyxmxx[j].sSpmc, fpmx.fyxmxx[j].ssSpmc);
 		addxml(fpmx.fyxmxx[j].sSpsl, fpmx.fyxmxx[j].ssSpsl);

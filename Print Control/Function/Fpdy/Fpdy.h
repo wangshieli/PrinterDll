@@ -174,6 +174,9 @@ protected:
 	BOOL GetPrinterDevice(LPTSTR pszPrinterName, HGLOBAL* phDevNames, HGLOBAL* phDevMode);
 	void setBuiltInOffset(IN int nType, OUT int &_x, OUT int &_y);
 
+	// 根据设置的字符个数插入换行'\n'
+	int DealData1(CString& m_szText, int s, int width);
+
 	int DealData(CDC *pDC, CString& m_szText, int s, int width);
 	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s);
 
