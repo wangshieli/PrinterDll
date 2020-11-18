@@ -872,6 +872,9 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	int fontSize = FontSize;
 
 	CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+	SIZE ss;
+	ss.cy = _s;
+	pCDC->LPtoDP(&ss);
 	pCDC->LPtoDP(&rect);
 	pCDC->SetMapMode(MM_TEXT);
 	

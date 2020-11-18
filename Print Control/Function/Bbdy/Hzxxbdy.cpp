@@ -218,7 +218,7 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 					else if (w != 0) // 宽度为0 ，画竖线， 高度为零， 画横线
 					{
 						PaintLine(itemRect, ls);
-						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+						PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 3, 3);
 					}
 					else
 					{
