@@ -385,10 +385,22 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 				}
 			}
 			else {
-				if (i + 1 < nCount)
+				if (size.cx % width != 0)
 				{
 					m_szText.Insert(i, '\n'); // 当前i肯定不会是'\n'，上面已经对它进行了检测
 					i += 1;
+				}
+				else
+				{
+					if (i + 1 < nCount)
+					{
+						if (m_szText.GetAt(i + 1) != '\n')
+						{
+							m_szText.Insert(i + 1, '\n'); // 当前i肯定不会是'\n'，上面已经对它进行了检测
+							i += 1;
+						}				
+						i += 1;
+					}
 				}
 			}
 			chCount += 1;
