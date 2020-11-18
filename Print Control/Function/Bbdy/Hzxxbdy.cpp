@@ -352,7 +352,7 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	addxml("名称", _xm);
 	xywhsf(_xm, x1, y + 90, XGFMCSH_W, 70, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("纳税人识别号", _xm);
-	xywhsf(_xm, x2, y, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_LTB);
+	xywhsf(_xm, x2, y, XGFMCSH_W1, 90, LS_11, FS, AM_ZC_CHEKC | LINE_STATE_LTB);
 	addxml(bbxx.st_sXfmc, _xm);
 	xywhsf(_xm, x2, y + 90, XGFMCSH_W1, 70, LS_11, FS, AM_ZC | LINE_STATE_LB);
 	addxml(bbxx.st_sXfsh, _xm);
@@ -363,7 +363,7 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 	addxml("名称", _xm);
 	xywhsf(_xm, x4, y + 90, XGFMCSH_W, 70, LS_12, FS, AM_ZC | LINE_STATE_LB);
 	addxml("纳税人识别号", _xm);
-	xywhsf(_xm, x5, y, XGFMCSH_W1, 90, LS_11, FS, AM_ZC | LINE_STATE_0);
+	xywhsf(_xm, x5, y, XGFMCSH_W1, 90, LS_11, FS, AM_ZC_CHEKC | LINE_STATE_0);
 	addxml(bbxx.st_sGfmc, _xm);
 	xywhsf(_xm, x5, y + 90, XGFMCSH_W1, 70, LS_11, FS, AM_ZC | LINE_STATE_LBR);
 	addxml(bbxx.st_sGfsh, _xm);

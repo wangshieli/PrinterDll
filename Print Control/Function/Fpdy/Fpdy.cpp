@@ -269,7 +269,7 @@ void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 	}
 }
 
-int CFpdyBase::DealData1(CString & m_szText, int s, int width)
+int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 {
 	int length = 0, chCount = 0;
 	BOOL chineseFlag = FALSE;
@@ -339,7 +339,7 @@ int CFpdyBase::DealData1(CString & m_szText, int s, int width)
 	return chCount + 1;
 }
 
-int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, int width)
+int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 {
 	int length = 0, chCount = 0;
 	BOOL chineseFlag = FALSE;
