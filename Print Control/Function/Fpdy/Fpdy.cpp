@@ -297,8 +297,7 @@ int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 			i++;
 		}
 
-		CString str1 = str.Right(i - s);
-		size = str.Right(i - s).GetLength();
+		size = str.Left(i - s).GetLength();
 		if (size / width) {
 			if (chineseFlag == TRUE) {
 				if (size % width != 0)
@@ -363,7 +362,7 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 			i += 1;
 		}
 
-		size = pDC->GetTextExtent(str.Right(i + 1 - s));
+		size = pDC->GetTextExtent(str.Left(i + 1 - s));
 		if ((size.cx) / width) {
 			if (chineseFlag == TRUE) {
 				if (size.cx % width != 0)
