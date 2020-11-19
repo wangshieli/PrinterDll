@@ -500,7 +500,7 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 		xywhsf(pos->xmSpsl, x4, _y, SL_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_L);
 		xywhsf(pos->xmDj, x5, _y, DJ_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
 		xywhsf(pos->xmJe, x6, _y, JE_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
-		xywhsf(pos->xmSlv, x7, _y, SLV_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_L);
+		xywhsf(pos->xmSlv, x7, _y, SLV_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_L);
 		xywhsf(pos->xmSe, x8, _y, SE_W, nLY, LS_9, FS, AM_VCR_S | LINE_STATE_LR);
 
 		addxml(pos->st_nXh, pos->xmXh);
