@@ -271,76 +271,67 @@ void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 
 int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 {
-	int length = 0, chCount = 0;
 	BOOL chineseFlag = FALSE;
 	int i = s;
 	CString str = m_szText.Mid(s);
 	int nCount = m_szText.GetLength();
-	for (; i < nCount;) {
+	for (; i < nCount; ++i) {
 		int size;
 		chineseFlag = FALSE;
 		char c = m_szText.GetAt(i);
 
 		if (c == '\n')
 		{
-			s = ++i;
+			s = i + 1;
 			return DealData1(m_szText, s, width);
 		}
 
 		if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
 		{
 			chineseFlag = TRUE;
-			i += 2;
-		}
-		else
-		{
-			i++;
+			i += 1;
 		}
 
-		size = str.Left(i - s).GetLength();
+		size = str.Left(i + 1 - s).GetLength();
 		if (size / width) {
 			if (chineseFlag == TRUE) {
 				if (size % width != 0)
 				{
-					i -= 2;
+					i -= 1;
 					m_szText.Insert(i, '\n');
-					i += 1;
 				}
 				else
 				{
-					if (i < nCount)
+					if (i + 1 < nCount)
 					{
+						i += 1;
 						if (m_szText.GetAt(i) != '\n')
 						{
 							m_szText.Insert(i, '\n');
 						}
-						i += 1;
 					}
 				}
 			}
 			else {
-				if (i < nCount)
+				if (i + 1 < nCount)
 				{
+					i += 1;
 					if (m_szText.GetAt(i) != '\n')
 					{
 						m_szText.Insert(i, '\n');
 					}
-					i += 1;
 				}
 			}
-			chCount += 1;
-			//i -= 1;//因为I要自增1，如果插入\N后，减1以抵消循环增1
 
-			s = i;
+			s = i + 1;
 			return DealData1(m_szText, s, width);
 		}
 	}
-	return chCount + 1;
+	return 0;
 }
 
 int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 {
-	int length = 0, chCount = 0;
 	BOOL chineseFlag = FALSE;
 	int i = s;
 	CString str = m_szText.Mid(s);
@@ -369,16 +360,15 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 				{
 					i -= 1;
 					m_szText.Insert(i, '\n');
-					i += 1;
 				}
 				else
 				{
 					if (i + 1 < nCount)
 					{
-						if (m_szText.GetAt(i + 1) == '\n')
+						i += 1;
+						if (m_szText.GetAt(i) != '\n')
 						{
-							//m_szText.Insert(i + 1, '\n');	// DT_WORDBREAK 如果'\n’在行末，不会有空行
-							i += 1;
+							m_szText.Insert(i, '\n');
 						}							
 					}			
 				}
@@ -386,30 +376,26 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 			else {
 				if (size.cx % width != 0)
 				{
-					m_szText.Insert(i, '\n'); // 当前i肯定不会是'\n'，上面已经对它进行了检测
-					i += 1;
+					m_szText.Insert(i, '\n');
 				}
 				else
 				{
 					if (i + 1 < nCount)
 					{
-						if (m_szText.GetAt(i + 1) != '\n')
-						{
-							m_szText.Insert(i + 1, '\n'); // 当前i肯定不会是'\n'，上面已经对它进行了检测
-							i += 1;
-						}				
 						i += 1;
+						if (m_szText.GetAt(i) != '\n')
+						{
+							m_szText.Insert(i, '\n');
+						}
 					}
 				}
 			}
-			chCount += 1;
-			//i -= 1;//因为I要自增1，如果插入\N后，减1以抵消循环增1
 
-			s = i;
+			s = i + 1;
 			return DealData(pDC, m_szText, s, width);
 		}
 	}
-	return chCount + 1;
+	return 0;
 }
 
 int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s)
