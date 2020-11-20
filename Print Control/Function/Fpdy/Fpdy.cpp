@@ -283,7 +283,7 @@ int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 		if (c == '\n')
 		{
 			s = i + 1;
-			return DealData1(m_szText, s, width);
+			return DealData1(m_szText, s, width) + 1;
 		}
 
 		if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
@@ -324,10 +324,10 @@ int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 			}
 
 			s = i + 1;
-			return DealData1(m_szText, s, width);
+			return DealData1(m_szText, s, width) + 1;
 		}
 	}
-	return 0;
+	return 1;
 }
 
 int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
