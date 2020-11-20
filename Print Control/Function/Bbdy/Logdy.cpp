@@ -7,7 +7,7 @@
 #define BM_W	250
 #define XM_W	250
 #define SJ_W	350
-#define MK_W	300
+#define MK_W	1100
 
 CLogdy::CLogdy()
 {
@@ -293,7 +293,7 @@ CString CLogdy::GenerateItemMXXml(LOG_BBXX bbxx)
 	int nLY = 90;// 数据行高度
 
 	m_nLineNum = 0;
-	m_nPageSize = 28;
+	m_nPageSize = 27;
 	int _y = y;
 	LTLOG_XMXX::iterator pos;
 	for (pos = bbxx.st_lLogdBbxx.begin(); pos != bbxx.st_lLogdBbxx.end(); pos++)
