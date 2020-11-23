@@ -337,7 +337,7 @@ CString CSkzltjdy::GenerateItemMXXml(SKZLTJ_BBXX bbxx)
 
 	xywhsf(bbxx.xmSsrq, x0, y, 500, 50, LS_10, FS, AM_VCL);
 	y += 50;
-	xywhsf(bbxx.xmSm, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmSm, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;
 	xywhsf(bbxx.xmNsrsbh, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	y += 50;

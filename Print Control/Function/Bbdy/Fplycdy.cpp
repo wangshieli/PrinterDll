@@ -340,7 +340,7 @@ CString CFplycdy::GenerateItemMXXml(FPLYC_BBXX bbxx)
 	xywhsf(bbxx.xmDw, x0 + 1200, y, 500, 50, LS_10, FS, AM_VCL);
 	y += 50;
 
-	xywhsf(bbxx.xmQymc, x0, y, 500, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmQymc, x0, y, 1990, 50, LS_10, FS, AM_VCL);
 	xywhsf(bbxx.xmDi, 1350, y, 80, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmP1, 1430, y, 90, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmYe1, 1520, y, 80, 50, LS_10, FS, AM_ZC);
