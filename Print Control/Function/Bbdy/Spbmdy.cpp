@@ -192,7 +192,7 @@ LONG CSpbmdy::PrintQD(LPCSTR billxml)
 
 					PaintLine(itemRect, ls);
 
-					PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 0, 2);
+					PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 5, 2);
 				}
 				xml.OutOfElem();
 			}
