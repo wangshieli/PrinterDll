@@ -19,7 +19,7 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 	nYoff(0),
 	nQRCodeSize(0),
 	m_nLineNum(0),
-	m_nAllPageNum(1),
+	m_nAllPageNum(0),
 	m_nPageSize(0),
 	m_nFromPage(1),
 	m_nToPage(1)

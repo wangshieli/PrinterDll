@@ -298,6 +298,7 @@ CString CFpzlhz::GenerateFpdyXml(FPZLHZ_BBXX bbxx, CString dylx, BBDY bbdy)
 CString CFpzlhz::GenerateItemMXXml(FPZLHZ_BBXX bbxx)
 {
 	CMarkup xml;
+	m_nAllPageNum = 1;
 	int i = 0;
 
 	xywhsf(bbxx.xmTitle, 0, 0, 1990, 100, LS_16, FS, AM_ZC);

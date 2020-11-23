@@ -320,6 +320,7 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 {
 	CMarkup xml;
 	//m_nPageSize = LINEFEED_L;
+	m_nAllPageNum = 1;
 	m_nPageSize = 19;
 
 	xml.AddElem("NewPage");
