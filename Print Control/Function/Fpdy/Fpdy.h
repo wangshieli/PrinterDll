@@ -178,19 +178,19 @@ protected:
 	int DealData1(CString& m_szText, int s, LONG width);
 
 	int DealData(CDC *pDC, CString& m_szText, int s, LONG width);
-	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s);
+	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect);
 
 	// PaintTile4 （钱币符号），用于钱币符号打印
-	void PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+	void PaintTile4(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
 
 	// PaintTile3 （YKFPCXDY），计算指定字号数据项换行打印高度
-	LONG PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+	LONG PaintTile3(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
 
 	// PaintTile2， 计算数据项适应打印区域之后的右边距、行高、字号
-	LONG PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+	LONG PaintTile2(int iType, int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
 
 	// PaintTile， 正常的打印
-	void PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, int FontSizeEC = 1, int _s = 0, int _l = 0, int _r = 0);
+	void PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
 
 	void PaintLine(RECT rect, int ls);
 

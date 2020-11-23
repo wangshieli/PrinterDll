@@ -147,6 +147,7 @@ LONG CSkzltjdy::PrintQD(LPCSTR billxml)
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
 					int z = atoi(xml.GetAttrib("z"));
+					int fc = atoi(xml.GetAttrib("fc"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -167,7 +168,7 @@ LONG CSkzltjdy::PrintQD(LPCSTR billxml)
 					}
 					else
 					{
-						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+						PaintTile(nFontSize, fc, strFontName, itemRect, strText, z);
 					}
 				}
 				xml.OutOfElem();
@@ -191,6 +192,7 @@ LONG CSkzltjdy::PrintQD(LPCSTR billxml)
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
 					int z1 = atoi(xml.GetAttrib("z"));
+					int fc = atoi(xml.GetAttrib("fc"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -203,7 +205,7 @@ LONG CSkzltjdy::PrintQD(LPCSTR billxml)
 
 					PaintLine(itemRect, ls);
 
-					PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 0, 2);
+					PaintTile(nFontSize, fc, strFontName, itemRect, strText, z, { 2, 2, 1, 1 });
 				}
 				xml.OutOfElem();
 			}

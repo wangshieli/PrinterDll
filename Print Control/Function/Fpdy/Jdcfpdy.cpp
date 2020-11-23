@@ -193,10 +193,10 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString zzzse)
 			if (COIN_Y == (ls & 0xff000000) || COIN_O == (ls & 0xff000000))
 			{
 				if (strText.Compare("***") != 0)
-					PaintTile4(nFontSize, strFontName, itemRect, strText, z1, fc);
+					PaintTile4(nFontSize, fc, strFontName, itemRect, strText, z1);
 			}
 
-			PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
+			PaintTile(nFontSize, fc, strFontName, itemRect, strText, z);
 		}
 
 		::EndPage(m_hPrinterDC);

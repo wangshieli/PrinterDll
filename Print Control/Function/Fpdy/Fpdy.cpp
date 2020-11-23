@@ -135,7 +135,7 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 		getSysDefPrinter(defPrinter);
 		setSysDefprinter(m_sPrinterName);
 		m_pDlg->m_pd.nMinPage = m_pDlg->m_pd.nFromPage = 1;
-		m_pDlg->m_pd.nMaxPage = m_pDlg->m_pd.nToPage = m_nAllPageNum;
+		m_pDlg->m_pd.nMaxPage = m_pDlg->m_pd.nToPage = (m_nAllPageNum == 0 ? 1 : m_nAllPageNum);
 		if (m_pDlg->DoModal() == IDCANCEL)
 		{
 			return -1;// 用户取消了打印操作
@@ -408,7 +408,7 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 	return 0;
 }
 
-int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int _s)
+int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect)
 {
 	fontNew->CreatePointFont(f, FontType, pDC);
 	fontOld = (CFont *)(::SelectObject(m_hPrinterDC, *fontNew));
@@ -423,13 +423,13 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags);
 	LONG r = trect.right;
-	if (((h >= recv_h - _s
+	if (((h >= recv_h
 		|| (r > recv_r)) && ((f -= 1) || 1)))
 	{
 		::SelectObject(m_hPrinterDC, fontOld);
 		fontNew->DeleteObject();
 
-		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect, _s);
+		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect);
 	}
 
 	_trect = trect;
@@ -437,14 +437,18 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 	return h;
 }
 
-void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z1, int FontSizeEC, int _s, int _l, int _r)
+void CFpdyBase::PaintTile4(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z1, RECT _rect)
 {
 
 	int z = z1 & 0x000000ff;
 	int ls = z1 & 0xff00ff00;
 
-	rect.left += _l;
-	rect.right -= _r;
+	rect = {
+		rect.left + _rect.left,
+		rect.top - _rect.top,
+		rect.right - _rect.right,
+		rect.bottom + _rect.bottom
+	};
 
 	UINT flags1 = 0;
 	UINT flags2 = 0;
@@ -555,7 +559,7 @@ void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 	LONG r = trect.right;
-	if (((h >= recv_h - _s
+	if (((h >= recv_h
 		|| (r > recv_r
 			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
@@ -564,7 +568,7 @@ void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
-		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, _s);
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
 	}
 
 	int x = 0;
@@ -619,10 +623,14 @@ void CFpdyBase::PaintTile4(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	pCDC->SetMapMode(MM_LOMETRIC);
 }
 
-LONG CFpdyBase::PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
+LONG CFpdyBase::PaintTile3(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z, RECT _rect)
 {
-	rect.left += _l;
-	rect.right -= _r;
+	rect = {
+		rect.left + _rect.left,
+		rect.top - _rect.top,
+		rect.right - _rect.right,
+		rect.bottom + _rect.bottom
+	};
 
 	UINT flags1 = 0;
 	UINT flags2 = 0;
@@ -712,10 +720,14 @@ LONG CFpdyBase::PaintTile3(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data
 	return lData > YKFP_LINE_H_MAX ? YKFP_LINE_H_MAX : lData;
 }
 
-LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
+LONG CFpdyBase::PaintTile2(int iType, int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z, RECT _rect)
 {
-	rect.left += _l;
-	rect.right -= _r;
+	rect = {
+		rect.left + _rect.left,
+		rect.top - _rect.top,
+		rect.right - _rect.right,
+		rect.bottom + _rect.bottom
+	};
 
 	UINT flags1 = 0;
 	UINT flags2 = 0;
@@ -784,7 +796,7 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 	LONG r = trect.right;
-	if (((h >= recv_h - _s
+	if (((h >= recv_h
 		|| (r > recv_r
 			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
@@ -793,7 +805,7 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
-		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, _s);
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
 	}
 
 	pCDC->SetMapMode(MM_LOMETRIC);
@@ -823,10 +835,14 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, LPCSTR FontType, RECT rect, 
 	return lData;
 }
 
-void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data, int z, int FontSizeEC, int _s, int _l, int _r)
+void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z, RECT _rect)
 {
-	rect.left += _l;
-	rect.right -= _r;
+	rect = {
+		rect.left + _rect.left,
+		rect.top - _rect.top,
+		rect.right - _rect.right,
+		rect.bottom + _rect.bottom
+	};
 
 	UINT flags1 = 0;
 	UINT flags2 = 0;
@@ -879,9 +895,6 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	int fontSize = FontSize;
 
 	CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
-	SIZE ss;
-	ss.cy = _s;
-	pCDC->LPtoDP(&ss);
 	pCDC->LPtoDP(&rect);
 	pCDC->SetMapMode(MM_TEXT);
 	
@@ -898,7 +911,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	int recv_r = rect.right;
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
 	LONG r = trect.right;
-	if ((z != AM_ZL_EX) && (((h >= recv_h - _s
+	if ((z != AM_ZL_EX) && (((h >= recv_h
 		|| (r > recv_r
 			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
@@ -908,7 +921,7 @@ void CFpdyBase::PaintTile(int FontSize, LPCSTR FontType, RECT rect, LPCSTR data,
 	{		
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
-		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, _s);
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
 
 		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
 			rect.top = rect.top + (recv_h - h) / 2;

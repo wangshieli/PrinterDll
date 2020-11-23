@@ -159,7 +159,7 @@ LONG CJsfp5776dy::Print_5776(JSFP_FPXX_5776 fpmx)
 			itemRect.right = x + nXoff + 190 + w;
 			itemRect.bottom = (-y - h - nYoff - 330);
 
-			PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
+			PaintTile(nFontSize, fc, strFontName, itemRect, strText, z);
 		}
 
 		::EndPage(m_hPrinterDC);
@@ -415,13 +415,13 @@ CString CJsfp5776dy::GenerateItemXmlG_57(JSFP_FPXX_5776 fpmx)
 		mc += "\n";
 	}
 
-	LONG f = PaintTile2(3, LS_8, FS, rect, mc, AM_ZL_L);
+	LONG f = PaintTile2(3, LS_8, 1, FS, rect, mc, AM_ZL_L);
 
 	int _h = h;
 	for (pos = fpmx.st_lJsfp_fyxm.begin(); pos != fpmx.st_lJsfp_fyxm.end(); pos++)
 	{
 		//pos->st_sSpmc = pos->st_sSpmc.Left(DataPrintMaxLen(pos->st_sSpmc, 40));
-		LONG l = PaintTile2(2, f, FS, rect, pos->st_sSpmc, AM_ZL_L);
+		LONG l = PaintTile2(2, f, 1, FS, rect, pos->st_sSpmc, AM_ZL_L);
 		xywhsf(pos->xmSpmc, x0, h, SP57_W, l, f, FS, AM_ZL_L);
 		xywhsf(pos->xmHsdj, x1, h, DJ57_W, l, f, FS, AM_ZR_S);
 		xywhsf(pos->xmSpsl, x2, h, SL57_W, l, f, FS, AM_ZR_S);
@@ -451,7 +451,7 @@ CString CJsfp5776dy::GenerateItemXmlG_57(JSFP_FPXX_5776 fpmx)
 		rect.top = 0;
 		rect.right = 470;
 		rect.bottom = -65;
-		LONG l = PaintTile2(2, LS_9, FS, rect, fpmx.st_sBz, AM_ZL_L);
+		LONG l = PaintTile2(2, LS_9, 1, FS, rect, fpmx.st_sBz, AM_ZL_L);
 		h += (65 - l);
 		xywhsf(fpmx.xmBz, 0, h, 470, l, LS_8, FS, AM_ZL_L);
 		h += l;

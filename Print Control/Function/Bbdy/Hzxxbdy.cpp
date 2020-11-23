@@ -149,6 +149,7 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
 					int z = atoi(xml.GetAttrib("z"));
+					int fc = atoi(xml.GetAttrib("fc"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -174,7 +175,7 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 					}
 					else
 					{
-						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+						PaintTile(nFontSize, fc, strFontName, itemRect, strText, z);
 					}					
 				}
 				xml.OutOfElem();
@@ -212,16 +213,16 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 
 					if (COIN_Y == (ls & 0xff000000))
 					{	
-						PaintTile4(nFontSize, strFontName, itemRect, strText, z1, fc);
+						PaintTile4(nFontSize, fc, strFontName, itemRect, strText, z1);
 
-						PaintTile(nFontSize, strFontName, itemRect, strText, z);
+						PaintTile(nFontSize, fc, strFontName, itemRect, strText, z);
 						itemRect.left -= 30; // 钱币符号预留 30，需要补回去
 						PaintLine(itemRect, ls & 0x0000ff00);						
 					}
 					else if (w != 0) // 宽度为0 ，画竖线， 高度为零， 画横线
 					{
 						PaintLine(itemRect, ls);
-						PaintTile(nFontSize, strFontName, itemRect, strText, z, 1, 3, 3);
+						PaintTile(nFontSize, fc, strFontName, itemRect, strText, z, { 2, 2, 1, 1 });
 					}
 					else
 					{
@@ -320,7 +321,6 @@ CString CHzxxbdy::GenerateItemMXXml(HZXXB_BBXX bbxx)
 {
 	CMarkup xml;
 	//m_nPageSize = LINEFEED_L;
-	m_nAllPageNum = 1;
 	m_nPageSize = 19;
 
 	xml.AddElem("NewPage");

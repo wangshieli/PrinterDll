@@ -148,6 +148,7 @@ LONG CFpzlhz::PrintQD(LPCSTR billxml)
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
 					int z = atoi(xml.GetAttrib("z"));
+					int fc = atoi(xml.GetAttrib("fc"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -155,7 +156,7 @@ LONG CFpzlhz::PrintQD(LPCSTR billxml)
 					itemRect.right = x + nXoff + 10 + w;
 					itemRect.bottom = (-y - 10 - h - nYoff);
 
-					PaintTile(nFontSize, strFontName, itemRect, strText, z);
+					PaintTile(nFontSize, fc, strFontName, itemRect, strText, z);
 				}
 				xml.OutOfElem();
 			}
@@ -178,6 +179,7 @@ LONG CFpzlhz::PrintQD(LPCSTR billxml)
 					int nFontSize = atoi(xml.GetAttrib("s"));
 					CString strFontName = xml.GetAttrib("f");
 					int z1 = atoi(xml.GetAttrib("z"));
+					int fc = atoi(xml.GetAttrib("fc"));
 					CString strText = xml.GetData();
 
 					itemRect.left = x + nXoff + 10;
@@ -190,7 +192,7 @@ LONG CFpzlhz::PrintQD(LPCSTR billxml)
 
 					PaintLine(itemRect, ls);
 
-					PaintTile(nFontSize, strFontName, itemRect, strText, z);
+					PaintTile(nFontSize, fc, strFontName, itemRect, strText, z, { 2, 2, 1, 1 });
 				}
 				xml.OutOfElem();
 			}
@@ -298,7 +300,6 @@ CString CFpzlhz::GenerateFpdyXml(FPZLHZ_BBXX bbxx, CString dylx, BBDY bbdy)
 CString CFpzlhz::GenerateItemMXXml(FPZLHZ_BBXX bbxx)
 {
 	CMarkup xml;
-	m_nAllPageNum = 1;
 	int i = 0;
 
 	xywhsf(bbxx.xmTitle, 0, 0, 1990, 100, LS_16, FS, AM_ZC);
