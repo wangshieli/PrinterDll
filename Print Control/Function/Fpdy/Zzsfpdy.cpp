@@ -19,9 +19,7 @@
 #define SLV_W	100
 #define SE_W	250
 
-CZzsfpdy::CZzsfpdy() :m_nOrientation(DMORIENT_PORTRAIT),
-m_nPageSize(LINEFEED_P),
-m_sHx("")
+CZzsfpdy::CZzsfpdy() :m_sHx("")
 {
 }
 
@@ -78,7 +76,7 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 	if (xml.FindElem("hx")) m_sHx = xml.GetData();
 	if (xml.FindElem("printtasknameflag")) m_sPrintTaskNameFlag = xml.GetData();
 	if (xml.FindElem("kjfs")) fpdy.sKJFS = xml.GetData();
-	if (xml.FindElem("orientation")) m_nOrientation = atoi(xml.GetData());
+	//if (xml.FindElem("orientation")) m_nOrientation = atoi(xml.GetData());
 	m_iPldy = atoi(fpdy.sDyfs.GetBuffer(0));
 
 	m_sTempFplxdm = fpdy.sFplxdm;

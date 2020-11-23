@@ -18,7 +18,7 @@
 #define SLV_W 90
 #define SE_W 325
 
-CHzxxbdy::CHzxxbdy() :m_nPageSize(LINEFEED_P)
+CHzxxbdy::CHzxxbdy()
 {
 }
 
@@ -115,6 +115,10 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 
 		while (xml.FindElem("NewPage"))
 		{
+			int npn = atoi(xml.GetAttrib("pn"));
+			if (npn > m_nToPage || npn < m_nFromPage)
+				continue;
+
 			nrt = ::StartPage(m_hPrinterDC);
 			if (nrt <= 0)
 			{
@@ -123,7 +127,6 @@ LONG CHzxxbdy::PrintQD(LPCSTR billxml)
 				break;
 			}
 
-			int npn = atoi(xml.GetAttrib("pn"));
 			xml.IntoElem();
 
 			CRect PaintRect;

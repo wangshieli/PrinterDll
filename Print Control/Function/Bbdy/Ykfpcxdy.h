@@ -168,10 +168,5 @@ private:
 	bool In(wchar_t start, wchar_t end, wchar_t code);
 	char convert(wchar_t n);
 	CString getChineseSpell(CString src);
-
-private:
-	int m_nLineNum;
-	int m_nAllPageNum;
-	int m_nPageSize;
 };
 

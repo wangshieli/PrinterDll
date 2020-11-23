@@ -41,6 +41,10 @@ public:
 	{
 		st_sTitle = "";
 		st_sSkpbh = "";
+		st_sDi = "µÚ";
+		st_sYe1 = "Ò³";
+		st_sGong = "¹²";
+		st_sYe2 = "Ò³";
 		st_lFpkccx_fpxx.clear();
 	}
 
@@ -69,6 +73,18 @@ public:
 	XM xmT7;
 	XM xmT8;
 	XM xmT9;
+
+	CString st_sDi;
+	CString st_sYe1;
+	CString st_sGong;
+	CString st_sYe2;
+	XM xmDi;
+	XM xmYe1;
+	XM xmGong;
+	XM xmYe2;
+
+	XM xmP1;
+	XM xmP2;
 
 	LTFPKCCX_FPXX st_lFpkccx_fpxx;
 }FPKCCX_BBXX;

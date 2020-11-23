@@ -16,7 +16,7 @@
 #define YH_W	225
 #define YJ_W	225
 
-CKhbmdy::CKhbmdy():m_nPageSize(LINEFEED_P)
+CKhbmdy::CKhbmdy()
 {
 }
 
@@ -375,6 +375,10 @@ LONG CKhbmdy::PrintQD(LPCSTR billxml)
 
 		while (xml.FindElem("NewPage"))
 		{
+			int npn = atoi(xml.GetAttrib("pn"));
+			if (npn > m_nToPage || npn < m_nFromPage)
+				continue;
+
 			nrt = ::StartPage(m_hPrinterDC);
 			if (nrt <= 0)
 			{
@@ -383,7 +387,6 @@ LONG CKhbmdy::PrintQD(LPCSTR billxml)
 				break;
 			}
 
-			int npn = atoi(xml.GetAttrib("pn"));
 			xml.IntoElem();
 
 			CRect PaintRect;

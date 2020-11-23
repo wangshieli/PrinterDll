@@ -222,4 +222,13 @@ protected:
 	int nXoff;
 	int nYoff;
 	int nQRCodeSize;
+
+	int m_nLineNum;
+	int m_nAllPageNum;
+
+	//	int m_nOrientation;
+	int m_nPageSize;
+
+	int m_nFromPage;
+	int m_nToPage;
 };

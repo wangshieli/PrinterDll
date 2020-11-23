@@ -193,12 +193,6 @@ private:
 	CString GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy);
 
 private:
-	int m_nLineNum;
-	int m_nAllPageNum;
-
-	int m_nOrientation;
-	int m_nPageSize;
-
 	CString m_sHx;
 };
 

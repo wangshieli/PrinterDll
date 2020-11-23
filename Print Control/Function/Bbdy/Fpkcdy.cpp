@@ -116,6 +116,10 @@ LONG CFpkcdy::PrintQD(LPCSTR billxml)
 
 		while (xml.FindElem("NewPage"))
 		{
+			int npn = atoi(xml.GetAttrib("pn"));
+			if (npn > m_nToPage || npn < m_nFromPage)
+				continue;
+
 			nrt = ::StartPage(m_hPrinterDC);
 			if (nrt <= 0)
 			{
@@ -124,7 +128,6 @@ LONG CFpkcdy::PrintQD(LPCSTR billxml)
 				break;
 			}
 
-			int npn = atoi(xml.GetAttrib("pn"));
 			xml.IntoElem();
 
 			CRect PaintRect;
@@ -278,6 +281,8 @@ CString CFpkcdy::GenerateFpdyXml(FPKCCX_BBXX bbxx, CString dylx, BBDY bbdy)
 
 CString CFpkcdy::GenerateItemMXXml(FPKCCX_BBXX bbxx)
 {
+	CMarkup xml;
+
 	int x0 = 0;
 	int x1 = x0 + T1_W;
 	int x2 = x1 + T2_W;
@@ -293,6 +298,12 @@ CString CFpkcdy::GenerateItemMXXml(FPKCCX_BBXX bbxx)
 	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
 	y += 100;
 	xywhsf(bbxx.xmSkpbh, 0, 100, 1990, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmDi, 1350, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmP1, 1430, y, 90, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmYe1, 1520, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmGong, 1600, y, 80, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmP2, 1680, y, 90, 50, LS_10, FS, AM_ZC);
+	xywhsf(bbxx.xmYe2, 1770, y, 80, 50, LS_10, FS, AM_ZC);
 	y += 50;
 
 	int nW = 70; // 标题项高度
@@ -307,47 +318,71 @@ CString CFpkcdy::GenerateItemMXXml(FPKCCX_BBXX bbxx)
 	xywhsf(bbxx.xmT9, x8, y, T9_W, nW, LS_9, FS, AM_ZC | LINE_STATE_0);
 	y += nW;
 
+	int nLY = 90;// 数据行高度
+
+	m_nLineNum = 0;
+	m_nPageSize = 27;
+	int _y = y;
 	LTFPKCCX_FPXX::iterator pos;
 	for (pos = bbxx.st_lFpkccx_fpxx.begin(); pos != bbxx.st_lFpkccx_fpxx.end(); pos++)
 	{
-		xywhsf(pos->xmXh, x0, y, T1_W, nW, LS_9, FS, AM_ZC | LINE_STATE_LB);
-		xywhsf(pos->xmFplx, x1, y, T2_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmFpdm, x2, y, T3_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmKpxe, x3, y, T4_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmFpqshm, x4, y, T5_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmFpzzhm, x5, y, T6_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmFpfs, x6, y, T7_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmSyfs, x7, y, T8_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
-		xywhsf(pos->xmLgrq, x8, y, T9_W, nW, LS_9, FS, AM_ZC_S | LINE_STATE_LBR);
-		y += nW;
+		xywhsf(pos->xmXh, x0, _y, T1_W, nLY, LS_9, FS, AM_ZC | LINE_STATE_LB);
+		xywhsf(pos->xmFplx, x1, _y, T2_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmFpdm, x2, _y, T3_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmKpxe, x3, _y, T4_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmFpqshm, x4, _y, T5_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmFpzzhm, x5, _y, T6_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmFpfs, x6, _y, T7_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmSyfs, x7, _y, T8_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LB);
+		xywhsf(pos->xmLgrq, x8, _y, T9_W, nLY, LS_9, FS, AM_ZC_S | LINE_STATE_LBR);
+		_y += nLY;
+
+		m_nLineNum++;
+		if (m_nLineNum%m_nPageSize == 0)
+		{
+			_y = y;
+		}
 	}
 
-	CMarkup xml;
-	xml.AddElem("NewPage");
-	xml.AddAttrib("pn", 1);
-	xml.IntoElem();
+	m_nAllPageNum = m_nLineNum / m_nPageSize;
+	if (0 != m_nLineNum % m_nPageSize)
+		m_nAllPageNum++;
 
-	xml.AddElem("PageHeader");
-	xml.IntoElem();
-	addxml(bbxx.st_sTitle, bbxx.xmTitle);
-	addxml(bbxx.st_sSkpbh, bbxx.xmSkpbh);
-	xml.OutOfElem();
-
-	xml.AddElem("PageData");
-	xml.IntoElem();
-
-	addxml(bbxx.st_sT1, bbxx.xmT1);
-	addxml(bbxx.st_sT2, bbxx.xmT2);
-	addxml(bbxx.st_sT3, bbxx.xmT3);
-	addxml(bbxx.st_sT4, bbxx.xmT4);
-	addxml(bbxx.st_sT5, bbxx.xmT5);
-	addxml(bbxx.st_sT6, bbxx.xmT6);
-	addxml(bbxx.st_sT7, bbxx.xmT7);
-	addxml(bbxx.st_sT8, bbxx.xmT8);
-	addxml(bbxx.st_sT9, bbxx.xmT9);
-
+	int num = 0;
+	BOOL bNewPage = TRUE;
+	int nNewPageNum = 1;
 	for (pos = bbxx.st_lFpkccx_fpxx.begin(); pos != bbxx.st_lFpkccx_fpxx.end(); pos++)
 	{
+		if (bNewPage)
+		{
+			xml.AddElem("NewPage");
+			xml.AddAttrib("pn", nNewPageNum);
+			xml.IntoElem();
+			xml.AddElem("PageHeader");
+			xml.IntoElem();
+			addxml(bbxx.st_sTitle, bbxx.xmTitle);
+			addxml(bbxx.st_sSkpbh, bbxx.xmSkpbh);
+			addxml(bbxx.st_sDi, bbxx.xmDi);
+			addxml(nNewPageNum++, bbxx.xmP1);
+			addxml(bbxx.st_sYe1, bbxx.xmYe1);
+			addxml(bbxx.st_sGong, bbxx.xmGong);
+			addxml(m_nAllPageNum, bbxx.xmP2);
+			addxml(bbxx.st_sYe2, bbxx.xmYe2);
+
+			xml.OutOfElem();
+			xml.AddElem("PageData");
+			xml.IntoElem();
+			addxml(bbxx.st_sT1, bbxx.xmT1);
+			addxml(bbxx.st_sT2, bbxx.xmT2);
+			addxml(bbxx.st_sT3, bbxx.xmT3);
+			addxml(bbxx.st_sT4, bbxx.xmT4);
+			addxml(bbxx.st_sT5, bbxx.xmT5);
+			addxml(bbxx.st_sT6, bbxx.xmT6);
+			addxml(bbxx.st_sT7, bbxx.xmT7);
+			addxml(bbxx.st_sT8, bbxx.xmT8);
+			addxml(bbxx.st_sT9, bbxx.xmT9);
+			bNewPage = FALSE;
+		}
 		addxml(pos->st_nXh, pos->xmXh);
 		addxml(pos->st_sFplx, pos->xmFplx);
 		addxml(pos->st_sFpdm, pos->xmFpdm);
@@ -357,11 +392,22 @@ CString CFpkcdy::GenerateItemMXXml(FPKCCX_BBXX bbxx)
 		addxml(pos->st_sFpfs, pos->xmFpfs);
 		addxml(pos->st_sSyfs, pos->xmSyfs);
 		addxml(pos->st_sLgrq, pos->xmLgrq);
+
+		num++;
+		if (num % m_nPageSize == 0)
+		{
+			xml.OutOfElem();
+			xml.OutOfElem();
+			bNewPage = TRUE;
+		}
 	}
 
-	// 最后一页增加 页码
-	xml.OutOfElem();
-	xml.OutOfElem();
+	if (!bNewPage)
+	{
+		xml.OutOfElem();
+		xml.OutOfElem();
+		bNewPage = TRUE;
+	}
 
 	return xml.GetDoc();
 }

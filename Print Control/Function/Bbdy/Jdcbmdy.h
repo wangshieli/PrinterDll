@@ -102,12 +102,5 @@ private:
 	JDCBM_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
 	CString GenerateFpdyXml(JDCBM_BBXX bbxx, CString dylx, BBDY bbdy);
 	CString GenerateItemMXXml(JDCBM_BBXX bbxx);
-
-private:
-	int m_nLineNum;
-	int m_nAllPageNum;
-
-	//	int m_nOrientation;
-	int m_nPageSize;
 };
 

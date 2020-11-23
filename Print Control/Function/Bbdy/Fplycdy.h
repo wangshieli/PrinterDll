@@ -190,12 +190,5 @@ private:
 	FPLYC_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
 	CString GenerateFpdyXml(FPLYC_BBXX bbxx, CString dylx, BBDY bbdy);
 	CString GenerateItemMXXml(FPLYC_BBXX bbxx);
-
-private:
-	int m_nLineNum;
-	int m_nAllPageNum;
-
-	//	int m_nOrientation;
-	int m_nPageSize;
 };
 

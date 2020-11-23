@@ -16,7 +16,7 @@
 #define DJ_W	250
 #define HS_W	150
 
-CSpbmdy::CSpbmdy() :m_nPageSize(LINEFEED_P)
+CSpbmdy::CSpbmdy()
 {
 }
 
@@ -116,6 +116,10 @@ LONG CSpbmdy::PrintQD(LPCSTR billxml)
 
 		while (xml.FindElem("NewPage"))
 		{
+			int npn = atoi(xml.GetAttrib("pn"));
+			if (npn > m_nToPage || npn < m_nFromPage)
+				continue;
+
 			nrt = ::StartPage(m_hPrinterDC);
 			if (nrt <= 0)
 			{
@@ -124,7 +128,6 @@ LONG CSpbmdy::PrintQD(LPCSTR billxml)
 				break;
 			}
 
-			int npn = atoi(xml.GetAttrib("pn"));
 			xml.IntoElem();
 
 			CRect PaintRect;

@@ -17,7 +17,12 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 	m_bStatus(FALSE),
 	nXoff(0),
 	nYoff(0),
-	nQRCodeSize(0)
+	nQRCodeSize(0),
+	m_nLineNum(0),
+	m_nAllPageNum(1),
+	m_nPageSize(0),
+	m_nFromPage(1),
+	m_nToPage(1)
 {
 	ZeroMemory(m_cQRcodePath, MAX_PATH);
 	GetQRcodePath();
@@ -129,10 +134,15 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 		CString defPrinter = ""; 
 		getSysDefPrinter(defPrinter);
 		setSysDefprinter(m_sPrinterName);
+		m_pDlg->m_pd.nMinPage = m_pDlg->m_pd.nFromPage = 1;
+		m_pDlg->m_pd.nMaxPage = m_pDlg->m_pd.nToPage = m_nAllPageNum;
 		if (m_pDlg->DoModal() == IDCANCEL)
 		{
 			return -1;// 用户取消了打印操作
 		}
+
+		m_nFromPage = m_pDlg->m_pd.nFromPage;
+		m_nToPage = m_pDlg->m_pd.nToPage;
 		m_sPrinterName = m_pDlg->GetDeviceName();
 		setSysDefprinter(defPrinter);
 

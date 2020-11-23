@@ -123,12 +123,5 @@ private:
 	FPZLHZ_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
 	CString GenerateFpdyXml(FPZLHZ_BBXX bbxx, CString dylx, BBDY bbdy);
 	CString GenerateItemMXXml(FPZLHZ_BBXX bbxx);
-
-private:
-	int m_nLineNum;
-	int m_nAllPageNum;
-
-	//	int m_nOrientation;
-	int m_nPageSize;
 };
 
