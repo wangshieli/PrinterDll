@@ -1360,38 +1360,6 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 
 		while (xml.FindElem("Item"))
 		{
-			/*RECT itemRect;
-
-			int x = atoi(xml.GetAttrib("x"));
-			int y = atoi(xml.GetAttrib("y"));
-			int w = atoi(xml.GetAttrib("w"));
-			int h = atoi(xml.GetAttrib("h"));
-			int nFontSize = atoi(xml.GetAttrib("s"));
-			CString strFontName = xml.GetAttrib("f");
-			int z = atoi(xml.GetAttrib("z"));
-			int fc = atoi(xml.GetAttrib("fc"));
-			CString strText = xml.GetData();
-
-			itemRect.left = x + nXoff + 100;
-			itemRect.top = (-y - 5 - nYoff);
-			itemRect.right = x + nXoff + 100 + w;
-			itemRect.bottom = (-y + 5 - h - nYoff);
-
-
-			if (w == 0 && h == 0)
-			{
-				CFont *pOldFont;
-				CFont fontHeader;
-				fontHeader.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-				pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
-				::TextOut(m_hPrinterDC, itemRect.left, itemRect.top, strText, strText.GetLength());
-				::SelectObject(m_hPrinterDC, pOldFont);
-				fontHeader.DeleteObject();
-			}
-			else
-			{
-				PaintTile(nFontSize, strFontName, itemRect, strText, z, fc);
-			}*/
 			RECT printRect;
 			CFont ftPrint;
 			CString strText = xml.GetData();
@@ -1407,8 +1375,13 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 			
 			printRect.left = x + nXoff + 100;
 			printRect.top = -(y - 5 + nYoff);
+			printRect.right = x + nXoff + w + 100;
+			printRect.bottom = -((y + 5 + nYoff) + h);
 
 			CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+			pCDC->LPtoDP(&printRect);
+			pCDC->SetMapMode(MM_TEXT);
+
 			ftPrint.CreatePointFont(nFontSize, strFontName, pCDC);
 			::SelectObject(m_hPrinterDC, ftPrint);
 
@@ -1418,9 +1391,6 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 			}
 			else
 			{
-				printRect.right = x + nXoff + w + 100;
-				printRect.bottom = -((y + 5 + nYoff) + h);
-
 				if (JSFP_RN == (z1 & 0xff000000))
 				{
 					DealData(pCDC, strText, 0, printRect.right - printRect.left);
@@ -1472,6 +1442,7 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 					}
 				}
 			}
+			pCDC->SetMapMode(MM_LOMETRIC);
 			ftPrint.DeleteObject();
 		}
 
