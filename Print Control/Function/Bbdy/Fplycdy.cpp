@@ -340,7 +340,8 @@ CString CFplycdy::GenerateItemMXXml(FPLYC_BBXX bbxx)
 	xywhsf(bbxx.xmDw, x0 + 1200, y, 500, 50, LS_10, FS, AM_VCL);
 	y += 50;
 
-	xywhsf(bbxx.xmQymc, x0, y, 1990, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmQymc1, x0, y, 220, 50, LS_10, FS, AM_VCL);
+	xywhsf(bbxx.xmQymc, x0 + 210, y, 1140, 50, LS_10, FS, AM_VCL);
 	xywhsf(bbxx.xmDi, 1350, y, 80, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmP1, 1430, y, 90, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmYe1, 1520, y, 80, 50, LS_10, FS, AM_ZC);
@@ -443,7 +444,8 @@ CString CFplycdy::GenerateItemMXXml(FPLYC_BBXX bbxx)
 			addxml(bbxx.st_sZbrq, bbxx.xmZbrq);
 			addxml(bbxx.st_sDw, bbxx.xmDw);
 
-			addxml(bbxx.st_sQymc, bbxx.xmQymc);
+			addxml(bbxx.st_sQymc.Left(bbxx.st_sQymc.Find("&&")), bbxx.xmQymc1);
+			addxml(bbxx.st_sQymc.Mid(bbxx.st_sQymc.Find("&&") + strlen("&&")), bbxx.xmQymc);
 			addxml(bbxx.st_sDi, bbxx.xmDi);
 			addxml(nNewPageNum++, bbxx.xmP1);
 			addxml(bbxx.st_sYe1, bbxx.xmYe1);
@@ -599,7 +601,7 @@ CString CFplycdy::GenerateItemMXXml(FPLYC_BBXX bbxx)
 			xywhsf(_xm, 0, _y, 1500, nLY, LS_9, FS, AM_VCL);
 			addxml(bbxx.st_sZ2, _xm);
 			_y += nLY;
-			xywhsf(_xm, 0, _y, 1500, nLY, LS_9, FS, AM_VCL);		
+			xywhsf(_xm, 0 + 420, _y, 1080, nLY, LS_9, FS, AM_VCL);		
 			addxml(bbxx.st_sZ3, _xm);
 			_y = y;
 			xml.OutOfElem();
@@ -648,7 +650,7 @@ CString CFplycdy::GenerateItemMXXml(FPLYC_BBXX bbxx)
 		xywhsf(_xm, 0, _y, 1500, nLY, LS_9, FS, AM_VCL);
 		addxml(bbxx.st_sZ2, _xm);
 		_y += nLY;
-		xywhsf(_xm, 0, _y, 1500, nLY, LS_9, FS, AM_VCL);
+		xywhsf(_xm, 0 + 420, _y, 1080, nLY, LS_9, FS, AM_VCL);
 		addxml(bbxx.st_sZ3, _xm);
 		xml.OutOfElem();
 		xml.OutOfElem();

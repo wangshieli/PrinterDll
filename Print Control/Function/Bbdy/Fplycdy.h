@@ -107,6 +107,7 @@ typedef struct _fplyc_bbxx
 	XM xmSsq;
 	XM xmZbrq;
 	XM xmDw;
+	XM xmQymc1;
 	XM xmQymc;
 	
 	CString st_sT1;

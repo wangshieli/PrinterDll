@@ -359,7 +359,7 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 	xywhsf_fc(fpmx.Mfdz, 420, 460, 1000, 70, LS_10, FS, AM_VCL, 10);
 	xywhsf_fc(fpmx.Mfdh, 1580, 460, 400, 70, LS_12, FT, AM_VCL, 10);
 
-	xywhsf_fc(fpmx.Cpzh, 420, 535, 320, 70, LS_12, FT, AM_VCL_S, 10);
+	xywhsf_fc(fpmx.Cpzh, 420, 535, 320, 70, LS_12, FT, AM_VCL, 10);
 	xywhsf_fc(fpmx.Djzh, 950, 535, 380, 70, LS_11, FT, AM_VCL, 10);
 	xywhsf_fc(fpmx.Cllx, 1580, 535, 400, 70, LS_10, FS, AM_VCL, 10);
 
@@ -388,7 +388,7 @@ CString CEscxstyfp::GenerateItemXml(ESCFP_FPXX fpmx, FPDY fpdy)
 	
 	xywhsf(fpmx.Escsc, 420, 1005, 580, 145, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.Escscnsrsbh, 1220, 1005, 760, 70, LS_11, FT, AM_VCL);
-	xywhsf_fc(fpmx.Escscdz, 1220, 1180, 760, 70, LS_10, FS, AM_VCL, 10);
+	xywhsf_fc(fpmx.Escscdz, 1220, 1080, 760, 70, LS_10, FS, AM_VCL, 10);
 	xywhsf_fc(fpmx.Escscyhzh, 420, 1160, 1130, 70, LS_10, FS, AM_VCL, 10);
 	xywhsf_fc(fpmx.Escscdh, 1710, 1160, 270, 70, LS_11, FT, AM_VCL, 10);
 
