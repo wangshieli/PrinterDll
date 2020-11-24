@@ -1402,10 +1402,13 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
 			int z = atoi(xml.GetAttrib("z"));
-			ftPrint.CreatePointFont(nFontSize, strFontName, CDC::FromHandle(m_hPrinterDC));
-			::SelectObject(m_hPrinterDC, ftPrint);
+			
 			printRect.left = x + nXoff + 100;
 			printRect.top = -(y - 5 + nYoff);
+
+			CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+			ftPrint.CreatePointFont(nFontSize, strFontName, pCDC);
+			::SelectObject(m_hPrinterDC, ftPrint);
 
 			if (w == 0 && h == 0)
 			{
@@ -1415,6 +1418,8 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 			{
 				printRect.right = x + nXoff + w + 100;
 				printRect.bottom = -((y + 5 + nYoff) + h);
+
+				DealData(pCDC, strText, 0, printRect.right - printRect.left);
 
 				RECT testRect = printRect;
 
