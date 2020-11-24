@@ -1021,7 +1021,7 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.kprq.Mouth, LX + 365 - 10, LY + 460 - 15, LW, LH, LS_9, FS, ZL);
 	xywhsf(fpmx.kprq.day, LX + 385 - 10, LY + 460 - 15, LW, LH, LS_9, FS, ZL);
 
-	xywhsf(fpmx.Ghdwmc, LX + 100, LY + 560, LW + 500, LH + 120, LS_8, FS, ZL);
+	xywhsf(fpmx.Ghdwmc, LX + 100, LY + 560, LW + 500, LH + 120, LS_8, FS, ZL | JSFP_RN);
 	xywhsf(fpmx.Ghdwsbh, LX + 290, LY + 650, LW, LH, LS_8, FS, ZL);
 
 	int number = LY + 730;
@@ -1117,7 +1117,7 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 	{
 		xywhsf(fpmx.jshjDx, LX + 230, LY + 1050 + 225, LW, LH, LS_6, FS, ZL);   //大写价税合计
 	}
-	xywhsf(fpmx.Xhdwmc, LX + 100, LY + 315, LW + 500, LH + 120, LS_8, FS, ZL);
+	xywhsf(fpmx.Xhdwmc, LX + 100, LY + 315, LW + 500, LH + 120, LS_8, FS, ZL | JSFP_RN);
 	xywhsf(fpmx.Xhdwsbh, LX + 290, LY + 405, LW, LH, LS_8, FS, ZL);
 
 	xywhsf(fpmx.skr, LX + 200, LY + 490, LW, LH, LS_8, FS, ZL);
@@ -1125,11 +1125,11 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 
 	if (fpmx.sBz.GetLength() < 103)
 	{
-		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 500, LH + 120, LS_8, FS, ZL);
+		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 500, LH + 120, LS_8, FS, ZL | JSFP_RN);
 	}
 	else
 	{
-		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 510, LH + 70, LS_7, FS, ZL);
+		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 510, LH + 70, LS_7, FS, ZL | JSFP_RN);
 	}
 
 	if (fpmx.sFpzt.CompareNoCase("01") == 0)
@@ -1401,7 +1401,9 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 			int h = atoi(xml.GetAttrib("h"));
 			int nFontSize = atoi(xml.GetAttrib("s"));
 			CString strFontName = xml.GetAttrib("f");
-			int z = atoi(xml.GetAttrib("z"));
+			int z1 = atoi(xml.GetAttrib("z"));
+
+			int z = z1 & 0x000000ff;
 			
 			printRect.left = x + nXoff + 100;
 			printRect.top = -(y - 5 + nYoff);
@@ -1419,7 +1421,10 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 				printRect.right = x + nXoff + w + 100;
 				printRect.bottom = -((y + 5 + nYoff) + h);
 
-				DealData(pCDC, strText, 0, printRect.right - printRect.left);
+				if (JSFP_RN == (z1 & 0xff000000))
+				{
+					DealData(pCDC, strText, 0, printRect.right - printRect.left);
+				}
 
 				RECT testRect = printRect;
 

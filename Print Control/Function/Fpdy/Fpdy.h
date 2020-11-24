@@ -67,7 +67,9 @@
 #define LINE_STATE_LBR	0x00000800	// 画左竖向和下横线和右竖线
 
 #define COIN_Y			0x01000000	// 钱币符号 Y
-#define COIN_O			0X02000000	// 钱币符号 O
+#define COIN_O			0x02000000	// 钱币符号 O
+
+#define JSFP_RN			0x03000000	// 卷式发票增加换行符
 
 #define YKFP_LINE_H_MIN	55
 #define YKFP_LINE_H_MAX	150
