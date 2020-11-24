@@ -1442,8 +1442,9 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 					}
 				}
 			}
-			pCDC->SetMapMode(MM_LOMETRIC);
+			
 			ftPrint.DeleteObject();
+			pCDC->SetMapMode(MM_LOMETRIC);
 		}
 
 		// 输出大写金额开头圈叉符号
