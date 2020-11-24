@@ -815,7 +815,7 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.kprq.Mouth, LX + 200 - 5 - 30, LY + 380 - 10, LW, LH, LS_9, FS, ZL);
 	xywhsf(fpmx.kprq.day, LX + 220 - 5 - 30, LY + 380 - 10, LW, LH, LS_9, FS, ZL);
 
-	xywhsf(fpmx.Ghdwmc, LX + 70, LY + 410 - 5, LW + 500, LH + 120, LS_8, FS, ZL);
+	xywhsf(fpmx.Ghdwmc, LX + 70, LY + 410 - 5, LW + 500, LH + 120, LS_8, FS, ZL | JSFP_RN);
 	xywhsf(fpmx.Ghdwsbh, LX + 100, LY + 500 - 5, LW, LH, LS_8, FS, ZL);
 
 	int number = LY + 580;
@@ -920,22 +920,22 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 	}
 	xywhsf(fpmx.jshj, LX + 70, LY + 1000 - 30 + 265, LW, LH, LS_8, FS, ZL);   //小写价税合计
 
-	xywhsf(fpmx.Xhdwmc, LX + 70, LY + 270 - 30, LW + 500, LH + 120, LS_8, FS, ZL);
+	xywhsf(fpmx.Xhdwmc, LX + 70, LY + 270 - 30, LW + 500, LH + 120, LS_8, FS, ZL | JSFP_RN);
 	xywhsf(fpmx.Xhdwsbh, LX + 100, LY + 340 - 10, LW, LH, LS_8, FS, ZL);
 
 	xywhsf(fpmx.skr, LX + 360, LY + 380 - 10, LW, LH, LS_8, FS, ZL);
 	xywhsf(fpmx.Jym, LX + 10, LY + 1080 - 30 + 265, LW, LH, LS_8, FS, ZL);   //小写价税合计
 	if (fpmx.sBz.GetLength() < 85)
 	{
-		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 60, LS_8, FS, ZL);
+		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 60, LS_8, FS, ZL | JSFP_RN);
 	}
 	else if (fpmx.sBz.GetLength() > 84 && fpmx.sBz.GetLength() < 97)
 	{
-		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 50, LS_7, FS, ZL);
+		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 50, LS_7, FS, ZL | JSFP_RN);
 	}
 	else
 	{
-		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 60, LS_6, FS, ZL);
+		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 60, LS_6, FS, ZL | JSFP_RN);
 	}
 	if (fpmx.sFpzt.CompareNoCase("01") == 0)
 	{
