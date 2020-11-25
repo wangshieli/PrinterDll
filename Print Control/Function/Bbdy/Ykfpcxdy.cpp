@@ -352,13 +352,13 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 		_nItemPageCount++;
 	}
 
-	m_nAllPageNum = bbxx.st_vData.size() / m_nPageSize;
-	if (0 != bbxx.st_vData.size() % m_nPageSize)
-	{
-		m_nAllPageNum++;
-	}
+	//m_nAllPageNum = bbxx.st_vData.size() / m_nPageSize;
+	//if (0 != bbxx.st_vData.size() % m_nPageSize)
+	//{
+	//	m_nAllPageNum++;
+	//}
 
-	m_nAllPageNum *= _nItemPageCount;
+	//m_nAllPageNum *= _nItemPageCount;
 
 
 	int y = 0;
@@ -372,6 +372,35 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 	xywhsf(bbxx.xmP2, 1680, y, 90, 50, LS_10, FS, AM_ZC);
 	xywhsf(bbxx.xmYe2, 1770, y, 80, 50, LS_10, FS, AM_ZC);
 	y += 50;
+
+	vector<vector<YKFPCX_ITEM_DATA_XX>>::iterator pos;
+	int _hCount = 0;
+	BOOL bNewPage = TRUE;
+	for (pos = bbxx.st_vData.begin(); pos != bbxx.st_vData.end(); pos++)
+	{
+		if (bNewPage)
+		{
+			m_nAllPageNum++;
+			bNewPage = false;
+		}
+
+		_hCount += pos->begin()->xmItem_data.h;
+		if (_hCount > 2550)
+		{
+			_hCount = 0;
+			_hCount += pos->begin()->xmItem_data.h;
+			bNewPage = true;
+			continue;
+		}
+	}
+
+	if (bNewPage)
+	{
+		m_nAllPageNum++;
+		bNewPage = false;
+	}
+
+	m_nAllPageNum *= _nItemPageCount;
 
 	int nNewPageNum = 1;
 	int _nTemp = 0;
@@ -394,10 +423,9 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 			_nPostion += pos_item->st_nWide;
 		}
 
-		BOOL bNewPage = TRUE;
+		bNewPage = TRUE;
 		int _y = y;		
 
-		vector<vector<YKFPCX_ITEM_DATA_XX>>::iterator pos;
 		_TempSize = _nPageSize;
 		for (pos = bbxx.st_vData.begin(); pos != bbxx.st_vData.end(); pos++)
 		{
