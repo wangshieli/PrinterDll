@@ -4,8 +4,8 @@
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
 
-#define T1_W	200
-#define T2_W	250
+#define T1_W	120
+#define T2_W	330
 #define T3_W	200
 #define T4_W	250
 #define T5_W	200
