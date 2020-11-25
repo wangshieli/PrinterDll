@@ -337,7 +337,7 @@ int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 			return DealData1(m_szText, s, width) + 1;
 		}
 	}
-	return 1;
+	return nCount == i ? 0 : 1;
 }
 
 int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)

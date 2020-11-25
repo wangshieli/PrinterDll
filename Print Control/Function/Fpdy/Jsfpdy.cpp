@@ -925,18 +925,24 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 
 	xywhsf(fpmx.skr, LX + 360, LY + 380 - 10, LW, LH, LS_8, FS, ZL);
 	xywhsf(fpmx.Jym, LX + 10, LY + 1080 - 30 + 265, LW, LH, LS_8, FS, ZL);   //小写价税合计
-	if (fpmx.sBz.GetLength() < 85)
+
+	fpmx.sBz = fpmx.sBz.Left(DataPrintMaxLen(fpmx.sBz, 120));
+	int _nLines = DealData1(fpmx.sBz, 0, 60);
+
+	if (fpmx.sBz.GetLength() <= 44)
 	{
-		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 60, LS_8, FS, ZL | JSFP_RN);
+		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 635, LH + 60, LS_8, FS, ZL | JSFP_RN);
 	}
-	else if (fpmx.sBz.GetLength() > 84 && fpmx.sBz.GetLength() < 97)
+	else/* if (fpmx.sBz.GetLength() > 84 && fpmx.sBz.GetLength() < 97)*/
 	{
-		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 50, LS_7, FS, ZL | JSFP_RN);
-	}
+		if (_nLines >= 3)
+			fpmx.sBz = fpmx.sBz.Left(fpmx.sBz.ReverseFind('\n'));
+		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 635, LH + 50, LS_6, FS, ZL);
+	}/*
 	else
 	{
 		xywhsf(fpmx.bz, LX + -60, LY + 865 - 30 + 265, LW + 620, LH + 60, LS_6, FS, ZL | JSFP_RN);
-	}
+	}*/
 	if (fpmx.sFpzt.CompareNoCase("01") == 0)
 	{
 		addxml(fpmx.sYfpdm, fpmx.yfpdm);
@@ -1123,13 +1129,16 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.skr, LX + 200, LY + 490, LW, LH, LS_8, FS, ZL);
 	xywhsf(fpmx.Jym, LX + 200, LY + 1090 + 225, LW, LH, LS_8, FS, ZL);
 
-	if (fpmx.sBz.GetLength() < 103)
+	fpmx.sBz = fpmx.sBz.Left(DataPrintMaxLen(fpmx.sBz, 120));
+	DealData1(fpmx.sBz, 0, 48);
+
+	if (fpmx.sBz.GetLength() <= 30)
 	{
-		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 500, LH + 120, LS_8, FS, ZL | JSFP_RN);
+		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 500, LH + 120, LS_8, FS, ZL);
 	}
 	else
 	{
-		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 510, LH + 70, LS_7, FS, ZL | JSFP_RN);
+		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 510, LH + 70, LS_6, FS, ZL);
 	}
 
 	if (fpmx.sFpzt.CompareNoCase("01") == 0)
