@@ -352,15 +352,6 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 		_nItemPageCount++;
 	}
 
-	//m_nAllPageNum = bbxx.st_vData.size() / m_nPageSize;
-	//if (0 != bbxx.st_vData.size() % m_nPageSize)
-	//{
-	//	m_nAllPageNum++;
-	//}
-
-	//m_nAllPageNum *= _nItemPageCount;
-
-
 	int y = 0;
 	xywhsf(bbxx.xmTitle, 0, y, 1990, 100, LS_16, FS, AM_ZC);
 	y += 100;
