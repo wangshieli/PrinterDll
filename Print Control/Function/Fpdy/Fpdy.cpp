@@ -130,13 +130,14 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 	if (NULL == m_pDlg)
 		return -10;
 
+	m_nToPage = m_nAllPageNum == 0 ? 1 : m_nAllPageNum;
 	if (0 == m_iPldy || m_sPrinterName.IsEmpty() || !CheckDyjOnline())
 	{
 		CString defPrinter = ""; 
 		getSysDefPrinter(defPrinter);
 		setSysDefprinter(m_sPrinterName);
 		m_pDlg->m_pd.nMinPage = m_pDlg->m_pd.nFromPage = 1;
-		m_pDlg->m_pd.nMaxPage = m_pDlg->m_pd.nToPage = (m_nAllPageNum == 0 ? 1 : m_nAllPageNum);
+		m_pDlg->m_pd.nMaxPage = m_pDlg->m_pd.nToPage = m_nToPage;
 		if (m_pDlg->DoModal() == IDCANCEL)
 		{
 			return -1;// 用户取消了打印操作
