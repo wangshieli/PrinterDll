@@ -528,7 +528,7 @@ int CYkfpcxdy::GetWideByItemName(CString & itemName)
 	else if (getChineseSpell("原发票代码").Compare(itemName) == 0) { return 210; }
 	else if (getChineseSpell("原发票号码").Compare(itemName) == 0) { return 180; }
 	 // 004
-		else if (getChineseSpell("信息表编号").Compare(itemName) == 0) { return 300; }
+		else if (getChineseSpell("通知单编号").Compare(itemName) == 0) { return 300; }
 	
 	else if (getChineseSpell("开票人").Compare(itemName) == 0) { return 150; }
 	else if (getChineseSpell("开票日期").Compare(itemName) == 0) { return 210; }
@@ -547,7 +547,7 @@ void CYkfpcxdy::GetFlagsByName(CString & itemName, XM& _xm)
 	int s = 0;
 	CString f = "";
 	UINT z = 0;
-	if (getChineseSpell("发票类型").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
+	if (getChineseSpell("发票类型").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
 	else if (getChineseSpell("发票状态").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
 	else if (getChineseSpell("发票代码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
 	else if (getChineseSpell("发票号码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
@@ -586,7 +586,7 @@ void CYkfpcxdy::GetFlagsByName(CString & itemName, XM& _xm)
 	else if (getChineseSpell("原发票代码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
 	else if (getChineseSpell("原发票号码").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }
 	 // 004
-		else if (getChineseSpell("信息表编号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
+		else if (getChineseSpell("通知单编号").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
 	
 	else if (getChineseSpell("开票人").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC; }
 	else if (getChineseSpell("开票日期").Compare(itemName) == 0) { s = LS_9; f = FS; z = AM_ZC_S; }

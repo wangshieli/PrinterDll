@@ -71,7 +71,7 @@
 
 #define JSFP_RN			0x03000000	// 卷式发票增加换行符
 
-#define YKFP_LINE_H_MIN	55
+#define YKFP_LINE_H_MIN	75
 #define YKFP_LINE_H_MAX	150
 
 #define A4_W	2100
