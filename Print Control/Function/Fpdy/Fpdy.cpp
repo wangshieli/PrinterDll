@@ -909,6 +909,7 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 	DealData(pCDC, data1, 0, rect.right - rect.left);
 
 	RECT trect = rect;
+	LONG nSp = 0;
 
 	int recv_h = rect.bottom - rect.top;
 	int recv_r = rect.right;
@@ -920,14 +921,20 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
 					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
-		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((rect.top = rect.top + (recv_h - h) / 2) && 0)))) //如果多行，居中左对齐
+		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((nSp = (trect.top - rect.top + rect.bottom - trect.bottom) / 2) && 0)))) //如果多行，居中左对齐
 	{		
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
 		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
 
 		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
-			rect.top = rect.top + (recv_h - h) / 2;
+			nSp = (trect.top - rect.top + rect.bottom - trect.bottom) / 2;
+	}
+
+	if (nSp != 0)
+	{
+		rect.top = rect.top + nSp;
+		rect.bottom = rect.bottom - nSp;
 	}
 
 	DealData(pCDC, data2, 0, rect.right - rect.left);
