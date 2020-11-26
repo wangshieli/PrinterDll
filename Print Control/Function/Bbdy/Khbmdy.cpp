@@ -351,6 +351,12 @@ LONG CKhbmdy::PrintQD(LPCSTR billxml)
 
 	InitXYoff();
 
+	nrt = InitPrinter(A4_W, A4_H);
+	if (0 != nrt)
+		return nrt;
+
+	DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+
 	do
 	{
 		CMarkup xml;
@@ -360,12 +366,7 @@ LONG CKhbmdy::PrintQD(LPCSTR billxml)
 			break;
 		}
 		xml.IntoElem();
-
-		nrt = InitPrinter(A4_W, A4_H);
-		if (0 != nrt)
-			break;
-
-		DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+		
 		nrt = ::StartDoc(m_hPrinterDC, &di);
 		if (nrt <= 0)
 		{
@@ -463,7 +464,7 @@ LONG CKhbmdy::PrintQD(LPCSTR billxml)
 		}
 		xml.OutOfElem();
 		::EndDoc(m_hPrinterDC);
-	} while (false);
+	} while (--m_nCopies);
 
 	return nrt;
 }

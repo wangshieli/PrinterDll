@@ -120,6 +120,12 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 	int _nHjjeLen = strlen(hjje);
 	int _nHjseLen = strlen(hjse);
 
+	nrt = InitPrinter(FPWidth, FPLength);
+	if (0 != nrt)
+		return nrt;
+
+	DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+
 	do
 	{
 		CMarkup xml;
@@ -130,11 +136,6 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 		}
 		xml.IntoElem();
 
-		nrt = InitPrinter(FPWidth, FPLength);
-		if (0 != nrt)
-			break;
-
-		DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
 		nrt = ::StartDoc(m_hPrinterDC, &di);
 		if (nrt <= 0)
 		{
@@ -231,7 +232,7 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
-	} while (false);
+	} while (--m_nCopies);
 
 	return nrt;
 }

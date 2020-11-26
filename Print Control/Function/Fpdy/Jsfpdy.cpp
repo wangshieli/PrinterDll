@@ -1335,6 +1335,12 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 
 	InitXYoff();
 
+	nrt = InitPrinter(760, (short)1770.8);
+	if (0 != nrt)
+		return nrt;
+
+	DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+
 	do
 	{
 		CMarkup xml;
@@ -1345,11 +1351,6 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 		}
 		xml.IntoElem();
 
-		nrt = InitPrinter(760, (short)1770.8);
-		if (0 != nrt)
-			break;
-
-		DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
 		nrt = ::StartDoc(m_hPrinterDC, &di);
 		if (nrt <= 0)
 		{
@@ -1474,7 +1475,7 @@ LONG CJsfpdy::Print(LPCTSTR billXml)
 		}
 		::EndPage(m_hPrinterDC);
 		::EndDoc(m_hPrinterDC);
-	} while (false);
+	} while (--m_nCopies);
 
 	return nrt;
 }

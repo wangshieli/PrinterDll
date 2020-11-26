@@ -22,7 +22,8 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 	m_nAllPageNum(0),
 	m_nPageSize(0),
 	m_nFromPage(1),
-	m_nToPage(1)
+	m_nToPage(1),
+	m_nCopies(1)
 {
 	ZeroMemory(m_cQRcodePath, MAX_PATH);
 	GetQRcodePath();
@@ -143,6 +144,7 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 
 		m_nFromPage = m_pDlg->m_pd.nFromPage;
 		m_nToPage = m_pDlg->m_pd.nToPage;
+		m_nCopies = m_pDlg->m_pd.nCopies;
 		m_sPrinterName = m_pDlg->GetDeviceName();
 		setSysDefprinter(defPrinter);
 

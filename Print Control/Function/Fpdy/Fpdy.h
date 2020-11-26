@@ -233,4 +233,5 @@ protected:
 
 	int m_nFromPage;
 	int m_nToPage;
+	int m_nCopies;
 };
