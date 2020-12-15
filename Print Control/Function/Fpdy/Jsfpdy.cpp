@@ -859,25 +859,27 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 
 		if (fpmx.bMxFontSize)
 		{
-			if (fpmx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
-			{
-				number += fpmx.fyxmxx[i].sSpmc.GetLength() / 12 * 30;
-			}
-			else
-			{
-				number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 12 + 1) * 30;
-			}
+			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 12) * 30;
+			//if (fpmx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
+			//{
+			//	number += fpmx.fyxmxx[i].sSpmc.GetLength() / 12 * 30;
+			//}
+			//else
+			//{
+			//	number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 12 + 1) * 30;
+			//}
 		}
 		else
 		{
-			if (fpmx.fyxmxx[i].sSpmc.GetLength() % 14 == 0)
-			{
-				number += fpmx.fyxmxx[i].sSpmc.GetLength() / 14 * 25;
-			}
-			else
-			{
-				number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 14 + 1) * 25;
-			}
+			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 14) * 25;
+			//if (fpmx.fyxmxx[i].sSpmc.GetLength() % 14 == 0)
+			//{
+			//	number += fpmx.fyxmxx[i].sSpmc.GetLength() / 14 * 25;
+			//}
+			//else
+			//{
+			//	number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 14 + 1) * 25;
+			//}
 		}
 
 		//		if(fpmx.fyxmxx[i].sSpmc.GetLength() == 0)
@@ -971,34 +973,34 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 
 	for (int j = 0; j < fpmx.iFyxmCount; j++)
 	{
-		if (fpmx.bMxFontSize)
-		{
-			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 12);
-			//for (int i = 12; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 12)
-			//{
-			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
-			//	if (!(cstrTemp[0] & 0x80))
-			//	{
-			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-			//		i += 2;
-			//	}
-			//}
-		}
-		else
-		{
-			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 14);
-			//for (int i = 14; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 14)
-			//{
-			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
-			//	if (!(cstrTemp[0] & 0x80))
-			//	{
-			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-			//		i += 2;
-			//	}
-			//}
-		}
+		//if (fpmx.bMxFontSize)
+		//{
+		//	DealData1(fpmx.fyxmxx[j].sSpmc, 0, 12);
+		//	//for (int i = 12; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 12)
+		//	//{
+		//	//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+		//	//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+		//	//	if (!(cstrTemp[0] & 0x80))
+		//	//	{
+		//	//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+		//	//		i += 2;
+		//	//	}
+		//	//}
+		//}
+		//else
+		//{
+		//	DealData1(fpmx.fyxmxx[j].sSpmc, 0, 14);
+		//	//for (int i = 14; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 14)
+		//	//{
+		//	//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+		//	//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+		//	//	if (!(cstrTemp[0] & 0x80))
+		//	//	{
+		//	//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+		//	//		i += 2;
+		//	//	}
+		//	//}
+		//}
 		addxml(fpmx.fyxmxx[j].sSpmc, fpmx.fyxmxx[j].ssSpmc);
 		addxml(fpmx.fyxmxx[j].sSpsl, fpmx.fyxmxx[j].ssSpsl);
 		addxml(fpmx.fyxmxx[j].sHsdj, fpmx.fyxmxx[j].ssHsdj);
@@ -1069,26 +1071,28 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 		}
 
 		if (fpmx.bMxFontSize)
-		{
-			if (fpmx.fyxmxx[i].sSpmc.GetLength() % 8 == 0)
+		{			
+			/*if (fpmx.fyxmxx[i].sSpmc.GetLength() % 8 == 0)
 			{
 				number += fpmx.fyxmxx[i].sSpmc.GetLength() / 8 * 30;
 			}
 			else
 			{
 				number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 8 + 1) * 30;
-			}
+			}*/
+			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 8) * 30;
 		}
 		else
 		{
-			if (fpmx.fyxmxx[i].sSpmc.GetLength() % 10 == 0)
+			/*if (fpmx.fyxmxx[i].sSpmc.GetLength() % 10 == 0)
 			{
 				number += fpmx.fyxmxx[i].sSpmc.GetLength() / 10 * 25;
 			}
 			else
 			{
 				number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 10 + 1) * 25;
-			}
+			}*/
+			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 10) * 25;
 		}
 
 		//		if(fpmx.fyxmxx[i].sSpmc.GetLength() == 0)
@@ -1170,34 +1174,34 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 
 	for (int j = 0; j < fpmx.iFyxmCount; j++)
 	{
-		if (fpmx.bMxFontSize)
-		{
-			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 8);
-			//for (int i = 8; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 8)
-			//{
-			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
-			//	if (!(cstrTemp[0] & 0x80))
-			//	{
-			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-			//		i += 2;
-			//	}
-			//}
-		}
-		else
-		{
-			DealData1(fpmx.fyxmxx[j].sSpmc, 0, 10);
-			//for (int i = 10; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 10)
-			//{
-			//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
-			//	strcpy(cstrTemp, strTemp.GetBuffer(0));
-			//	if (!(cstrTemp[0] & 0x80))
-			//	{
-			//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
-			//		i += 2;
-			//	}
-			//}
-		}
+		//if (fpmx.bMxFontSize)
+		//{
+		//	DealData1(fpmx.fyxmxx[j].sSpmc, 0, 8);
+		//	//for (int i = 8; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 8)
+		//	//{
+		//	//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+		//	//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+		//	//	if (!(cstrTemp[0] & 0x80))
+		//	//	{
+		//	//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+		//	//		i += 2;
+		//	//	}
+		//	//}
+		//}
+		//else
+		//{
+		//	DealData1(fpmx.fyxmxx[j].sSpmc, 0, 10);
+		//	//for (int i = 10; i < fpmx.fyxmxx[j].sSpmc.GetLength(); i += 10)
+		//	//{
+		//	//	strTemp = fpmx.fyxmxx[j].sSpmc.Mid(i, 1);
+		//	//	strcpy(cstrTemp, strTemp.GetBuffer(0));
+		//	//	if (!(cstrTemp[0] & 0x80))
+		//	//	{
+		//	//		fpmx.fyxmxx[j].sSpmc.Insert(i + 1, "\r\n");
+		//	//		i += 2;
+		//	//	}
+		//	//}
+		//}
 		addxml(fpmx.fyxmxx[j].sSpmc, fpmx.fyxmxx[j].ssSpmc);
 		addxml(fpmx.fyxmxx[j].sSpsl, fpmx.fyxmxx[j].ssSpsl);
 		addxml(fpmx.fyxmxx[j].sHsdj, fpmx.fyxmxx[j].ssHsdj);
