@@ -196,46 +196,54 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 		{
 			xml.FindElem("group");
 			xml.IntoElem();
-			if (xml.FindElem("spmc")) fpxx.fyxmxx[i].sSpmc = xml.GetData();
+			if (xml.FindElem("spmc")) fpxx.fyxmxx[i].sSpmc = xml.GetData();		
 			if (m_strFppy.CompareNoCase("01") == 0 || m_strFppy.CompareNoCase("06") == 0)
 			{
-				if (fpxx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
+				CString _tempSpmc = fpxx.fyxmxx[i].sSpmc;
+				fpxx.sWidthRow8 += DealData1(_tempSpmc, 0, 12);
+				/*if (fpxx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
 				{
 					fpxx.sWidthRow8 += fpxx.fyxmxx[i].sSpmc.GetLength() / 12;
 				}
 				else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 12 != 0)
 				{
 					fpxx.sWidthRow8 += fpxx.fyxmxx[i].sSpmc.GetLength() / 12 + 1;
-				}
+				}*/
 
-				if (fpxx.fyxmxx[i].sSpmc.GetLength() % 14 == 0)
+				_tempSpmc = fpxx.fyxmxx[i].sSpmc;
+				fpxx.sWidthRow7 += DealData1(_tempSpmc, 0, 14);
+				/*if (fpxx.fyxmxx[i].sSpmc.GetLength() % 14 == 0)
 				{
 					fpxx.sWidthRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 14;
 				}
 				else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 14 != 0)
 				{
 					fpxx.sWidthRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 14 + 1;
-				}
+				}*/
 			}
 			else if (m_strFppy.CompareNoCase("03") == 0 || m_strFppy.CompareNoCase("07") == 0)
 			{
-				if (fpxx.fyxmxx[i].sSpmc.GetLength() % 8 == 0)
-				{
-					fpxx.sNarrowRow8 += fpxx.fyxmxx[i].sSpmc.GetLength() / 8;
-				}
-				else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 8 != 0)
-				{
-					fpxx.sNarrowRow8 += fpxx.fyxmxx[i].sSpmc.GetLength() / 8 + 1;
-				}
+				CString _tempSpmc = fpxx.fyxmxx[i].sSpmc;
+				fpxx.sNarrowRow8 += DealData1(_tempSpmc, 0, 8);
+				//if (fpxx.fyxmxx[i].sSpmc.GetLength() % 8 == 0)
+				//{
+				//	fpxx.sNarrowRow8 += fpxx.fyxmxx[i].sSpmc.GetLength() / 8;
+				//}
+				//else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 8 != 0)
+				//{
+				//	fpxx.sNarrowRow8 += fpxx.fyxmxx[i].sSpmc.GetLength() / 8 + 1;
+				//}
 
-				if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 == 0)
+				_tempSpmc = fpxx.fyxmxx[i].sSpmc;
+				fpxx.sNarrowRow7 += DealData1(_tempSpmc, 0, 10);
+			/*	if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 == 0)
 				{
 					fpxx.sNarrowRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 10;
 				}
 				else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 != 0)
 				{
 					fpxx.sNarrowRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 10 + 1;
-				}
+				}*/
 			}
 			else
 			{
