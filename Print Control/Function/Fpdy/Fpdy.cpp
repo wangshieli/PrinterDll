@@ -299,7 +299,8 @@ int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 			return DealData1(m_szText, s, width) + 1;
 		}
 
-		if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
+		//if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
+		if ((unsigned char)c & 0x80 && (unsigned char)m_szText.GetAt(i + 1) & 0x80)
 		{
 			chineseFlag = TRUE;
 			i += 1;
@@ -343,6 +344,120 @@ int CFpdyBase::DealData1(CString & m_szText, int s, LONG width)
 	return (nCount == i && s < nCount) ? 1 : 0;
 }
 
+typedef enum {
+	GBK,
+	UTF8,
+	UNKOWN
+} CODING;
+
+//判断字符串编码格式
+int preNum(unsigned char byte) {
+	unsigned char mask = 0x80;
+	int num = 0;
+	for (int i = 0; i < 8; i++) {
+		if ((byte & mask) == mask) {
+			mask = mask >> 1;
+			num++;
+		}
+		else {
+			break;
+		}
+	}
+	return num;
+}
+
+bool isUtf8(unsigned char* data, int len)
+{
+	int num = 0;
+	int i = 0;
+	while (i < len)
+	{
+		if ((data[i] & 0x80) == 0x00)
+		{
+			// 0XXX_XXXX
+			i++;
+			continue;
+		}
+		else if ((num = preNum(data[i])) > 2)
+		{
+			// 110X_XXXX 10XX_XXXX
+			// 1110_XXXX 10XX_XXXX 10XX_XXXX
+			// 1111_0XXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
+			// 1111_10XX 10XX_XXXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
+			// 1111_110X 10XX_XXXX 10XX_XXXX 10XX_XXXX 10XX_XXXX 10XX_XXXX
+			// preNum() 返回首个字节8个bits中首4bit中“1”的个数，该数量也是该字符所使用的字节数        
+			i++;
+			for (int j = 0; j < num - 1; j++)
+			{
+				//判断后面num - 1 个字节是不是都是10开
+				if ((data[i] & 0xc0) != 0x80)
+				{
+					return false;
+				}
+				i++;
+			}
+		}
+		else
+		{
+			//其他情况说明不是utf-8
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isGBK(unsigned char* data, int len)
+{
+	int i = 0;
+	while (i < len)
+	{
+		if (data[i] <= 0x7f)
+		{
+			//编码小于等于127,只有一个字节的编码，兼容ASCII
+			i++;
+			continue;
+		}
+		else
+		{
+			//大于127的使用双字节编码
+			if (data[i] >= 0x81 &&
+				data[i] <= 0xfe &&
+				data[i + 1] >= 0x40 &&
+				data[i + 1] <= 0xfe)
+			{
+				i += 2;
+				continue;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+//isGBK()是通过双字节是否落在gbk的编码范围内实现的，
+//而utf-8编码格式的每个字节都是落在gbk的编码范围内
+//所以只有先调用isUtf8()先判断不是utf-8编码，再调用isGBK()才有意义
+CODING GetCoding(unsigned char* data, int len)
+{
+	CODING coding;
+	if (isUtf8(data, len) == true)
+	{
+		coding = UTF8;
+	}
+	else if (isGBK(data, len) == true)
+	{
+		coding = GBK;
+	}
+	else
+	{
+		coding = UNKOWN;
+	}
+	return coding;
+}
+
 int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 {
 	BOOL chineseFlag = FALSE;
@@ -360,12 +475,14 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 			return DealData(pDC, m_szText, s, width);
 		}
 
-		if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
+		//if ((unsigned char)c >= 0xA0 && (unsigned char)m_szText.GetAt(i + 1) >= 0xA0)
+		if ((unsigned char)c & 0x80 && (unsigned char)m_szText.GetAt(i + 1) & 0x80)
 		{
 			chineseFlag = TRUE;
 			i += 1;
 		}
 
+		CString dd = str.Left(i + 1 - s);
 		size = pDC->GetTextExtent(str.Left(i + 1 - s));
 		if ((size.cx) / width) {
 			if (chineseFlag == TRUE) {
@@ -1036,14 +1153,17 @@ int CFpdyBase::DataPrintMaxLen(const char * lpszData, int nLineMaxLen)
 	int k = 0; //记录要截取的长度
 
 	// 字段最后一位不是汉字，则直接截取
-	if ((unsigned char)(lpszData[nLineMaxLen - 1]) < 0xA0)
+	//if ((unsigned char)(lpszData[nLineMaxLen - 1]) < 0xA0)
+	if (!((unsigned char)(lpszData[nLineMaxLen - 1]) & 0x80))
 	{
 		k = nLineMaxLen;
 	}
 
 	// 字段最后一位是汉字，而倒数第二位不是汉字则直接截取到倒数第二位
-	else if ((unsigned char)(lpszData[nLineMaxLen - 1]) >= 0xA0
-		&& (unsigned char)(lpszData[nLineMaxLen - 2]) < 0xA0)
+	/*else if ((unsigned char)(lpszData[nLineMaxLen - 1]) >= 0xA0
+		&& (unsigned char)(lpszData[nLineMaxLen - 2]) < 0xA0)*/
+	else if ((unsigned char)(lpszData[nLineMaxLen - 1]) & 0x80
+		&& !((unsigned char)(lpszData[nLineMaxLen - 2]) & 0x80))
 	{
 		k = nLineMaxLen - 1;
 	}
@@ -1054,9 +1174,12 @@ int CFpdyBase::DataPrintMaxLen(const char * lpszData, int nLineMaxLen)
 	{
 		while (i < nLineMaxLen)
 		{
-			if ((unsigned char)(lpszData[i]) >= 0xA0
+			/*if ((unsigned char)(lpszData[i]) >= 0xA0
 
-				&& (unsigned char)(lpszData[i + 1]) >= 0xA0)
+				&& (unsigned char)(lpszData[i + 1]) >= 0xA0)*/
+			if ((unsigned char)(lpszData[i]) & 0x80
+
+				&& (unsigned char)(lpszData[i + 1]) & 0x80)
 			{
 				if (k + 2 <= nLineMaxLen)
 				{
