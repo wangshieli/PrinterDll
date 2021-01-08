@@ -337,7 +337,7 @@ int ZLib_GetPrinterName(CString& strPrinterName);
 
 int ZLib_SetIniYbjValue(CString strFplxdm, CString strTop, CString strLeft, CString strQRCodeSize);
 
-int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CString& strQRCodeSize);
+int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CString& strQRCodeSize, CString& strZzlx);
 
 int ZLib_SetIniDyjName(CString strFplxdm, CString dyjName);
 #endif

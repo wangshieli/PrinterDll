@@ -257,7 +257,7 @@ void GetDllPath(CString& dllpath)
 	DEBUG_TRACELOG_STR("dllpath", dllpath);
 }
 
-int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CString& strQRCodeSize)
+int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CString& strQRCodeSize, CString& strZzlx)
 {
 	CString strTempTop, strTempLeft;
 	int rtn[5];
@@ -266,12 +266,13 @@ int ZLib_GetIniYbjValue(CString strFplxdm, CString& strTop, CString& strLeft, CS
 	GetDllPath(ini);
 	DEBUG_TRACELOG_STR("dllpath", strFplxdm);
 
-	char cstr1[100], cstr2[100];
-	rtn[0] = GetPrivateProfileString(strFplxdm, "top",	"", cstr1, sizeof(cstr1), ini);
-	rtn[1] = GetPrivateProfileString(strFplxdm, "left",	"", cstr2, sizeof(cstr2), ini);
-
-	strTop.Format("%s", cstr1);
-	strLeft.Format("%s", cstr2);
+	char cstr[100];
+	rtn[0] = GetPrivateProfileString(strFplxdm, "top",	"", cstr, sizeof(cstr), ini);
+	strTop.Format("%s", cstr);
+	rtn[1] = GetPrivateProfileString(strFplxdm, "left",	"", cstr, sizeof(cstr), ini);
+	strLeft.Format("%s", cstr);
+	rtn[2] = GetPrivateProfileString(strFplxdm, "zzlx", "", cstr, sizeof(cstr), ini);
+	strZzlx.Format("%s", cstr);
 
 	return 0;
 }

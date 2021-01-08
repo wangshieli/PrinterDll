@@ -44,10 +44,12 @@ void CFpdyBase::InitXYoff()
 	CString _sTop = "";
 	CString _sLeft = "";
 	CString _sQRSize = "";
-	ZLib_GetIniYbjValue(m_sTempFplxdm, _sTop, _sLeft, _sQRSize);
+	CString _sZzlx = "";
+	ZLib_GetIniYbjValue(m_sTempFplxdm, _sTop, _sLeft, _sQRSize, _sZzlx);
 	nXoff = atoi(_sLeft);
 	nYoff = atoi(_sTop);
 	nQRCodeSize = atoi(_sQRSize);
+	nZzlx = atoi(_sZzlx);
 
 	//int _nXoff = 0;
 	//int _nYoff = 0;
@@ -175,6 +177,8 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 	lpDevMode->dmFields |= DM_PAPERSIZE | DM_PAPERWIDTH | DM_PAPERLENGTH;
 	lpDevMode->dmPaperSize = DMPAPER_USER;
 	lpDevMode->dmPaperWidth = pwidth;       // 指定发票实物宽高
+	if (nZzlx == 1)
+		plength = 2794;
 	lpDevMode->dmPaperLength = plength;
 	m_hPrinterDC =m_pDlg->CreatePrinterDC();
 

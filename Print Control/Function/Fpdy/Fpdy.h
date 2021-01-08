@@ -224,6 +224,7 @@ protected:
 	int nXoff;
 	int nYoff;
 	int nQRCodeSize;
+	int nZzlx;
 
 	int m_nLineNum;
 	int m_nAllPageNum;
