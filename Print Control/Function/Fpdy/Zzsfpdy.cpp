@@ -347,7 +347,8 @@ ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 				}
 			}
 
-			if (fpxx.fyxmxx[i].sSl.CompareNoCase("1.5%") == 0)
+			//if (fpxx.fyxmxx[i].sSl.CompareNoCase("1.5%") == 0 && fpxx.sZsfs.CompareNoCase("1") == 0)
+			if (fpxx.sZsfs.CompareNoCase("0") != 0)
 			{
 				fpxx.fyxmxx[i].sSl.Format("%s", "***");
 			}
@@ -362,10 +363,10 @@ ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 				}
 			}
 
-			if (fpxx.sZsfs.CompareNoCase("2") == 0)
-			{
-				fpxx.fyxmxx[i].sSl.Format("***");
-			}
+			//if (fpxx.sZsfs.CompareNoCase("2") == 0)
+			//{
+			//	fpxx.fyxmxx[i].sSl.Format("***");
+			//}
 
 			if (fpxx.fyxmxx[i].sJe.Find('.') != -1)  //有小数点
 			{
