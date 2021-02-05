@@ -61,6 +61,22 @@ void CFpdyBase::InitXYoff()
 
 bool CFpdyBase::CheckDyjOnline()
 {
+	if (m_sPrinterName.IsEmpty())
+		return false;
+
+	HGLOBAL hDevMode = NULL;
+	HGLOBAL hDevNames = NULL;
+
+	if (!GetPrinterDevice(m_sPrinterName.GetBuffer(0), &hDevNames, &hDevMode)) //使用指定的打印机
+		return false;
+
+	m_pDlg->m_pd.hDevNames = hDevNames;
+	m_pDlg->m_pd.hDevMode = hDevMode;  // 为dlg设置参数，达到不弹框打印
+
+	if (0 == m_iPldy) // 不是批量打印直接弹框
+		return false;
+
+	// 是批量打印，检查打印机在线状态
 	DWORD _dwSize = 0;
 	HANDLE _hPrinter = NULL;
 	PRINTER_INFO_2* _pInfo = NULL;
@@ -133,11 +149,8 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 		return -10;
 
 	m_nToPage = m_nAllPageNum == 0 ? 1 : m_nAllPageNum;
-	if (0 == m_iPldy || m_sPrinterName.IsEmpty() || !CheckDyjOnline())
+	if (!CheckDyjOnline())
 	{
-		CString defPrinter = ""; 
-		getSysDefPrinter(defPrinter);
-		setSysDefprinter(m_sPrinterName);
 		m_pDlg->m_pd.nMinPage = m_pDlg->m_pd.nFromPage = 1;
 		m_pDlg->m_pd.nMaxPage = m_pDlg->m_pd.nToPage = m_nToPage;
 		if (m_pDlg->DoModal() == IDCANCEL)
@@ -149,28 +162,9 @@ int CFpdyBase::InitPrinter(short pwidth, short plength)
 		m_nToPage = m_pDlg->m_pd.nToPage;
 		m_nCopies = m_pDlg->m_pd.nCopies;
 		m_sPrinterName = m_pDlg->GetDeviceName();
-		setSysDefprinter(defPrinter);
 
 		// 更新配置文件
 		ZLib_SetIniDyjName(m_sTempFplxdm, m_sPrinterName);
-	}
-	else if (1 == m_iPldy)
-	{
-		HGLOBAL hDevMode = NULL;
-		HGLOBAL hDevNames = NULL;
-		if (!GetPrinterDevice(m_sPrinterName.GetBuffer(0), &hDevNames, &hDevMode)) //使用指定的打印机
-		{
-			return -7;// 找不到打印机
-		}
-		m_pDlg->m_pd.hDevNames = hDevNames;
-		m_pDlg->m_pd.hDevMode = hDevMode;  // 为dlg设置参数，达到不弹框打印
-	}
-	else
-	{
-		if (!m_pDlg->GetDefaults())
-		{
-			return -11;// 找不到打印机
-		}
 	}
 
 	DEVMODE *lpDevMode = m_pDlg->GetDevMode();
