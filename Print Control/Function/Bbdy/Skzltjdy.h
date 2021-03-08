@@ -54,6 +54,7 @@ typedef struct _skzltj_bbxx
 		st_sFffp = "";
 		st_sThfp = "";
 		st_sQmkc = "";
+		st_sHjfp = "";
 
 		st_sTitle2 = "";
 		st_sJedw = "";
@@ -100,6 +101,7 @@ typedef struct _skzltj_bbxx
 	CString st_sFffp;
 	CString st_sThfp;
 	CString st_sQmkc;
+	CString st_sHjfp;
 
 	XM xmTitle1;
 	XM xmCqkc;
@@ -110,6 +112,7 @@ typedef struct _skzltj_bbxx
 	XM xmFffp;
 	XM xmThfp;
 	XM xmQmkc;
+	XM xmHjfp;
 
 	CString st_sTitle2;
 	CString st_sJedw;

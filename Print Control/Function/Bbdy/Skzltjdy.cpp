@@ -259,6 +259,7 @@ SKZLTJ_BBXX CSkzltjdy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 	if (xml.FindElem("fffp")) bbxx.st_sFffp = xml.GetData();
 	if (xml.FindElem("thfp")) bbxx.st_sThfp = xml.GetData();
 	if (xml.FindElem("qmkc")) bbxx.st_sQmkc = xml.GetData();
+	if (xml.FindElem("hjfp")) bbxx.st_sHjfp = xml.GetData();
 	if (xml.FindElem("title2")) bbxx.st_sTitle2 = xml.GetData();
 	if (xml.FindElem("dw")) bbxx.st_sJedw = xml.GetData();
 
@@ -355,26 +356,40 @@ CString CSkzltjdy::GenerateItemMXXml(SKZLTJ_BBXX bbxx)
 	y += 50;
 
 	int x_ = 0;
-	xywhsf(bbxx.xmCqkc, x_, y, 400, 50, LS_10, FS, AM_VCL);
-	x_ += 400;
+	if (!bbxx.st_sCqkc.IsEmpty())
+	{
+		xywhsf(bbxx.xmCqkc, x_, y, 400, 50, LS_10, FS, AM_VCL);
+		x_ += 400;
+	}
 	xywhsf(bbxx.xmZsfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
 	x_ += 400;
 	xywhsf(bbxx.xmFsfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
 	y += 50;
 
 	x_ = 0;
-	xywhsf(bbxx.xmGjfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
-	x_ += 400;
+	if (!bbxx.st_sGjfp.IsEmpty())
+	{
+		xywhsf(bbxx.xmGjfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
+		x_ += 400;
+	}
 	xywhsf(bbxx.xmZffp, x_, y, 400, 50, LS_10, FS, AM_VCL);
 	x_ += 400;
 	xywhsf(bbxx.xmFffp, x_, y, 400, 50, LS_10, FS, AM_VCL);
 	y += 50;
 
 	x_ = 0;
-	xywhsf(bbxx.xmThfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
-	x_ += 400;
-	x_ += 400;
-	xywhsf(bbxx.xmQmkc, x_, y, 400, 50, LS_10, FS, AM_VCL);
+	if (!bbxx.st_sHjfp.IsEmpty())// Çø·Öukey 2.0
+	{
+		xywhsf(bbxx.xmHjfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
+	}
+	else
+	{
+		xywhsf(bbxx.xmThfp, x_, y, 400, 50, LS_10, FS, AM_VCL);
+		x_ += 400;
+		x_ += 400;
+
+		xywhsf(bbxx.xmQmkc, x_, y, 400, 50, LS_10, FS, AM_VCL);
+	}
 	y += 50;
 
 	y += 25;
@@ -459,14 +474,25 @@ CString CSkzltjdy::GenerateItemMXXml(SKZLTJ_BBXX bbxx)
 			addxml("", bbxx.xm1);
 
 			addxml(bbxx.st_sTitle1, bbxx.xmTitle1);
-			addxml(bbxx.st_sCqkc, bbxx.xmCqkc);
+			if (!bbxx.st_sCqkc.IsEmpty())
+				addxml(bbxx.st_sCqkc, bbxx.xmCqkc);
+			
 			addxml(bbxx.st_sZsfp, bbxx.xmZsfp);
 			addxml(bbxx.st_sFsfp, bbxx.xmFsfp);
-			addxml(bbxx.st_sGjfp, bbxx.xmGjfp);
+			if (!bbxx.st_sGjfp.IsEmpty())
+				addxml(bbxx.st_sGjfp, bbxx.xmGjfp);
 			addxml(bbxx.st_sZffp, bbxx.xmZffp);
 			addxml(bbxx.st_sFffp, bbxx.xmFffp);
-			addxml(bbxx.st_sThfp, bbxx.xmThfp);
-			addxml(bbxx.st_sQmkc, bbxx.xmQmkc);
+			if (!bbxx.st_sHjfp.IsEmpty())
+			{
+				addxml(bbxx.st_sHjfp, bbxx.xmHjfp);
+			}
+			else
+			{
+				addxml(bbxx.st_sThfp, bbxx.xmThfp);
+				addxml(bbxx.st_sQmkc, bbxx.xmQmkc);
+			}
+			
 
 			addxml("", bbxx.xm2);
 

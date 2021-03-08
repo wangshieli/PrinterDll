@@ -80,22 +80,25 @@
 
 //设置打印各项/字段属性
 #define xywhsf(A,X,Y,W,H,S,F,Z)\
+{\
 		((A).x)=(X) ;((A).y)= (Y) ;((A).w)= (W); \
 		((A).h)=(H) ;((A).s)= (S) ;((A).f)= (F); \
-		((A).z)=(Z) ;((A).fc)= 1 
+		((A).z)=(Z) ;((A).fc)= 1;} 
 
 #define xywhsf_fc(A,X,Y,W,H,S,F,Z,FC)\
+{\
 		((A).x)=(X) ;((A).y)= (Y) ;((A).w)= (W); \
 		((A).h)=(H) ;((A).s)= (S) ;((A).f)= (F); \
-		((A).z)=(Z) ;((A).fc)= (FC) 
+		((A).z)=(Z) ;((A).fc)= (FC);} 
 
 //生成XML内部段
 #define addxml(a,b)  \
+{						\
 	xml.AddElem("Item",a);xml.AddAttrib("x",b.x);  \
 	xml.AddAttrib("y",b.y);xml.AddAttrib("w",b.w); \
 	xml.AddAttrib("h",b.h);xml.AddAttrib("s",b.s); \
 	xml.AddAttrib("f",b.f);xml.AddAttrib("z",b.z); \
-	xml.AddAttrib("fc",b.fc)
+	xml.AddAttrib("fc",b.fc);}					   
 
 struct XM //打印属性（坐标、宽高、字体、字号）
 {
