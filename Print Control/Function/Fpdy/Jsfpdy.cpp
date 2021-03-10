@@ -1150,7 +1150,7 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 	}
 	else
 	{
-		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 510, LH + 70, LS_6, FS, ZL);
+		xywhsf(fpmx.bz, LX + 100, LY + 850 - 30 + 265, LW + 520, LH + 70, LS_6, FS, ZL);
 	}
 
 	if (fpmx.sFpzt.CompareNoCase("01") == 0)
