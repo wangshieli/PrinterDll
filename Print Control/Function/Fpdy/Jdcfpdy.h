@@ -124,5 +124,8 @@ private:
 	JDCFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);
 	CString GenerateFpdyXml(JDCFP_FPXX fpmx, CString dylx, FPDY fpdy);
 	CString GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy);
+
+private:
+	CString m_stFppy;// 0老票样   1新票样
 };
 
