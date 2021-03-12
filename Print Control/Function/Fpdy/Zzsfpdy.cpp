@@ -109,6 +109,8 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 	return GenerateXMLFpdy(fpdy, rtn);
 }
 
+#include <atlimage.h>
+
 LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -167,36 +169,41 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 			char sTempPath[MAX_PATH];
 			strcpy(sTempPath, m_cQRcodePath);
 			strcat(sTempPath, "\\Ewm.bmp");
-			HBITMAP hBitmap = (HBITMAP)::LoadImage(
-				NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)
-				sTempPath,				// 位图路径
-				IMAGE_BITMAP,			// 位图类型
-				0,						// 指定图片的宽
-				0,						// 指定图片的高
-				LR_LOADFROMFILE | LR_CREATEDIBSECTION);		// 从路径处加载图片
 
-			BITMAP bitmap;
-			::GetObject(hBitmap, sizeof(BITMAP), &bitmap);
-			HDC dcMem;
-			dcMem = ::CreateCompatibleDC(m_hPrinterDC);
-			HBITMAP hOldBmp = (HBITMAP)::SelectObject(dcMem, hBitmap);
+			CImage image;
+			image.Load(sTempPath);
+			image.StretchBlt(m_hPrinterDC, 190 + nXoff, -110 - nYoff, 160, -160, 0, 0, 74, 74, SRCCOPY);
 
-			if (nQRCodeSize > 0) // isZero
-			{
-				int nScaledWidth = nQRCodeSize;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
-				int nScaledHeight = nQRCodeSize;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
-				::StretchBlt(m_hPrinterDC, nXoff + 80 + 180 - nQRCodeSize, -(nYoff + 30 + (180 - nQRCodeSize)), nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
-			}
-			else
-			{
-				int nScaledWidth = 160;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
-				int nScaledHeight = 160;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
-				::StretchBlt(m_hPrinterDC, 190 + nXoff, -110 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
-			}
+			//HBITMAP hBitmap = (HBITMAP)::LoadImage(
+			//	NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)
+			//	sTempPath,				// 位图路径
+			//	IMAGE_BITMAP,			// 位图类型
+			//	0,						// 指定图片的宽
+			//	0,						// 指定图片的高
+			//	LR_LOADFROMFILE | LR_CREATEDIBSECTION);		// 从路径处加载图片
 
-			::SelectObject(dcMem, hOldBmp);
-			::DeleteDC(dcMem);
-			::DeleteObject(hBitmap);
+			//BITMAP bitmap;
+			//::GetObject(hBitmap, sizeof(BITMAP), &bitmap);
+			//HDC dcMem;
+			//dcMem = ::CreateCompatibleDC(m_hPrinterDC);
+			//HBITMAP hOldBmp = (HBITMAP)::SelectObject(dcMem, hBitmap);
+
+			//if (nQRCodeSize > 0) // isZero
+			//{
+			//	int nScaledWidth = nQRCodeSize;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
+			//	int nScaledHeight = nQRCodeSize;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
+			//	::StretchBlt(m_hPrinterDC, nXoff + 80 + 180 - nQRCodeSize, -(nYoff + 30 + (180 - nQRCodeSize)), nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+			//}
+			//else
+			//{
+			//	int nScaledWidth = 160;	//GetDeviceCaps (m_hPrinterDC, HORZRES);
+			//	int nScaledHeight = 160;	//GetDeviceCaps (m_hPrinterDC, VERTRES);
+			//	::StretchBlt(m_hPrinterDC, 190 + nXoff, -110 - nYoff, nScaledWidth, -nScaledHeight, dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+			//}
+
+			//::SelectObject(dcMem, hOldBmp);
+			//::DeleteDC(dcMem);
+			//::DeleteObject(hBitmap);
 		}
 
 		while (xml.FindElem("Item"))
