@@ -446,11 +446,14 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	if (m_stFppy.CompareNoCase("1") == 0)
 	{
 		xywhsf_fc(fpmx.Ghfmc, 290, 310, 650, 120, LS_10, FS, AM_VCL, 10);
+		addxml(fpmx.sGhfmc, fpmx.Ghfmc);
 	}
 	else
 	{
 		xywhsf_fc(fpmx.Ghfmc, 290, 310, 650, 60, LS_10, FS, AM_VCL, 10);
 		xywhsf(fpmx.Sfzhm, 290, 370, 650, 60, LS_12, FT, AM_VCL);
+		addxml(fpmx.sGhfmc, fpmx.Ghfmc);
+		addxml(fpmx.sSfzhm, fpmx.Sfzhm);
 	}
 	
 	xywhsf(fpmx.Ghfsbh, 1420, 310, 650, 120, LS_12, FT, AM_VCL);
@@ -502,9 +505,6 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sFpdm, fpmx.Fpdm);
 	addxml(fpmx.sFphm, fpmx.Fphm);
 	addxml(fpmx.sJqbh, fpmx.Jqbh);
-	addxml(fpmx.sGhfmc, fpmx.Ghfmc);
-	if (m_stFppy.CompareNoCase("0") == 0)
-		addxml(fpmx.sSfzhm, fpmx.Sfzhm);
 	addxml(fpmx.sCllx, fpmx.Cllx);
 	addxml(fpmx.sHgzh, fpmx.Hgzh);
 	addxml(fpmx.sFdjhm, fpmx.Fdjhm);
