@@ -142,7 +142,9 @@
     <PostBuildEvent>
       <Command>copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\exe权限提升工具";
 copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\newskkp_TempVer";
-copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-uk\\code\\UKey_TempVer";</Command>
+copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-uk\\code\\UKey_TempVer";
+copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-uk\\code\\UKey_KZ1";
+copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\newskkp_KZ1";</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

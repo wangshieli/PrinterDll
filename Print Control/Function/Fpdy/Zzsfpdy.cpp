@@ -601,6 +601,10 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	{
 		fpmx.sNcpsg = "收购";
 	}
+	else if (fpmx.sTspz.CompareNoCase("12") == 0)
+	{
+		fpmx.sCpy = "机动车";
+	}
 	else if (fpmx.sTspz.CompareNoCase("08") == 0 || fpmx.sTspz.CompareNoCase("18") == 0)
 	{
 		fpmx.sCpy = "成品油";
