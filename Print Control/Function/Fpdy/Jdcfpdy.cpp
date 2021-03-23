@@ -6,6 +6,8 @@
 #include "../../Helper/QRGenerator/QRGenerator.h"
 #include "../../Helper/QRGenerator/Base64.h"
 
+#include "../../cximage/ximage.h"
+
 CJdcfpdy::CJdcfpdy()
 {
 }
@@ -141,9 +143,9 @@ LONG CJdcfpdy::Print(LPCTSTR billXml, CString zzzse)
 			strcpy(sTempPath, m_cQRcodePath);
 			strcat(sTempPath, "\\Ewm.bmp");
 
-			CImage image;
+			CxImage image;
 			image.Load(sTempPath);
-			image.StretchBlt(m_hPrinterDC, 220 + nXoff, -100 - nYoff, 160, -160, 0, 0, 74, 74, SRCCOPY);
+			image.Stretch(m_hPrinterDC, 220 + nXoff, -100 - nYoff, 160, -160, SRCCOPY);
 			//HBITMAP hBitmap = (HBITMAP)::LoadImage(
 			//	NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)
 			//	sTempPath,				// 位图路径

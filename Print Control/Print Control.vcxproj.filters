@@ -37,6 +37,9 @@
     <Filter Include="Function\Bbdy">
       <UniqueIdentifier>{c2e5e6ce-2f0f-4946-8807-78e2de730b84}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helper\cximage">
+      <UniqueIdentifier>{560c0ee5-afe2-43a6-9527-efd2caaed901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="Function\Bbdy\Xhqddy.h">
       <Filter>Function\Bbdy</Filter>
+    </ClInclude>
+    <ClInclude Include="cximage\ximage.h">
+      <Filter>Helper\cximage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

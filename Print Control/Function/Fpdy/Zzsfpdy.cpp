@@ -6,6 +6,8 @@
 #include "../../Helper/QRGenerator/QRGenerator.h"
 #include "../../Helper/QRGenerator/Base64.h"
 
+#include "../../cximage/ximage.h"
+
 #define LINEFEED_P (22+4) //换行数，标识 竖向
 #define LINEFEED_L (16) //换行数，标识 横向
 
@@ -170,9 +172,10 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 			strcpy(sTempPath, m_cQRcodePath);
 			strcat(sTempPath, "\\Ewm.bmp");
 
-			CImage image;
+			//CImage image;
+			CxImage image;
 			image.Load(sTempPath);
-			image.StretchBlt(m_hPrinterDC, 190 + nXoff, -110 - nYoff, 160, -160, 0, 0, 74, 74, SRCCOPY);
+			image.Stretch(m_hPrinterDC, 190 + nXoff, -110 - nYoff, 160, -160, SRCCOPY);
 
 			//HBITMAP hBitmap = (HBITMAP)::LoadImage(
 			//	NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)

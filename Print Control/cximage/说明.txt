@@ -1,0 +1,22 @@
+#include "../Helper/cximage/ximage.h"
+#ifdef _DEBUG
+#pragma comment(lib, "cximage_d.lib")
+#pragma comment(lib, "jasper_d.lib")
+#pragma comment(lib, "libpsd_d.lib")
+#pragma comment(lib, "libdcr_d.lib")
+#pragma comment(lib, "mng_d.lib")
+#pragma comment(lib, "png_d.lib")
+#pragma comment(lib, "jpeg_d.lib")
+#pragma comment(lib, "tiff_d.lib")
+#pragma comment(lib, "zlib_d.lib")
+#else
+#pragma comment(lib, "cximage.lib")
+#pragma comment(lib, "jasper.lib")
+#pragma comment(lib, "libpsd.lib")
+#pragma comment(lib, "libdcr.lib")
+#pragma comment(lib, "mng.lib")
+#pragma comment(lib, "png.lib")
+#pragma comment(lib, "jpeg.lib")
+#pragma comment(lib, "tiff.lib")
+#pragma comment(lib, "zlib.lib")
+#endif

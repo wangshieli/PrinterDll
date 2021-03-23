@@ -6,6 +6,8 @@
 #include "../../Helper/QRGenerator/QRGenerator.h"
 #include "../../Helper/QRGenerator/Base64.h"
 
+#include "../../cximage/ximage.h"
+
 CEscxstyfp::CEscxstyfp()
 {
 
@@ -140,9 +142,9 @@ LONG CEscxstyfp::Print(LPCTSTR billXml)
 			strcpy(sTempPath, m_cQRcodePath);
 			strcat(sTempPath, "\\Ewm.bmp");
 
-			CImage image;
+			CxImage image;
 			image.Load(sTempPath);
-			image.StretchBlt(m_hPrinterDC, 225 + nXoff, -90 - nYoff, 160, -160, 0, 0, 74, 74, SRCCOPY);
+			image.Stretch(m_hPrinterDC, 225 + nXoff, -90 - nYoff, 160, -160, SRCCOPY);
 			
 			//HBITMAP hBitmap = (HBITMAP)::LoadImage(
 			//	NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)

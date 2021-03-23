@@ -131,6 +131,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;PRINTCONTROL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,6 +171,7 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cximage\ximage.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Function\Bbdy\Fpkcdy.h" />
     <ClInclude Include="Function\Bbdy\Fplycdy.h" />
