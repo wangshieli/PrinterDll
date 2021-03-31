@@ -195,7 +195,6 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
     <ClInclude Include="Helper\QRGenerator\Base64.h" />
     <ClInclude Include="Helper\QRGenerator\CRC.h" />
     <ClInclude Include="Helper\QRGenerator\QRControl.h" />
-    <ClInclude Include="Helper\QRGenerator\QRGenerator.h" />
     <ClInclude Include="Helper\XML\Markup.h" />
     <ClInclude Include="Helper\ZLib\ZLib.h" />
     <ClInclude Include="pch.h" />

@@ -78,9 +78,6 @@
     <ClInclude Include="Helper\QRGenerator\Base64.h">
       <Filter>Helper\QRGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="Helper\QRGenerator\QRGenerator.h">
-      <Filter>Helper\QRGenerator</Filter>
-    </ClInclude>
     <ClInclude Include="Function\Fpdy\Jdcfpdy.h">
       <Filter>Function\Fpdy</Filter>
     </ClInclude>
