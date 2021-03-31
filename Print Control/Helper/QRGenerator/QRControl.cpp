@@ -49,6 +49,7 @@ bool CQRControl::funcc(LPCTSTR src, LPTSTR * des, HDC hdc, int32_t xoffset, int3
 	memcpy_s(pData + _tcslen(src), 1, ",", 1);
 	memcpy_s(pData + _tcslen(src) + 1, 5, crcData, 5);
 
+	QRcode* pQRC = NULL;
 	int nWidth = 0;
 	int nWidthAdjusted = 0;
 	int nDataBytes = 0;
@@ -61,80 +62,81 @@ bool CQRControl::funcc(LPCTSTR src, LPTSTR * des, HDC hdc, int32_t xoffset, int3
 	unsigned char* pSourceData = NULL;
 	unsigned char* pDestData = NULL;
 
-	QRcode* pQRC;
-	if (pQRC = QRcode_encodeString(pData, 5, QR_ECLEVEL_M, QR_MODE_8, 1))
+	pQRC = QRcode_encodeString(pData, 5, QR_ECLEVEL_M, QR_MODE_8, 1);
+	if (pQRC == NULL)
 	{
-		nWidth = pQRC->width;
-		nWidthAdjusted = nWidth * OUT_FILE_PIXEL_PRESCALER * 3;//3
-		if (nWidthAdjusted % 4)
-			nWidthAdjusted = (nWidthAdjusted / 4 + 1) * 4;
-		nDataBytes = nWidthAdjusted * nWidth * OUT_FILE_PIXEL_PRESCALER;
+		return false;
+	}
+	
+	nWidth = pQRC->width;
+	nWidthAdjusted = nWidth * OUT_FILE_PIXEL_PRESCALER * 3;//3
+	if (nWidthAdjusted % 4)
+		nWidthAdjusted = (nWidthAdjusted / 4 + 1) * 4;
+	nDataBytes = nWidthAdjusted * nWidth * OUT_FILE_PIXEL_PRESCALER;
 
-		BITMAPFILEHEADER kFileHeader;
-		kFileHeader.bfType = 0x4d42;  // "BM"
-		kFileHeader.bfSize = sizeof(BITMAPFILEHEADER) +
-			sizeof(BITMAPINFOHEADER) +
-			nDataBytes;
-		kFileHeader.bfReserved1 = 0;
-		kFileHeader.bfReserved2 = 0;
-		kFileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) +
-			sizeof(BITMAPINFOHEADER);
+	BITMAPFILEHEADER kFileHeader;
+	kFileHeader.bfType = 0x4d42;  // "BM"
+	kFileHeader.bfSize = sizeof(BITMAPFILEHEADER) +
+		sizeof(BITMAPINFOHEADER) +
+		nDataBytes;
+	kFileHeader.bfReserved1 = 0;
+	kFileHeader.bfReserved2 = 0;
+	kFileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) +
+		sizeof(BITMAPINFOHEADER);
 
-		BITMAPINFOHEADER kInfoHeader;
-		kInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
-		kInfoHeader.biWidth = nWidth * OUT_FILE_PIXEL_PRESCALER;
-		kInfoHeader.biHeight = -((int)nWidth * OUT_FILE_PIXEL_PRESCALER);
-		kInfoHeader.biPlanes = 1;
-		kInfoHeader.biBitCount = 24;
-		kInfoHeader.biCompression = BI_RGB;
-		kInfoHeader.biSizeImage = 0;
-		kInfoHeader.biXPelsPerMeter = 0;
-		kInfoHeader.biYPelsPerMeter = 0;
-		kInfoHeader.biClrUsed = 0;
-		kInfoHeader.biClrImportant = 0;
+	BITMAPINFOHEADER kInfoHeader;
+	kInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
+	kInfoHeader.biWidth = nWidth * OUT_FILE_PIXEL_PRESCALER;
+	kInfoHeader.biHeight = -((int)nWidth * OUT_FILE_PIXEL_PRESCALER);
+	kInfoHeader.biPlanes = 1;
+	kInfoHeader.biBitCount = 24;
+	kInfoHeader.biCompression = BI_RGB;
+	kInfoHeader.biSizeImage = 0;
+	kInfoHeader.biXPelsPerMeter = 0;
+	kInfoHeader.biYPelsPerMeter = 0;
+	kInfoHeader.biClrUsed = 0;
+	kInfoHeader.biClrImportant = 0;
 
-		// Allocate pixels buffer
-		int lccc = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nDataBytes;
-		if (!(pSrcData = (unsigned char*)malloc(lccc)))
+	// Allocate pixels buffer
+	int lccc = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nDataBytes;
+	if (!(pSrcData = (unsigned char*)malloc(lccc)))
+	{
+		return false;
+	}
+	memcpy(pSrcData, &kFileHeader, sizeof(BITMAPFILEHEADER));
+	memcpy(pSrcData + sizeof(BITMAPFILEHEADER), &kInfoHeader, sizeof(BITMAPINFOHEADER));
+	memset(pSrcData + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER), 0xff, nDataBytes);
+
+	// Convert QrCode bits to bmp pixels
+	pRGBData = pSrcData + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+	pSourceData = pQRC->data;
+	for (y = 0; y < nWidth; y++)
+	{
+		pDestData = pRGBData + nWidthAdjusted * y * OUT_FILE_PIXEL_PRESCALER;
+		for (x = 0; x < nWidth; x++)
 		{
-			printf("Out of memory");
-			exit(-1);
-		}
-		memcpy(pSrcData, &kFileHeader, sizeof(BITMAPFILEHEADER));
-		memcpy(pSrcData + sizeof(BITMAPFILEHEADER), &kInfoHeader, sizeof(BITMAPINFOHEADER));
-		memset(pSrcData + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER), 0xff, nDataBytes);
-
-		// Convert QrCode bits to bmp pixels
-		pRGBData = pSrcData + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
-		pSourceData = pQRC->data;
-		for (y = 0; y < nWidth; y++)
-		{
-			pDestData = pRGBData + nWidthAdjusted * y * OUT_FILE_PIXEL_PRESCALER;
-			for (x = 0; x < nWidth; x++)
+			if (*pSourceData & 1)
 			{
-				if (*pSourceData & 1)
+				for (l = 0; l < OUT_FILE_PIXEL_PRESCALER; l++)
 				{
-					for (l = 0; l < OUT_FILE_PIXEL_PRESCALER; l++)
+					for (n = 0; n < OUT_FILE_PIXEL_PRESCALER; n++)
 					{
-						for (n = 0; n < OUT_FILE_PIXEL_PRESCALER; n++)
-						{
-							*(pDestData + n * 3 + nWidthAdjusted * l) = PIXEL_COLOR_B;
-							*(pDestData + 1 + n * 3 + nWidthAdjusted * l) = PIXEL_COLOR_G;
-							*(pDestData + 2 + n * 3 + nWidthAdjusted * l) = PIXEL_COLOR_R;
-						}
+						*(pDestData + n * 3 + nWidthAdjusted * l) = PIXEL_COLOR_B;
+						*(pDestData + 1 + n * 3 + nWidthAdjusted * l) = PIXEL_COLOR_G;
+						*(pDestData + 2 + n * 3 + nWidthAdjusted * l) = PIXEL_COLOR_R;
 					}
 				}
-				pDestData += 3 * OUT_FILE_PIXEL_PRESCALER;
-				pSourceData++;
 			}
+			pDestData += 3 * OUT_FILE_PIXEL_PRESCALER;
+			pSourceData++;
 		}
-
-		CxImage im(pSrcData, lccc, CXIMAGE_FORMAT_BMP);
-		im.Stretch(hdc, xoffset, yoffset, xsize, ysize, dwRop);
-
-		free(pSrcData);
-		QRcode_free(pQRC);
 	}
 
-	return false;
+	CxImage im(pSrcData, lccc, CXIMAGE_FORMAT_BMP);
+	im.Stretch(hdc, xoffset, yoffset, xsize, ysize, dwRop);
+
+	free(pSrcData);
+	QRcode_free(pQRC);
+
+	return true;
 }
