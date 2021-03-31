@@ -5,30 +5,6 @@
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/ZLib/ZLib.h"
 
-#pragma comment(lib, "Helper/QRGenerator/QRGenerator.lib")
-
-#ifdef _DEBUG
-#pragma comment(lib, "cximage/cximage_d.lib")
-#pragma comment(lib, "cximage/jasper_d.lib")
-#pragma comment(lib, "cximage/libpsd_d.lib")
-#pragma comment(lib, "cximage/libdcr_d.lib")
-#pragma comment(lib, "cximage/mng_d.lib")
-#pragma comment(lib, "cximage/png_d.lib")
-#pragma comment(lib, "cximage/jpeg_d.lib")
-#pragma comment(lib, "cximage/tiff_d.lib")
-#pragma comment(lib, "cximage/zlib_d.lib")
-#else
-#pragma comment(lib, "cximage/cximage.lib")
-#pragma comment(lib, "cximage/jasper.lib")
-#pragma comment(lib, "cximage/libpsd.lib")
-#pragma comment(lib, "cximage/libdcr.lib")
-#pragma comment(lib, "cximage/mng.lib")
-#pragma comment(lib, "cximage/png.lib")
-#pragma comment(lib, "cximage/jpeg.lib")
-#pragma comment(lib, "cximage/tiff.lib")
-#pragma comment(lib, "cximage/zlib.lib")
-#endif
-
 CFpdyBase::CFpdyBase():m_iPldy(0),
 	m_hPrinterDC(NULL),
 	m_sPrinterName(""),
@@ -37,6 +13,7 @@ CFpdyBase::CFpdyBase():m_iPldy(0),
 	m_sPrintTaskName(""),
 	m_sPrintTaskNameFlag(""),
 	m_bStatus(FALSE),
+	m_sEwm(""),
 	nXoff(0),
 	nYoff(0),
 	nQRCodeSize(0),

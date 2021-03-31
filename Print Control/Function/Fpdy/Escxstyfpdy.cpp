@@ -3,10 +3,8 @@
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
-#include "../../Helper/QRGenerator/QRGenerator.h"
-#include "../../Helper/QRGenerator/Base64.h"
 
-#include "../../cximage/ximage.h"
+#include "../../Helper/QRGenerator/QRControl.h"
 
 CEscxstyfp::CEscxstyfp()
 {
@@ -138,13 +136,16 @@ LONG CEscxstyfp::Print(LPCTSTR billXml)
 
 		if (m_sFpzt.Compare("02") != 0)
 		{
-			char sTempPath[MAX_PATH];
-			strcpy(sTempPath, m_cQRcodePath);
-			strcat(sTempPath, "\\Ewm.bmp");
+			//char sTempPath[MAX_PATH];
+			//strcpy(sTempPath, m_cQRcodePath);
+			//strcat(sTempPath, "\\Ewm.bmp");
 
-			CxImage image;
-			image.Load(sTempPath);
-			image.Stretch(m_hPrinterDC, 225 + nXoff, -90 - nYoff, 160, -160, SRCCOPY);
+			//CxImage image;
+			//image.Load(sTempPath);
+			//image.Stretch(m_hPrinterDC, 225 + nXoff, -90 - nYoff, 160, -160, SRCCOPY);
+
+			CQRControl cc;
+			cc.funcc(m_sEwm, NULL, m_hPrinterDC, 225 + nXoff, -90 - nYoff, 160, -160, SRCCOPY);
 			
 			//HBITMAP hBitmap = (HBITMAP)::LoadImage(
 			//	NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)
@@ -294,32 +295,10 @@ ESCFP_FPXX CEscxstyfp::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 
 	CString strFplx = "15";
 
-	if (fpdy.sDylx.CompareNoCase("0") == 0)
+	if (m_sFpzt.CompareNoCase("02") != 0)
 	{
 		fpxx.sKprq = fpxx.sKprq.Left(8);
-		CString strEwm = "01," + strFplx + "," + fpxx.sFpdm + "," + fpxx.sFphm + "," + fpxx.sCjhj + "," + fpxx.sKprq + "," + fpxx.sSkm;
-		int size = 0;
-		unsigned int num = 0;
-		getSize(strEwm.GetBuffer(0), &num);
-		unsigned char* fpEwm = new unsigned char[num];
-		QRGeneratorBit(strEwm.GetBuffer(0), fpEwm, &size);
-		Base64 base;
-		int outLen = 0;
-		string str64 = base.Decode((const char*)fpEwm, size, outLen);
-		delete[]fpEwm;
-		FILE * pFile = NULL;
-		char sTempPath[MAX_PATH];
-		strcpy(sTempPath, m_cQRcodePath);
-		strcat(sTempPath, "\\Ewm.bmp");
-		if ((pFile = fopen(sTempPath, "wb")) != NULL)
-		{
-			fwrite(str64.c_str(), 1, outLen, pFile);
-			fclose(pFile);
-		}
-		else
-		{
-			//
-		}
+		m_sEwm = "01," + strFplx + "," + fpxx.sFpdm + "," + fpxx.sFphm + "," + fpxx.sCjhj + "," + fpxx.sKprq + "," + fpxx.sSkm;
 	}
 
 	fpxx.kprq.syear = fpxx.sKprq.Mid(0, 4);

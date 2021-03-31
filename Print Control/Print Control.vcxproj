@@ -193,6 +193,8 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
     <ClInclude Include="Function\Fpdy\Zzsfpdy.h" />
     <ClInclude Include="Helper\Log\TraceLog.h" />
     <ClInclude Include="Helper\QRGenerator\Base64.h" />
+    <ClInclude Include="Helper\QRGenerator\CRC.h" />
+    <ClInclude Include="Helper\QRGenerator\QRControl.h" />
     <ClInclude Include="Helper\QRGenerator\QRGenerator.h" />
     <ClInclude Include="Helper\XML\Markup.h" />
     <ClInclude Include="Helper\ZLib\ZLib.h" />
@@ -281,6 +283,12 @@ copy /b "$(TargetDir)PRINTCONTROL.dll" "D:\\Mr.Wang\\My.Work\\kprj-2.0\\code\\ne
     <ClCompile Include="Helper\QRGenerator\Base64.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Helper\QRGenerator\CRC.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Helper\QRGenerator\QRControl.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Helper\XML\Markup.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

@@ -223,6 +223,7 @@ protected:
 	CString m_sPrintTaskName;
 	CString m_sPrintTaskNameFlag;
 	BOOL m_bStatus;
+	CString m_sEwm;
 
 	int nXoff;
 	int nYoff;

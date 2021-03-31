@@ -3,10 +3,8 @@
 
 #include "../../Helper/XML/Markup.h"
 #include "../../Helper/Log/TraceLog.h"
-#include "../../Helper/QRGenerator/QRGenerator.h"
-#include "../../Helper/QRGenerator/Base64.h"
 
-#include "../../cximage/ximage.h"
+#include "../../Helper/QRGenerator/QRControl.h"
 
 #define LINEFEED_P (22+4) //换行数，标识 竖向
 #define LINEFEED_L (16) //换行数，标识 横向
@@ -168,14 +166,17 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 
 		if (m_sFpzt.Compare("02") != 0)
 		{
-			char sTempPath[MAX_PATH];
-			strcpy(sTempPath, m_cQRcodePath);
-			strcat(sTempPath, "\\Ewm.bmp");
+			//char sTempPath[MAX_PATH];
+			//strcpy(sTempPath, m_cQRcodePath);
+			//strcat(sTempPath, "\\Ewm.bmp");
 
 			//CImage image;
-			CxImage image;
-			image.Load(sTempPath);
-			image.Stretch(m_hPrinterDC, 190 + nXoff, -110 - nYoff, 160, -160, SRCCOPY);
+			//CxImage image;
+			//image.Load(sTempPath);
+			//image.Stretch(m_hPrinterDC, 190 + nXoff, -110 - nYoff, 160, -160, SRCCOPY);
+
+			CQRControl cc;
+			cc.funcc(m_sEwm, NULL, m_hPrinterDC, 190 + nXoff, -110 - nYoff, 160, -160, SRCCOPY);
 
 			//HBITMAP hBitmap = (HBITMAP)::LoadImage(
 			//	NULL,					// 模块实例句柄(要加载的图片在其他DLL中时)
@@ -542,32 +543,10 @@ ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 		strFplx = "04";
 	}
 
-	if (fpdy.sDylx.CompareNoCase("0") == 0)
+	if (m_sFpzt.CompareNoCase("02") != 0)
 	{
 		fpxx.sKprq = fpxx.sKprq.Left(8);
-		CString strEwm = "01," + strFplx + "," + fpxx.sFpdm + "," + fpxx.sFphm + "," + fpxx.sHjje + "," + fpxx.sKprq + "," + fpxx.sJym;
-		int size = 0;
-		unsigned int num = 0;
-		getSize(strEwm.GetBuffer(0), &num);
-		unsigned char* fpEwm = new unsigned char[num];
-		QRGeneratorBit(strEwm.GetBuffer(0), fpEwm, &size);
-		Base64 base;
-		int outLen = 0;
-		string str64 = base.Decode((const char*)fpEwm, size, outLen);
-		delete[]fpEwm;
-		FILE * pFile = NULL;
-		char sTempPath[MAX_PATH];
-		strcpy(sTempPath, m_cQRcodePath);
-		strcat_s(sTempPath, MAX_PATH, "\\Ewm.bmp");
-		if (fopen_s(&pFile, sTempPath, "wb") == 0 && pFile != NULL)
-		{
-			fwrite(str64.c_str(), 1, outLen, pFile);
-			fclose(pFile);
-		}
-		else
-		{
-			//
-		}
+		m_sEwm = "01," + strFplx + "," + fpxx.sFpdm + "," + fpxx.sFphm + "," + fpxx.sHjje + "," + fpxx.sKprq + "," + fpxx.sJym;
 	}
 
 	return fpxx;

@@ -132,6 +132,12 @@
     <ClInclude Include="cximage\ximage.h">
       <Filter>Helper\cximage</Filter>
     </ClInclude>
+    <ClInclude Include="Helper\QRGenerator\QRControl.h">
+      <Filter>Helper\QRGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper\QRGenerator\CRC.h">
+      <Filter>Helper\QRGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Print Control.cpp">
@@ -208,6 +214,12 @@
     </ClCompile>
     <ClCompile Include="Function\Bbdy\Xhqddy.cpp">
       <Filter>Function\Bbdy</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper\QRGenerator\QRControl.cpp">
+      <Filter>Helper\QRGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper\QRGenerator\CRC.cpp">
+      <Filter>Helper\QRGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
