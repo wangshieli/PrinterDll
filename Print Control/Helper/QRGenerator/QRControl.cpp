@@ -107,6 +107,7 @@ bool CQRControl::funcc(LPCTSTR src, LPTSTR * des, HDC hdc, int32_t xoffset, int3
 	int lccc = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nDataBytes;
 	if (!(pSrcData = (unsigned char*)malloc(lccc)))
 	{
+		QRcode_free(pQRC);
 		return false;
 	}
 	memcpy(pSrcData, &kFileHeader, sizeof(BITMAPFILEHEADER));
