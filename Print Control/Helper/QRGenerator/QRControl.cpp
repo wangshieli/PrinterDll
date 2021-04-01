@@ -41,13 +41,14 @@
 
 bool CQRControl::funcc(LPCTSTR src, LPTSTR * des, HDC hdc, int32_t xoffset, int32_t yoffset, int32_t xsize, int32_t ysize, uint32_t dwRop)
 {
-	unsigned char crcData[5] = { 0 };
-	get_ewm_crc_str(_tcslen(src), (unsigned char*)src, crcData);
-	TCHAR* pData = new TCHAR[_tcslen(src) + 5 + 1 + 1];
-	memset(pData, 0, _tcslen(src) + 5 + 1 + 1);
+	TCHAR* pData = new TCHAR[_tcslen(src) + 1 + 4 + 1 + 1];
+	memset(pData, 0, _tcslen(src) + 1 + 4 + 1 + 1);
 	memcpy_s(pData, _tcslen(src), src, _tcslen(src));
 	memcpy_s(pData + _tcslen(src), 1, ",", 1);
-	memcpy_s(pData + _tcslen(src) + 1, 5, crcData, 5);
+	unsigned char crcData[5] = { 0 };
+	get_ewm_crc_str(_tcslen(src) + 1, (unsigned char*)pData, crcData);
+	memcpy_s(pData + _tcslen(src) + 1, 4, crcData, 4);
+	memcpy_s(pData + _tcslen(src) + 1 + 4, 1, ",", 1);
 
 	QRcode* pQRC = NULL;
 	int nWidth = 0;
@@ -62,7 +63,8 @@ bool CQRControl::funcc(LPCTSTR src, LPTSTR * des, HDC hdc, int32_t xoffset, int3
 	unsigned char* pSourceData = NULL;
 	unsigned char* pDestData = NULL;
 
-	pQRC = QRcode_encodeString(pData, 5, QR_ECLEVEL_M, QR_MODE_8, 1);
+	//pQRC = QRcode_encodeString(pData, 5, QR_ECLEVEL_M, QR_MODE_AN, 1);
+	pQRC = QRcode_encodeData(_tcslen(pData) + 1, (const unsigned char*)pData, 5, QR_ECLEVEL_M);
 	if (pQRC == NULL)
 	{
 		return false;
