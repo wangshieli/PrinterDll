@@ -67,8 +67,12 @@ bool CQRControl::funcc(LPCTSTR src, LPTSTR * des, HDC hdc, int32_t xoffset, int3
 	pQRC = QRcode_encodeData(_tcslen(pData) + 1, (const unsigned char*)pData, 5, QR_ECLEVEL_M);
 	if (pQRC == NULL)
 	{
+		delete pData;
+		pData = NULL;
 		return false;
 	}
+	delete pData;
+	pData = NULL;
 	
 	nWidth = pQRC->width;
 	nWidthAdjusted = nWidth * OUT_FILE_PIXEL_PRESCALER * 3;//3
