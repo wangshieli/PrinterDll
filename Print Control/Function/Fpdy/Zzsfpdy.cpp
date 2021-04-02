@@ -100,6 +100,8 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 	}
 
 	printXml = GenerateFpdyXml(fpmx, fpdy.sDylx, fpdy);
+	if (fpdy.sDyfs.Compare("100") == 0)
+		return printXml;
 
 	if (fpdy.sDylx.CompareNoCase("0") == 0)
 	{

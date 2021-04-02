@@ -277,6 +277,7 @@ XHQD_BBXX CXhqddy::ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy)
 	if (xml.FindElem("z3")) bbxx.st_sZ3 = xml.GetData();
 
 	if (xml.FindElem("fplxdm")) bbxx.st_sFplxdm = xml.GetData();
+	if (xml.FindElem("ncpbz")) bbxx.st_sNcpbz = xml.GetData();
 	if (xml.FindElem("bz")) bbxx.st_sBz = xml.GetData();
 
 	if (xml.FindElem("qdxxs"))
@@ -417,7 +418,16 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 	int x9 = x8 + SE_W;
 
 	int y = 0;
-	xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
+
+	if (bbxx.st_sNcpbz.CompareNoCase("12") == 0)
+	{
+		xywhsf(bbxx.xmNcpbz, x0 + 150, y, 200, 100, LS_11, FH, AM_VCL);
+		xywhsf(bbxx.xmTitle, x0 + 400, y, 1190, 100, LS_16, FS, AM_ZC);
+	}
+	else
+	{
+		xywhsf(bbxx.xmTitle, x0, y, 1990, 100, LS_16, FS, AM_ZC);
+	}	
 	y += 100;
 
 	xywhsf(bbxx.xmGhdwmc, x0, y, 1990, 50, LS_10, FS, AM_VCL);
@@ -473,6 +483,10 @@ CString CXhqddy::GenerateItemMXXml(XHQD_BBXX bbxx)
 			xml.IntoElem();
 			xml.AddElem("PageHeader");
 			xml.IntoElem();
+			if (bbxx.st_sNcpbz.CompareNoCase("12") == 0)
+			{
+				addxml("»ú¶¯³µ", bbxx.xmNcpbz);
+			}
 			addxml(bbxx.st_sTitle, bbxx.xmTitle);
 			addxml(bbxx.st_sGhdwmc, bbxx.xmGhdwmc);
 			addxml(bbxx.st_sXhdwmc, bbxx.xmXhdwmc);

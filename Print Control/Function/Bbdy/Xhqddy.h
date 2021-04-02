@@ -70,6 +70,8 @@ typedef struct _xhqd_bbxx
 		st_sFpdm = "";
 		st_sFphm = "";
 
+		st_sNcpbz = "";
+
 		st_sBz = "";
 
 		st_sT1 = "";
@@ -100,6 +102,7 @@ typedef struct _xhqd_bbxx
 	CString st_sFpdm;
 	CString st_sFphm;
 
+	XM xmNcpbz;
 	XM xmTitle;
 	XM xmGhdwmc;
 	XM xmXhdwmc;
@@ -139,6 +142,8 @@ typedef struct _xhqd_bbxx
 	XM xmP2;
 
 	CString st_sFplxdm;
+
+	CString st_sNcpbz;
 
 	CString st_sBz;
 
