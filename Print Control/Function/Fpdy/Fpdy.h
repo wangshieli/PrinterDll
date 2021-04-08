@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Helper/XML/Markup.h"
 
 #define XMLHEAD "<?xml version=\"1.0\" encoding=\"gbk\"?>\r\n"
 
@@ -196,6 +197,8 @@ protected:
 
 	// PaintTile， 正常的打印
 	void PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
+
+	void PaintTileXml(int x, int y, int w, int h, int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, CMarkup &printxml, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
 
 	void PaintLine(RECT rect, int ls);
 

@@ -186,6 +186,7 @@ public:
 
 private:
 	LONG Print(LPCTSTR billXml, CString hjje, CString hjse);
+	CString PrintXml(LPCTSTR billXml, CString hjje, CString hjse);
 
 private:
 	ZZSFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);

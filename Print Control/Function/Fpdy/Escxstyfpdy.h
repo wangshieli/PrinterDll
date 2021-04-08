@@ -111,6 +111,7 @@ public:
 public:
 	CString Dlfpdy(LPCTSTR sInputInfo);
 	LONG Print(LPCTSTR billXml);
+	CString PrintXml(LPCTSTR billXml);
 
 private:
 	ESCFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);

@@ -950,6 +950,125 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 	pCDC->SetMapMode(MM_LOMETRIC);
 }
 
+void CFpdyBase::PaintTileXml(int _x, int _y, int _w, int _h, int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, CMarkup &xml, int z1, RECT _rect)
+{
+	int z = z1 & 0x000000ff;
+
+	rect = {
+		rect.left + _rect.left,
+		rect.top - _rect.top,
+		rect.right - _rect.right,
+		rect.bottom + _rect.bottom
+	};
+
+	UINT flags1 = 0;
+	UINT flags2 = 0;
+	UINT flags3 = 0;
+	if (z == AM_ZC)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_ZC_S || z == AM_ZC_CHEKC)
+	{
+		flags1 = DT_SINGLELINE | DT_EDITCONTROL | DT_CALCRECT | DT_CENTER | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_EDITCONTROL | DT_CENTER | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_SINGLELINE | DT_CENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_VC)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX;
+	}
+	else if (z == AM_ZL || z == AM_ZL_EX || z == AM_ZL_L)
+	{
+		flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_NOPREFIX;
+		flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_NOPREFIX;
+		flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_NOPREFIX;
+	}
+	else if (z == AM_VCL || z == AM_VCL_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_LEFT | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_LEFT | DT_NOPREFIX;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_LEFT | DT_NOPREFIX;
+	}
+	else if (z == AM_VCR || z == AM_VCR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_VCENTER | DT_RIGHT | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT | DT_NOPREFIX;
+		flags3 = DT_SINGLELINE | DT_VCENTER | DT_RIGHT | DT_NOPREFIX;
+	}
+	else if (z == AM_ZR_S)
+	{
+		flags1 = DT_SINGLELINE | DT_CALCRECT | DT_RIGHT | DT_NOPREFIX;
+		flags2 = DT_SINGLELINE | DT_RIGHT | DT_NOPREFIX;
+		flags3 = DT_SINGLELINE | DT_RIGHT | DT_NOPREFIX;
+	}
+
+	CFont *pOldFont;
+	CFont fontHeader;
+	int fontSize = FontSize;
+
+	CDC* pCDC = CDC::FromHandle(m_hPrinterDC);
+	pCDC->LPtoDP(&rect);
+	pCDC->SetMapMode(MM_TEXT);
+
+	fontHeader.CreatePointFont(fontSize, FontType, pCDC);
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+
+	CString data1 = data;
+	CString data2 = data;
+	DealData(pCDC, data1, 0, rect.right - rect.left);
+
+	RECT trect = rect;
+	LONG nSp = 0;
+
+	int recv_h = rect.bottom - rect.top;
+	int recv_r = rect.right;
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags1);
+	LONG r = trect.right;
+	if ((z != AM_ZL_EX) && (((h >= recv_h
+		|| (r > recv_r
+			&& (z == AM_VCR_S || z == AM_VCL_S || z == AM_ZC_S || z == AM_ZR_S
+				|| (((flags1 = DT_WORDBREAK | DT_EDITCONTROL | DT_CALCRECT | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags2 = DT_WORDBREAK | DT_EDITCONTROL | DT_LEFT | DT_NOPREFIX) || 1)
+					&& ((flags3 = DT_EDITCONTROL | DT_WORDBREAK | DT_LEFT | DT_NOPREFIX) || 1))))) && ((fontSize -= FontSizeEC) || 1))
+		|| ((z == AM_ZC || z == AM_ZC_S || z == AM_ZC_CHEKC || z == AM_ZL) && ((nSp = (trect.top - rect.top + rect.bottom - trect.bottom) / 2) && 0)))) //如果多行，居中左对齐
+	{
+		::SelectObject(m_hPrinterDC, pOldFont);
+		fontHeader.DeleteObject();
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+
+		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
+			nSp = (trect.top - rect.top + rect.bottom - trect.bottom) / 2;
+	}
+
+	if (nSp != 0)
+	{
+		rect.top = rect.top + nSp;
+		rect.bottom = rect.bottom - nSp;
+	}
+
+	DealData(pCDC, data2, 0, rect.right - rect.left);
+
+	XM _xm;
+	_xm.x = _x;
+	_xm.y = _y;
+	_xm.w = _w;
+	_xm.h = _h;
+	_xm.z = z1;
+	_xm.f = FontType;
+	_xm.s = FontSize;
+	addxml(data2, _xm);
+
+	::SelectObject(m_hPrinterDC, pOldFont);
+	fontHeader.DeleteObject();
+
+	pCDC->SetMapMode(MM_LOMETRIC);
+}
+
 void CFpdyBase::PaintLine(RECT rect, int ls)
 {
 	if (ls == LINE_STATE_0)

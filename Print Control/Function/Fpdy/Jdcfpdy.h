@@ -118,7 +118,8 @@ public:
 
 public:
 	CString Dlfpdy(LPCTSTR sInputInfo);
-	LONG Print(LPCTSTR billXml, CString zzzse);
+	LONG Print(LPCTSTR billXml);
+	CString PrintXml(LPCTSTR billXml);
 
 private:
 	JDCFP_FPXX ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy);

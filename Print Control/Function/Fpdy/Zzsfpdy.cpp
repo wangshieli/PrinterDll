@@ -101,7 +101,14 @@ CString CZzsfpdy::Dlfpdy(LPCTSTR sInputInfo)
 
 	printXml = GenerateFpdyXml(fpmx, fpdy.sDylx, fpdy);
 	if (fpdy.sDyfs.Compare("100") == 0)
-		return printXml;
+	{
+		CString xml;
+		xml += "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		xml += "<Print>";
+		xml += PrintXml(printXml, fpmx.sHjje, fpmx.sHjse);
+		xml += "</Print>";
+		return xml;
+	}
 
 	if (fpdy.sDylx.CompareNoCase("0") == 0)
 	{
@@ -208,6 +215,72 @@ LONG CZzsfpdy::Print(LPCTSTR billXml, CString hjje, CString hjse)
 	} while (--m_nCopies);
 
 	return nrt;
+}
+
+CString CZzsfpdy::PrintXml(LPCTSTR billXml, CString hjje, CString hjse)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	CMarkup printxml;
+
+	int nrt = 0;
+
+	InitXYoff();
+
+	int _nHjjeLen = strlen(hjje);
+	int _nHjseLen = strlen(hjse);
+
+	nrt = InitPrinter(FPWidth, FPLength);
+	if (0 != nrt)
+		return "";
+
+	DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+
+	do
+	{
+		CMarkup xml;
+		if (!xml.SetDoc(billXml) || !xml.FindElem("Print"))
+		{
+			nrt = -5;// ´òÓ¡ÄÚÈÝ½âÎöÊ§°Ü
+			break;
+		}
+		xml.IntoElem();
+
+		double nHjjeFontSize = 21, nHjseFontSize = 21;
+		if (_nHjjeLen > 8)
+		{
+			nHjjeFontSize = 18.5;
+		}
+
+		if (_nHjseLen > 8)
+		{
+			nHjseFontSize = 18.5;
+		}
+
+		while (xml.FindElem("Item"))
+		{
+			RECT itemRect;
+
+			int x = atoi(xml.GetAttrib("x"));
+			int y = atoi(xml.GetAttrib("y"));
+			int w = atoi(xml.GetAttrib("w"));
+			int h = atoi(xml.GetAttrib("h"));
+			int nFontSize = atoi(xml.GetAttrib("s"));
+			CString strFontName = xml.GetAttrib("f");
+			int z1 = atoi(xml.GetAttrib("z"));
+			int fc = atoi(xml.GetAttrib("fc"));
+			CString strText = xml.GetData();
+
+			itemRect.left = x + nXoff + 190;
+			itemRect.top = (-y - nYoff - 300);
+			itemRect.right = x + nXoff + 190 + w;
+			itemRect.bottom = (-y - h - nYoff - 300);
+
+			PaintTileXml(x, y, w, h, nFontSize, fc, strFontName, itemRect, strText, printxml, z1);
+		}
+	} while (--m_nCopies);
+
+	return printxml.GetDoc();;
 }
 
 ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)

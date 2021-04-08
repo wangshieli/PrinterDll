@@ -84,6 +84,15 @@ CString CEscxstyfp::Dlfpdy(LPCTSTR sInputInfo)
 	}
 
 	printXml = GenerateFpdyXml(fpmx, fpdy.sDylx, fpdy);
+	if (fpdy.sDyfs.Compare("100") == 0)
+	{
+		CString xml;
+		xml += "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		xml += "<Print>";
+		xml += PrintXml(printXml);
+		xml += "</Print>";
+		return xml;
+	}
 
 	if (fpdy.sDylx.CompareNoCase("0") == 0)
 	{
@@ -175,6 +184,58 @@ LONG CEscxstyfp::Print(LPCTSTR billXml)
 	} while (--m_nCopies);
 
 	return nrt;
+}
+
+CString CEscxstyfp::PrintXml(LPCTSTR billXml)
+{
+	AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+	CMarkup printxml;
+
+	int nrt = 0;
+
+	InitXYoff();
+
+	nrt = InitPrinter(FPWidth, 1778);
+	if (0 != nrt)
+		return "";
+
+	DOCINFO di = { sizeof(DOCINFO), m_sPrintTaskName.GetBuffer(0), NULL };
+
+	do
+	{
+		CMarkup xml;
+		if (!xml.SetDoc(billXml) || !xml.FindElem("Print"))
+		{
+			nrt = -5;// ¥Ú”°ƒ⁄»›Ω‚Œˆ ß∞‹
+			break;
+		}
+		xml.IntoElem();
+
+		while (xml.FindElem("Item"))
+		{
+			RECT itemRect;
+
+			int x = atoi(xml.GetAttrib("x"));
+			int y = atoi(xml.GetAttrib("y"));
+			int w = atoi(xml.GetAttrib("w"));
+			int h = atoi(xml.GetAttrib("h"));
+			int nFontSize = atoi(xml.GetAttrib("s"));
+			CString strFontName = xml.GetAttrib("f");
+			int z1 = atoi(xml.GetAttrib("z"));
+			int fc = atoi(xml.GetAttrib("fc"));
+			CString strText = xml.GetData();
+
+			itemRect.left = x + nXoff + 200;
+			itemRect.top = (-y - nYoff - 320);
+			itemRect.right = x + nXoff + 200 + w;
+			itemRect.bottom = (-y - h - nYoff - 320);
+
+			PaintTileXml(x, y, w, h, nFontSize, fc, strFontName, itemRect, strText, printxml, z1);
+		}
+	} while (--m_nCopies);
+
+	return printxml.GetDoc();
 }
 
 ESCFP_FPXX CEscxstyfp::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
