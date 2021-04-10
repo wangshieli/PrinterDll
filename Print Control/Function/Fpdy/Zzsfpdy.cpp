@@ -230,7 +230,7 @@ CString CZzsfpdy::PrintXml(LPCTSTR billXml, CString hjje, CString hjse)
 	int _nHjjeLen = strlen(hjje);
 	int _nHjseLen = strlen(hjse);
 
-	nrt = InitPrinter(FPWidth, FPLength);
+	nrt = InitPrinter1(FPWidth, FPLength);
 	if (0 != nrt)
 		return "";
 

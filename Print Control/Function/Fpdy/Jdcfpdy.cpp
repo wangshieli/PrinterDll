@@ -198,7 +198,7 @@ CString CJdcfpdy::PrintXml(LPCTSTR billXml)
 
 	InitXYoff();
 
-	nrt = InitPrinter(FPWidth, 1778);
+	nrt = InitPrinter1(FPWidth, 1778);
 	if (0 != nrt)
 		return "";
 
