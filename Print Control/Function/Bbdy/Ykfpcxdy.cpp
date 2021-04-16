@@ -414,6 +414,7 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 			xywhsf(pos_item->st_xmName, _nPostion, y, pos_item->st_nWide, nW, LS_9, FS, flags);
 			_nPostion += pos_item->st_nWide;
 		}
+		y += nW;
 
 		bNewPage = TRUE;
 		int _y = y;		
@@ -432,7 +433,6 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 			_nPostion = 0;
 			if (bNewPage)
 			{
-				_y += nW;
 				xml.AddElem("NewPage");
 				xml.AddAttrib("pn", nNewPageNum);
 				xml.IntoElem();
