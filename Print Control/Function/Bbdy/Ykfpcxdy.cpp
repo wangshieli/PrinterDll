@@ -377,7 +377,7 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 		}
 
 		_hCount += pos->begin()->xmItem_data.h;
-		if (_hCount > 2550)
+		if (_hCount > 2480)
 		{
 			_hCount = 0;
 			_hCount += pos->begin()->xmItem_data.h;
@@ -414,7 +414,6 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 			xywhsf(pos_item->st_xmName, _nPostion, y, pos_item->st_nWide, nW, LS_9, FS, flags);
 			_nPostion += pos_item->st_nWide;
 		}
-		y += nW;
 
 		bNewPage = TRUE;
 		int _y = y;		
@@ -423,7 +422,7 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 		for (pos = bbxx.st_vData.begin(); pos != bbxx.st_vData.end(); pos++)
 		{
 			vector<YKFPCX_ITEM_DATA_XX>::iterator v_pos = pos->begin() + _nIndexOfItem;
-			if (_y + v_pos->xmItem_data.h - y > 2550)
+			if (_y + v_pos->xmItem_data.h - y > 2480 + nW)
 			{
 				xml.OutOfElem();
 				xml.OutOfElem();
@@ -433,6 +432,7 @@ CString CYkfpcxdy::GenerateItemMXXml(YKFPCX_BBXX bbxx)
 			_nPostion = 0;
 			if (bNewPage)
 			{
+				_y += nW;
 				xml.AddElem("NewPage");
 				xml.AddAttrib("pn", nNewPageNum);
 				xml.IntoElem();
