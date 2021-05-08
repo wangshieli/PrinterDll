@@ -170,5 +170,8 @@ private:
 	XHQD_BBXX ParseFpmxFromXML(LPCTSTR inXml, BBDY bbdy);
 	CString GenerateFpdyXml(XHQD_BBXX bbxx, CString dylx, BBDY bbdy);
 	CString GenerateItemMXXml(XHQD_BBXX bbxx);
+
+private:
+	bool isTdbz;
 };
 

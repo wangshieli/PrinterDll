@@ -16,6 +16,7 @@
 
 CXhqddy::CXhqddy()
 {
+	isTdbz = false;
 }
 
 CXhqddy::~CXhqddy()
@@ -65,6 +66,7 @@ CString CXhqddy::Dlfpdy(LPCTSTR sInputInfo)
 	if (xml.FindElem("dylx"))   bbdy.sDylx = xml.GetData();
 	if (xml.FindElem("bblx"))	bbdy.sFplxdm = xml.GetData();
 	if (xml.FindElem("dyfs"))   bbdy.sDyfs = xml.GetData();
+	if (xml.FindElem("tdbz"))	isTdbz = (xml.GetData().CompareNoCase("0") == 0);
 	if (xml.FindElem("printername"))	m_sPrinterName = xml.GetData();
 	m_iPldy = atoi(bbdy.sDyfs.GetBuffer(0));
 
@@ -191,7 +193,8 @@ LONG CXhqddy::PrintQD(LPCSTR billxml)
 					int z = z1 & 0x000000ff;
 					int ls = z1 & 0x0000ff00;
 
-					PaintLine(itemRect, ls);
+					if (!isTdbz)
+						PaintLine(itemRect, ls);
 
 					PaintTile(nFontSize, fc, strFontName, itemRect, strText, z, { 2, 2, 1, 1 });
 				}
