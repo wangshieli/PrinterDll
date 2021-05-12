@@ -528,10 +528,17 @@ ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 	if (xml.FindElem("qmz"))    fpxx.sQmz = xml.GetData();
 	if (xml.FindElem("ykfsje")) fpxx.sYkfsje = xml.GetData();
 
-	fpxx.sSkm1 = fpxx.sSkm.Mid(0, 28);
-	fpxx.sSkm2 = fpxx.sSkm.Mid(28, 28);
-	fpxx.sSkm3 = fpxx.sSkm.Mid(56, 28);
-	fpxx.sSkm4 = fpxx.sSkm.Mid(84, 28);
+	if (fpxx.sSkm.CompareNoCase("预览页面") == 0)
+	{
+		fpxx.sSkm1 = "预览页面";
+	}
+	else
+	{
+		fpxx.sSkm1 = fpxx.sSkm.Mid(0, 28);
+		fpxx.sSkm2 = fpxx.sSkm.Mid(28, 28);
+		fpxx.sSkm3 = fpxx.sSkm.Mid(56, 28);
+		fpxx.sSkm4 = fpxx.sSkm.Mid(84, 28);
+	}
 
 	fpxx.kprq.syear = fpxx.sKprq.Mid(0, 4);
 	fpxx.kprq.smouth = fpxx.sKprq.Mid(4, 2);
@@ -636,17 +643,31 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	{
 		if (m_sHx.IsEmpty())
 		{
-			fpmx.sBzF = "校验码 " + fpmx.sJym.Mid(0, 5) + " " + fpmx.sJym.Mid(5, 5) + " " + fpmx.sJym.Mid(10, 5) + " " + fpmx.sJym.Mid(15, 5);
+			if (fpmx.sJym.CompareNoCase("预览页面") == 0)
+			{
+				fpmx.sBzF = "校验码 " + fpmx.sJym;
+			}
+			else
+			{
+				fpmx.sBzF = "校验码 " + fpmx.sJym.Mid(0, 5) + " " + fpmx.sJym.Mid(5, 5) + " " + fpmx.sJym.Mid(10, 5) + " " + fpmx.sJym.Mid(15, 5);
+			}			
 		}
 		else
 		{
-			int nTemp = 0;
-			for (int i = 0; i < 4; i++)
+			if (fpmx.sJym.CompareNoCase("预览页面") == 0)
 			{
-				fpmx.sJym.Insert(i * 5 + nTemp, ' ');
-				++nTemp;
+				fpmx.sBzF = "校验码 " + fpmx.sJym;
 			}
-			fpmx.sJym.Insert(0, "校验码");
+			else
+			{
+				int nTemp = 0;
+				for (int i = 0; i < 4; i++)
+				{
+					fpmx.sJym.Insert(i * 5 + nTemp, ' ');
+					++nTemp;
+				}
+				fpmx.sJym.Insert(0, "校验码");
+			}			
 		}
 	}
 
