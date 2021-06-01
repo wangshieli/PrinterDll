@@ -216,6 +216,205 @@ void CFpdyBase::setSysDefprinter(CString& printer)
 	::SetDefaultPrinter(printer);
 }
 
+char* CFpdyBase::GbkToUtf8(const char* src_str, int& rlen)
+{
+	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
+	wchar_t* wstr = new wchar_t[len + 1];
+	memset(wstr, 0, len + 1);
+	MultiByteToWideChar(CP_ACP, 0, src_str, -1, wstr, len);
+	len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
+	char* str = new char[len + 1];
+	memset(str, 0, len + 1);
+	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
+	delete wstr;
+	rlen = len + 1;
+	return str;
+}
+
+CString CFpdyBase::Utf8ToGbk(const char* src_str)
+{
+	int len = MultiByteToWideChar(CP_UTF8, 0, src_str, -1, NULL, 0);
+	wchar_t* wszGBK = new wchar_t[len + 1];
+	memset(wszGBK, 0, len * 2 + 2);
+	MultiByteToWideChar(CP_UTF8, 0, src_str, -1, wszGBK, len);
+	len = WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, NULL, 0, NULL, NULL);
+	char* szGBK = new char[len + 1];
+	memset(szGBK, 0, len + 1);
+	WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, szGBK, len, NULL, NULL);
+	CString rStr(szGBK);
+	delete[] wszGBK;
+	delete[] szGBK;
+	return rStr;
+}
+
+int CFpdyBase::charCal(unsigned char c)
+{
+	if ((c >>= 1) == 0x7E) return 6; // 11111100
+	if ((c >>= 1) == 0x3E) return 5; // 11111000
+	if ((c >>= 1) == 0x1E) return 4; // 11110000
+	if ((c >>= 1) == 0x0E) return 3; // 11100000
+	if ((c >>= 1) == 0x06) return 2; // 11000000
+
+	return 1; // 01111111
+}
+
+int CFpdyBase::Utf8StrLen(const char* str)
+{
+	int length = 0;
+	unsigned char c;
+	
+	while ((c = *str) != '\0')
+	{
+		length += charCal(c);
+		str++;
+	} 
+
+	return length;
+}
+
+int CFpdyBase::Utf8StrSize(const char* str)
+{
+	int size = 0;
+	int count = Utf8StrLen(str);
+	for (int i = 0; i < count; i++)
+	{
+		int nL = charCal(str[i]);
+		size += (nL == 1 ? 1 : 2);
+	}
+	return size;
+}
+
+int CFpdyBase::Utf8StringInsert(char** data, int pos, int datasize, char c)
+{
+	char* p = *data;
+
+	char* pDes = new char[datasize + 1 + 1];// datasize不包含元数据结束符
+	memset(pDes, 0, datasize + 1 + 1);
+	memcpy(pDes, p, pos);
+	memset(pDes + pos, c, 1);
+	memcpy(pDes + pos + 1, p + pos, datasize - pos);
+
+	delete[] p;
+	*data = pDes;
+	
+	return 0;
+}
+
+int CFpdyBase::Utf8StringWraps(CDC* pDC, char** pdata, int s, size_t width, bool bChange, bool type)
+{
+	char* data = *pdata;
+	int i = s;
+	int nTemp = 0; // 逻辑字符个数
+	int count = Utf8StrLen(data);
+
+	char* pSrc = data + s;
+
+	for (; i < count;)
+	{
+		char c = data[i];
+		if (c == '\n')
+		{
+			i += 1;
+			return Utf8StringWraps(pDC, pdata, i, width, bChange, type) + 1;
+		}
+
+		int nL = charCal(c);
+		i += nL;
+
+		if (!type)
+		{
+			int len = i - s;
+			char* buf = new char[len + 1];
+			memset(buf, 0, len + 1);
+			memcpy_s(buf, len + 1, pSrc, len);
+			CString str = Utf8ToGbk(buf);
+			delete[] buf;
+
+			CSize size = pDC->GetTextExtent(str);
+			nTemp = size.cx;			
+		}
+		else
+		{
+			nTemp += (nL == 1 ? 1 : 2);
+		}
+
+		if (nTemp / width) {
+			if (nTemp % width)
+			{
+				i -= nL;
+			}
+			if (bChange && i < count)
+			{
+				Utf8StringInsert(&data, i, count);
+				i += 1;
+				*pdata = data;
+			}
+
+			return Utf8StringWraps(pDC, pdata, i, width, bChange, type) + 1;
+		}
+	}
+
+	return s < count ? 1 : 0;
+}
+
+int CFpdyBase::Utf8StringSub(char* data, int maxlen)
+{
+	int i = 0;
+	int nTemp = 0;
+	int count = Utf8StrLen(data);
+
+	for (; i < count;)
+	{
+		char c = *(data + i);
+
+		int nL = charCal(c);
+		i += nL;
+		nTemp += (nL == 1 ? 1 : 2);
+		if (nTemp / maxlen) {
+			if (nTemp % maxlen)
+			{
+				i -= nL;
+			}
+
+			data[i] = '\0';
+
+			return i;
+		}
+	}
+
+	return i;
+}
+
+int CFpdyBase::utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect)
+{
+	fontNew->CreatePointFont(f, FontType, pDC);
+	fontOld = (CFont*)(::SelectObject(m_hPrinterDC, *fontNew));
+
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pDC, &pUtf8, 0, rect.right - rect.left);
+	CString data1 = Utf8ToGbk(pUtf8);
+
+	RECT trect = rect;
+
+	int recv_h = rect.bottom - rect.top;
+	int recv_r = rect.right;
+	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags);
+	LONG r = trect.right;
+	if (((h >= recv_h
+		|| (r > recv_r)) && ((f -= 1) || 1)))
+	{
+		::SelectObject(m_hPrinterDC, fontOld);
+		fontNew->DeleteObject();
+
+		return utf8Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect);
+	}
+
+	_trect = trect;
+
+	return h;
+}
+
 // nType = 1机动车  2二手车  3转普票
 void CFpdyBase::setBuiltInOffset(IN int nType, OUT int & _x, OUT int & _y)
 {
@@ -552,9 +751,16 @@ void CFpdyBase::PaintTile4(int FontSize, int FontSizeEC, LPCSTR FontType, RECT r
 	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data1 = Utf8ToGbk(pUtf8);
+#else
 	CString data1 = data;
 	CString data2 = data;
 	DealData(pCDC, data1, 0, rect.right - rect.left);
+#endif // UTF8_TEST
 
 	RECT trect = rect;
 
@@ -571,7 +777,11 @@ void CFpdyBase::PaintTile4(int FontSize, int FontSizeEC, LPCSTR FontType, RECT r
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
+#ifdef UTF8_TEST
+		h = utf8Deal(pOldFont, &fontHeader, data, rect, fontSize, FontType, pCDC, flags1, trect);
+#else
 		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+#endif // UTF8_TEST	
 	}
 
 	int x = 0;
@@ -695,8 +905,15 @@ LONG CFpdyBase::PaintTile3(int FontSize, int FontSizeEC, LPCSTR FontType, RECT r
 	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data1 = Utf8ToGbk(pUtf8);
+#else
 	CString data1 = data;
 	DealData(pCDC, data1, 0, rect.right - rect.left);
+#endif // UTF8_TEST
 
 	RECT trect = rect;
 
@@ -789,9 +1006,16 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, int FontSizeEC, LPCSTR FontT
 	fontHeader.CreatePointFont(fontSize, FontType, CDC::FromHandle(m_hPrinterDC));
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data1 = Utf8ToGbk(pUtf8);
+#else
 	CString data1 = data;
 	CString data2 = data;
 	DealData(pCDC, data1, 0, rect.right - rect.left);
+#endif // UTF8_TEST
 
 	RECT trect = rect;
 
@@ -808,7 +1032,11 @@ LONG CFpdyBase::PaintTile2(int iType, int FontSize, int FontSizeEC, LPCSTR FontT
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
+#ifdef UTF8_TEST
+		h = utf8Deal(pOldFont, &fontHeader, data, rect, fontSize, FontType, pCDC, flags1, trect);
+#else
 		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+#endif // UTF8_TEST	
 	}
 
 	pCDC->SetMapMode(MM_LOMETRIC);
@@ -902,11 +1130,18 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 	pCDC->SetMapMode(MM_TEXT);
 	
 	fontHeader.CreatePointFont(fontSize, FontType, pCDC);
-	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
+	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));	
 
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data1 = Utf8ToGbk(pUtf8);
+#else
 	CString data1 = data;
 	CString data2 = data;
 	DealData(pCDC, data1, 0, rect.right - rect.left);
+#endif // UTF8_TEST
 
 	RECT trect = rect;
 	LONG nSp = 0;
@@ -925,7 +1160,11 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 	{		
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
+#ifdef UTF8_TEST
+		h = utf8Deal(pOldFont, &fontHeader, data, rect, fontSize, FontType, pCDC, flags1, trect);
+#else
 		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+#endif // UTF8_TEST		
 
 		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
 			nSp = (trect.top - rect.top + rect.bottom - trect.bottom) / 2;
@@ -937,7 +1176,14 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 		rect.bottom = rect.bottom - nSp;
 	}
 
+#ifdef UTF8_TEST
+	pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data2 = Utf8ToGbk(pUtf8);
+#else
 	DealData(pCDC, data2, 0, rect.right - rect.left);
+#endif // UTF8_TEST
+	
 
 	if (rect.right >= trect.right)
 		::DrawText(m_hPrinterDC, data2, -1, &rect, flags2);
@@ -1018,9 +1264,16 @@ void CFpdyBase::PaintTileXml(int _x, int _y, int _w, int _h, int FontSize, int F
 	fontHeader.CreatePointFont(fontSize, FontType, pCDC);
 	pOldFont = (CFont *)(::SelectObject(m_hPrinterDC, fontHeader));
 
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data1 = Utf8ToGbk(pUtf8);
+#else
 	CString data1 = data;
 	CString data2 = data;
 	DealData(pCDC, data1, 0, rect.right - rect.left);
+#endif // UTF8_TEST
 
 	RECT trect = rect;
 	LONG nSp = 0;
@@ -1039,7 +1292,11 @@ void CFpdyBase::PaintTileXml(int _x, int _y, int _w, int _h, int FontSize, int F
 	{
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
+#ifdef UTF8_TEST
+		h = utf8Deal(pOldFont, &fontHeader, data, rect, fontSize, FontType, pCDC, flags1, trect);
+#else
 		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+#endif // UTF8_TEST	
 
 		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
 			nSp = (trect.top - rect.top + rect.bottom - trect.bottom) / 2;
@@ -1051,7 +1308,13 @@ void CFpdyBase::PaintTileXml(int _x, int _y, int _w, int _h, int FontSize, int F
 		rect.bottom = rect.bottom - nSp;
 	}
 
+#ifdef UTF8_TEST
+	pUtf8 = GbkToUtf8(data, len);
+	Utf8StringWraps(pCDC, &pUtf8, 0, rect.right - rect.left);
+	CString data2 = Utf8ToGbk(pUtf8);
+#else
 	DealData(pCDC, data2, 0, rect.right - rect.left);
+#endif // UTF8_TEST
 
 	XM _xm;
 	_xm.x = _x;

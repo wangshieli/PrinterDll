@@ -1,6 +1,8 @@
 #pragma once
 #include "../../Helper/XML/Markup.h"
 
+#undef UTF8_TEST
+
 #define XMLHEAD "<?xml version=\"1.0\" encoding=\"gbk\"?>\r\n"
 
 //增值税发票
@@ -214,6 +216,21 @@ private:
 
 	void getSysDefPrinter(CString& printer);
 	void setSysDefprinter(CString& printer);
+
+protected:
+	char* GbkToUtf8(const char* src_str, int& rlen);
+	CString Utf8ToGbk(const char* src_str);	
+
+	int charCal(unsigned char c);
+	int Utf8StrLen(const char* str); // utf8字符串字节长度，不包括'\0'
+	int Utf8StrSize(const char* str); // utf8字符串字符长度，不包括'\0'
+	int Utf8StringInsert(char** data, int pos, int datasize = 0, char c = '\n');
+
+	int	Utf8StringWraps(CDC* pDC, char** data, int s, size_t width, bool bChange = true, bool type = false);// type 字符个数换行（true） 打印区域换行（false）  bChange修改字符串（true） 不修改字符串（false）
+	int Utf8StringSub(char* data, int maxlen);
+
+private:
+	int utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect);
 
 protected:
 	char m_cQRcodePath[MAX_PATH]; // 二维码

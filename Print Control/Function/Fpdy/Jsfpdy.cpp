@@ -198,6 +198,12 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 			if (xml.FindElem("spmc")) fpxx.fyxmxx[i].sSpmc = xml.GetData();		
 			if (m_strFppy.CompareNoCase("01") == 0 || m_strFppy.CompareNoCase("06") == 0)
 			{
+#ifdef UTF8_TEST
+				int len = 0;
+				char* pUtf8 = GbkToUtf8(fpxx.fyxmxx[i].sSpmc, len);
+				fpxx.sWidthRow8 += Utf8StringWraps(NULL, &pUtf8, 0, 12, false, true);
+				fpxx.sWidthRow7 += Utf8StringWraps(NULL, &pUtf8, 0, 14, false, true);
+#else
 				CString _tempSpmc = fpxx.fyxmxx[i].sSpmc;
 				fpxx.sWidthRow8 += DealData1(_tempSpmc, 0, 12);
 				/*if (fpxx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
@@ -219,9 +225,17 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 				{
 					fpxx.sWidthRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 14 + 1;
 				}*/
+#endif // UTF8_TEST
+				
 			}
 			else if (m_strFppy.CompareNoCase("03") == 0 || m_strFppy.CompareNoCase("07") == 0)
 			{
+#ifdef UTF8_TEST
+				int len = 0;
+				char* pUtf8 = GbkToUtf8(fpxx.fyxmxx[i].sSpmc, len);
+				fpxx.sNarrowRow8 += Utf8StringWraps(NULL, &pUtf8, 0, 8, false, true);
+				fpxx.sNarrowRow7 += Utf8StringWraps(NULL, &pUtf8, 0, 10, false, true);
+#else
 				CString _tempSpmc = fpxx.fyxmxx[i].sSpmc;
 				fpxx.sNarrowRow8 += DealData1(_tempSpmc, 0, 8);
 				//if (fpxx.fyxmxx[i].sSpmc.GetLength() % 8 == 0)
@@ -235,14 +249,18 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 
 				_tempSpmc = fpxx.fyxmxx[i].sSpmc;
 				fpxx.sNarrowRow7 += DealData1(_tempSpmc, 0, 10);
-			/*	if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 == 0)
-				{
-					fpxx.sNarrowRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 10;
-				}
-				else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 != 0)
-				{
-					fpxx.sNarrowRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 10 + 1;
-				}*/
+				/*	if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 == 0)
+					{
+						fpxx.sNarrowRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 10;
+					}
+					else if (fpxx.fyxmxx[i].sSpmc.GetLength() % 10 != 0)
+					{
+						fpxx.sNarrowRow7 += fpxx.fyxmxx[i].sSpmc.GetLength() / 10 + 1;
+					}*/
+#endif // UTF8_TEST
+
+
+				
 			}
 			else
 			{
@@ -866,7 +884,15 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 
 		if (fpmx.bMxFontSize)
 		{
+			
+#ifdef UTF8_TEST
+			int len = 0;
+			char* pUtf8 = GbkToUtf8(fpmx.fyxmxx[i].sSpmc, len);
+			number += Utf8StringWraps(NULL, &pUtf8, 0, 12, true, true) * 30;
+			fpmx.fyxmxx[i].sSpmc = Utf8ToGbk(pUtf8);
+#else
 			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 12) * 30;
+#endif // UTF8_TEST
 			//if (fpmx.fyxmxx[i].sSpmc.GetLength() % 12 == 0)
 			//{
 			//	number += fpmx.fyxmxx[i].sSpmc.GetLength() / 12 * 30;
@@ -878,7 +904,15 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 		}
 		else
 		{
+			
+#ifdef UTF8_TEST
+			int len = 0;
+			char* pUtf8 = GbkToUtf8(fpmx.fyxmxx[i].sSpmc, len);
+			number += Utf8StringWraps(NULL, &pUtf8, 0, 14, true, true) * 25;
+			fpmx.fyxmxx[i].sSpmc = Utf8ToGbk(pUtf8);
+#else
 			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 14) * 25;
+#endif // UTF8_TEST
 			//if (fpmx.fyxmxx[i].sSpmc.GetLength() % 14 == 0)
 			//{
 			//	number += fpmx.fyxmxx[i].sSpmc.GetLength() / 14 * 25;
@@ -935,8 +969,17 @@ CString CJsfpdy::GenerateItemXmlF(JSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.skr, LX + 360, LY + 380 - 10, LW, LH, LS_8, FS, ZL);
 	xywhsf(fpmx.Jym, LX + 10, LY + 1080 - 30 + 265, LW, LH, LS_8, FS, ZL);   //小写价税合计
 
+
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(fpmx.sBz, len);
+	Utf8StringSub(pUtf8, 120);
+	int _nLines = Utf8StringWraps(NULL, &pUtf8, 0, 60, true, true);
+	fpmx.sBz = Utf8ToGbk(pUtf8);
+#else
 	fpmx.sBz = fpmx.sBz.Left(DataPrintMaxLen(fpmx.sBz, 120));
 	int _nLines = DealData1(fpmx.sBz, 0, 60);
+#endif // UTF8_TEST
 
 	if (fpmx.sBz.GetLength() <= 44)
 	{
@@ -1087,7 +1130,14 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 			{
 				number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 8 + 1) * 30;
 			}*/
+#ifdef UTF8_TEST
+			int len = 0;
+			char* pUtf8 = GbkToUtf8(fpmx.fyxmxx[i].sSpmc, len);
+			number += Utf8StringWraps(NULL, &pUtf8, 0, 8, true, true) * 30;
+			fpmx.fyxmxx[i].sSpmc = Utf8ToGbk(pUtf8);
+#else
 			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 8) * 30;
+#endif // UTF8_TEST
 		}
 		else
 		{
@@ -1099,7 +1149,18 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 			{
 				number += (fpmx.fyxmxx[i].sSpmc.GetLength() / 10 + 1) * 25;
 			}*/
+			
+
+#ifdef UTF8_TEST
+			int len = 0;
+			char* pUtf8 = GbkToUtf8(fpmx.fyxmxx[i].sSpmc, len);
+			number += Utf8StringWraps(NULL, &pUtf8, 0, 10, true, true) * 25;
+			fpmx.fyxmxx[i].sSpmc = Utf8ToGbk(pUtf8);
+#else
 			number += DealData1(fpmx.fyxmxx[i].sSpmc, 0, 10) * 25;
+#endif // UTF8_TEST
+
+			
 		}
 
 		//		if(fpmx.fyxmxx[i].sSpmc.GetLength() == 0)
@@ -1140,8 +1201,16 @@ CString CJsfpdy::GenerateItemXmlG(JSFP_FPXX fpmx, FPDY fpdy)
 	xywhsf(fpmx.skr, LX + 200, LY + 490, LW, LH, LS_8, FS, ZL);
 	xywhsf(fpmx.Jym, LX + 200, LY + 1090 + 225, LW, LH, LS_8, FS, ZL);
 
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(fpmx.sBz, len);
+	Utf8StringSub(pUtf8, 120);
+	Utf8StringWraps(NULL, &pUtf8, 0, 48, true, true);
+	fpmx.sBz = Utf8ToGbk(pUtf8);
+#else
 	fpmx.sBz = fpmx.sBz.Left(DataPrintMaxLen(fpmx.sBz, 120));
 	DealData1(fpmx.sBz, 0, 48);
+#endif // UTF8_TEST
 
 	if (fpmx.sBz.GetLength() <= 30)
 	{

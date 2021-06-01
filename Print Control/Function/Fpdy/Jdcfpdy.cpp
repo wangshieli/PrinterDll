@@ -537,7 +537,16 @@ CString CJdcfpdy::GenerateItemXml(JDCFP_FPXX fpmx, FPDY fpdy)
 	addxml(fpmx.sSwjgmc, fpmx.Swjgmc);
 	addxml(fpmx.sSwjgdm, fpmx.Swjgdm);
 	addxml(fpmx.sWspzhm, fpmx.Wspzhm);
+#ifdef UTF8_TEST
+	int len = 0;
+	char* pUtf8 = GbkToUtf8(fpmx.sDw, len);
+	Utf8StringWraps(NULL, &pUtf8, 0, 4, true, true);
+	fpmx.sDw = Utf8ToGbk(pUtf8);
+#else
 	DealData1(fpmx.sDw, 0, 4);
+#endif // UTF8_TEST
+
+	
 	//if (fpmx.sDw.GetLength() > 4)
 	//{
 	//	fpmx.sDw.Insert(4, "\n");
