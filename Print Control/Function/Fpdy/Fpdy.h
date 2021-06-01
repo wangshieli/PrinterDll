@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Helper/XML/Markup.h"
 
-#undef UTF8_TEST
+#define UTF8_TEST
 
 #define XMLHEAD "<?xml version=\"1.0\" encoding=\"gbk\"?>\r\n"
 
@@ -186,7 +186,7 @@ protected:
 	int DealData1(CString& m_szText, int s, LONG width);
 
 	int DealData(CDC *pDC, CString& m_szText, int s, LONG width);
-	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect);
+	int Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int fc = 1);
 
 	// PaintTile4 £¨Ç®±Ò·ûºÅ£©£¬ÓÃÓÚÇ®±Ò·ûºÅ´òÓ¡
 	void PaintTile4(int FontSize, int FontSizeEC, LPCSTR FontType, RECT rect, LPCSTR data, int z = AM_ZC, RECT _rect = { 0, 0, 0, 0 });
@@ -230,7 +230,7 @@ protected:
 	int Utf8StringSub(char* data, int maxlen);
 
 private:
-	int utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect);
+	int utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int fc = 1);
 
 protected:
 	char m_cQRcodePath[MAX_PATH]; // ¶þÎ¬Âë

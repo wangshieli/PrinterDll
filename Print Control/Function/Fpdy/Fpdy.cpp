@@ -385,7 +385,7 @@ int CFpdyBase::Utf8StringSub(char* data, int maxlen)
 	return i;
 }
 
-int CFpdyBase::utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect)
+int CFpdyBase::utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int fc)
 {
 	fontNew->CreatePointFont(f, FontType, pDC);
 	fontOld = (CFont*)(::SelectObject(m_hPrinterDC, *fontNew));
@@ -402,7 +402,7 @@ int CFpdyBase::utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, 
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags);
 	LONG r = trect.right;
 	if (((h >= recv_h
-		|| (r > recv_r)) && ((f -= 1) || 1)))
+		|| (r > recv_r)) && ((f -= fc) || 1)))
 	{
 		::SelectObject(m_hPrinterDC, fontOld);
 		fontNew->DeleteObject();
@@ -610,7 +610,7 @@ int CFpdyBase::DealData(CDC * pDC, CString& m_szText, int s, LONG width)
 	return 0;
 }
 
-int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect)
+int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int f, LPCSTR FontType, CDC* pDC, UINT flags, RECT& _trect, int fc)
 {
 	fontNew->CreatePointFont(f, FontType, pDC);
 	fontOld = (CFont *)(::SelectObject(m_hPrinterDC, *fontNew));
@@ -626,7 +626,7 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 	int h = ::DrawText(m_hPrinterDC, data1, -1, &trect, flags);
 	LONG r = trect.right;
 	if (((h >= recv_h
-		|| (r > recv_r)) && ((f -= 1) || 1)))
+		|| (r > recv_r)) && ((f -= fc) || 1)))
 	{
 		::SelectObject(m_hPrinterDC, fontOld);
 		fontNew->DeleteObject();
@@ -1161,9 +1161,9 @@ void CFpdyBase::PaintTile(int FontSize, int FontSizeEC, LPCSTR FontType, RECT re
 		::SelectObject(m_hPrinterDC, pOldFont);
 		fontHeader.DeleteObject();
 #ifdef UTF8_TEST
-		h = utf8Deal(pOldFont, &fontHeader, data, rect, fontSize, FontType, pCDC, flags1, trect);
+		h = utf8Deal(pOldFont, &fontHeader, data, rect, fontSize, FontType, pCDC, flags1, trect, FontSizeEC);
 #else
-		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect);
+		h = Deal(pOldFont, &fontHeader, data2, rect, fontSize, FontType, pCDC, flags1, trect, FontSizeEC);
 #endif // UTF8_TEST		
 
 		if (z != AM_ZL_L && z != AM_ZR_S && z != AM_ZL_EX)
