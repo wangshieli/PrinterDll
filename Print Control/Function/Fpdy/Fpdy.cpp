@@ -407,7 +407,7 @@ int CFpdyBase::utf8Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, 
 		::SelectObject(m_hPrinterDC, fontOld);
 		fontNew->DeleteObject();
 
-		return utf8Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect);
+		return utf8Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect, fc);
 	}
 
 	_trect = trect;
@@ -631,7 +631,7 @@ int CFpdyBase::Deal(CFont* fontOld, CFont* fontNew, LPCSTR data, RECT rect, int 
 		::SelectObject(m_hPrinterDC, fontOld);
 		fontNew->DeleteObject();
 
-		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect);
+		return Deal(fontOld, fontNew, data, rect, f, FontType, pDC, flags, _trect, fc);
 	}
 
 	_trect = trect;
