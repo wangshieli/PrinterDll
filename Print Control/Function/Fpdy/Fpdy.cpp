@@ -261,12 +261,11 @@ int CFpdyBase::charCal(unsigned char c)
 int CFpdyBase::Utf8StrLen(const char* str)
 {
 	int length = 0;
-	unsigned char c;
+	char c;
 	
-	while ((c = *str) != '\0')
+	while ((c = *(str+length)) != '\0')
 	{
 		length += charCal(c);
-		str++;
 	} 
 
 	return length;
