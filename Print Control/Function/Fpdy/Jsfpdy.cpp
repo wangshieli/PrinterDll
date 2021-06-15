@@ -203,6 +203,7 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 				char* pUtf8 = GbkToUtf8(fpxx.fyxmxx[i].sSpmc, len);
 				fpxx.sWidthRow8 += Utf8StringWraps(NULL, &pUtf8, 0, 12, false, true);
 				fpxx.sWidthRow7 += Utf8StringWraps(NULL, &pUtf8, 0, 14, false, true);
+				delete[] pUtf8;
 #else
 				CString _tempSpmc = fpxx.fyxmxx[i].sSpmc;
 				fpxx.sWidthRow8 += DealData1(_tempSpmc, 0, 12);
@@ -235,6 +236,7 @@ JSFP_FPXX CJsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 				char* pUtf8 = GbkToUtf8(fpxx.fyxmxx[i].sSpmc, len);
 				fpxx.sNarrowRow8 += Utf8StringWraps(NULL, &pUtf8, 0, 8, false, true);
 				fpxx.sNarrowRow7 += Utf8StringWraps(NULL, &pUtf8, 0, 10, false, true);
+				delete[] pUtf8;
 #else
 				CString _tempSpmc = fpxx.fyxmxx[i].sSpmc;
 				fpxx.sNarrowRow8 += DealData1(_tempSpmc, 0, 8);

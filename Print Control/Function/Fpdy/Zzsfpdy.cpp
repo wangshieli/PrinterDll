@@ -705,12 +705,25 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 
 	for (int i = 0; i < fpmx.iFyxmCount; i++)
 	{
+#ifdef UTF8_TEST
+		int len = 0;
+		char* pUtf8 = GbkToUtf8(fpmx.fyxmxx[i].sSpmc, len);
+		Utf8StringSub(pUtf8, 92);
+		fpmx.fyxmxx[i].sSpmc = Utf8ToGbk(pUtf8);
+#else
 		fpmx.fyxmxx[i].sSpmc = fpmx.fyxmxx[i].sSpmc.Left(DataPrintMaxLen(fpmx.fyxmxx[i].sSpmc, 92));
+#endif // UTF8_TEST			
 		xywhsf(fpmx.fyxmxx[i].ssSpmc, 30, 260 + 45 * i, 460 - 15, 45, LS_9, FS, AM_VCL);
 
 		xywhsf(fpmx.fyxmxx[i].ssGgxh, 540, 260 + 45 * i, 230, 45, LS_9, FS, AM_VCL);
 
+#ifdef UTF8_TEST
+		pUtf8 = GbkToUtf8(fpmx.fyxmxx[i].sDw, len);
+		Utf8StringSub(pUtf8, 16);
+		fpmx.fyxmxx[i].sDw = Utf8ToGbk(pUtf8);
+#else
 		fpmx.fyxmxx[i].sDw = fpmx.fyxmxx[i].sDw.Left(DataPrintMaxLen(fpmx.fyxmxx[i].sDw, 16));
+#endif // UTF8_TEST			
 		xywhsf(fpmx.fyxmxx[i].ssDw, 790, 260 + 45 * i, 100, 45, LS_9, FS, AM_VCL);
 
 		if (fpmx.fyxmxx[i].sSpsl.GetLength() > 13)
