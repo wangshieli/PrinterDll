@@ -328,7 +328,6 @@ int CFpdyBase::Utf8StringWraps(CDC* pDC, char** pdata, int s, size_t width, bool
 			memset(buf, 0, len + 1);
 			memcpy_s(buf, len + 1, pSrc, len);
 			CString str = Utf8ToGbk(buf);
-			delete[] buf;
 
 			CSize size = pDC->GetTextExtent(str);
 			nTemp = size.cx;			
