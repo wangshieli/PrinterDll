@@ -633,6 +633,10 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	{
 		fpmx.sCpy = "成品油";
 	}
+	else if (fpmx.sTspz.CompareNoCase("33") == 0)
+	{
+		fpmx.sCpy = "委托代开";
+	}
 
 	if (fpdy.sKJFS.CompareNoCase("1") == 0)
 	{
@@ -757,14 +761,22 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		xywhsf(fpmx.bz, 1240, 750, 740, 200, LS_9, FS, AM_ZL_EX);
 	}
 
-	xywhsf(fpmx.Xhdwmc, 340, 750, 780, 50, LS_9, FS, AM_VCL);
-	//XM xmDbjg;
-	//xywhsf(xmDbjg, 920, 750, 200, 50, LS_9, FS, AM_VCR_S);
-	//addxml("（代办机关）", xmDbjg);
+	if (fpmx.sTspz.CompareNoCase("33") == 0)
+	{
+		xywhsf(fpmx.Xhdwmc, 340, 750, 580, 50, LS_9, FS, AM_VCL);
+		XM xmDbjg;
+		xywhsf(xmDbjg, 920, 750, 200, 50, LS_9, FS, AM_VCR_S);
+		addxml("（代开单位）", xmDbjg);
 
-	xywhsf(fpmx.Xhdwsbh, 340, 800, 780, 50, LS_12, FT, AM_VCL);
-	//xywhsf(xmDbjg, 920, 800, 200, 50, LS_9, FS, AM_VCR_S);
-	//addxml("（代办机关）", xmDbjg);
+		xywhsf(fpmx.Xhdwsbh, 340, 800, 580, 50, LS_12, FT, AM_VCL);
+		xywhsf(xmDbjg, 920, 800, 200, 50, LS_9, FS, AM_VCR_S);
+		addxml("（代开单位）", xmDbjg);
+	}
+	else
+	{
+		xywhsf(fpmx.Xhdwmc, 340, 750, 780, 50, LS_9, FS, AM_VCL);
+		xywhsf(fpmx.Xhdwsbh, 340, 800, 780, 50, LS_12, FT, AM_VCL);
+	}
 
 	xywhsf(fpmx.Xhdwdzdh, 340, 850, 780, 50, LS_9, FS, AM_VCL);
 
