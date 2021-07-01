@@ -49,6 +49,7 @@ typedef struct _zzsfp_fpxx
 	CString sNcpsg;
 	CString sCpy;
 	CString sBlxx;
+	CString sKpfs;
 	CString sNcpxssgqy;
 	CString sFpdm;
 	CString sFphm;
@@ -68,6 +69,8 @@ typedef struct _zzsfp_fpxx
 	CString sGhdwmc;
 	CString sGhdwdzdh;
 	CString sGhdwyhzh;
+	CString sSjxhdwsbh;
+	CString sSjxhdwmc;
 	CString sZsfs;
 	CString sJqbhZW;
 	CString sXxfs;
@@ -167,6 +170,8 @@ typedef struct _zzsfp_fpxx
 	_zzsfp_fpxx()
 	{
 		iFyxmCount = 0;
+
+		sKpfs = "";
 
 		kprq.sYear = _T("Äê");
 		kprq.sMouth = _T("ÔÂ");

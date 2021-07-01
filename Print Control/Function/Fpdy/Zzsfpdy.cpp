@@ -304,6 +304,7 @@ ZZSFP_FPXX CZzsfpdy::ParseFpmxFromXML(LPCTSTR inXml, FPDY fpdy)
 	if (xml.FindElem("fpdm"))  fpxx.sFpdm = xml.GetData();
 	if (xml.FindElem("fphm"))  fpxx.sFphm = xml.GetData();
 	if (xml.FindElem("fpzt"))  fpxx.sFpzt = xml.GetData();
+	if (xml.FindElem("kpfs"))  fpxx.sKpfs = xml.GetData();
 	if (xml.FindElem("scbz"))  fpxx.sScbz = xml.GetData(); //上传标志
 	if (xml.FindElem("kprq"))  fpxx.sKprq = xml.GetData();
 	if (xml.FindElem("jqbh"))  fpxx.sSkpbh = xml.GetData();
@@ -633,7 +634,8 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 	{
 		fpmx.sCpy = "成品油";
 	}
-	else if (fpmx.sTspz.CompareNoCase("33") == 0)
+
+	if (fpmx.sKpfs.CompareNoCase("02") == 0)
 	{
 		fpmx.sCpy = "委托代开";
 	}
@@ -761,7 +763,7 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		xywhsf(fpmx.bz, 1240, 750, 740, 200, LS_9, FS, AM_ZL_EX);
 	}
 
-	if (fpmx.sTspz.CompareNoCase("33") == 0)
+	if (fpmx.sKpfs.CompareNoCase("02") == 0)
 	{
 		xywhsf(fpmx.Xhdwmc, 340, 750, 580, 50, LS_9, FS, AM_VCL);
 		XM xmDbjg;
