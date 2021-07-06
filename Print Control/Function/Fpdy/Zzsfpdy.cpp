@@ -773,18 +773,19 @@ CString CZzsfpdy::GenerateItemXml(ZZSFP_FPXX fpmx, FPDY fpdy)
 		xywhsf(fpmx.Xhdwsbh, 340, 800, 580, 50, LS_12, FT, AM_VCL);
 		xywhsf(xmDbjg, 920, 800, 200, 50, LS_9, FS, AM_VCR_S);
 		addxml("（代开单位）", xmDbjg);
+
+		xywhsf(fpmx.Xhdwyhzh, 340, 900, 580, 50, LS_9, FS, AM_VCL);
+		xywhsf(xmDbjg, 920, 900, 200, 50, LS_9, FS, AM_VCR_S);
+		addxml("（完税凭证号）", xmDbjg);
 	}
 	else
 	{
 		xywhsf(fpmx.Xhdwmc, 340, 750, 780, 50, LS_9, FS, AM_VCL);
 		xywhsf(fpmx.Xhdwsbh, 340, 800, 780, 50, LS_12, FT, AM_VCL);
+		xywhsf(fpmx.Xhdwyhzh, 340, 900, 780, 50, LS_9, FS, AM_VCL);
 	}
 
 	xywhsf(fpmx.Xhdwdzdh, 340, 850, 780, 50, LS_9, FS, AM_VCL);
-
-	xywhsf(fpmx.Xhdwyhzh, 340, 900, 780, 50, LS_9, FS, AM_VCL);
-	//xywhsf(xmDbjg, 920, 900, 200, 50, LS_9, FS, AM_VCR_S);
-	//addxml("（完税凭证号）", xmDbjg);
 
 	xywhsf(fpmx.skr, 200, 950, 330, 60, LS_10, FS, AM_VCL);
 	xywhsf(fpmx.fhr, 720, 950, 290, 60, LS_10, FS, AM_VCL);
